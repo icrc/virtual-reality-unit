@@ -1,0 +1,45 @@
+{
+	"videos": [
+		{ "id": 0, "file": "videos/00.mp4", "title": "Welcome" },
+		{ "id": 1, "file": "videos/01.mp4", "title": "Fireworks countdown" },
+		{ "id": 2, "file": "videos/02.mp4", "title": "Silent film countdown" },
+		{ "id": 3, "file": "videos/03.mp4", "title": "Film countdown" },
+		{ "id": 4, "file": "videos/04.mp4", "title": "Code countdown" },
+		{ "id": 5, "file": "videos/05.mp4", "title": "Sweep countdown" },
+		{ "id": 6, "file": "videos/06.mp4", "title": "Bold countdown" },
+		{ "id": 7, "file": "videos/07.mp4", "title": "Race countdown" },
+		{ "id": 8, "file": "videos/08.mp4", "title": "Sci-Fi countdown" },
+		{ "id": 9, "file": "videos/09.mp4", "title": "Neon countdown" },
+		{ "id": 10, "file": "videos/10.mp4", "title": "Fire countdown" }
+	],
+	"locations": [
+		{
+			"id": 1,
+			"videoId": 0,
+			"nextLocations": [
+				{ "id": 2, "prompt": "Go see some fireworks" },
+				{ "id": 3, "prompt": "View a silent film" },
+				{ "id": 4, "prompt": "See a cinefilm" }
+			],
+			"canGoBack": false
+		},
+		{
+			"id": 1,
+			"videoId": 1,
+			"nextLocations": [],
+			"canGoBack": true
+		},
+		{
+			"id": 1,
+			"videoId": 2,
+			"nextLocations": [],
+			"canGoBack": true
+		},
+		{
+			"id": 1,
+			"videoId": 3,
+			"nextLocations": [],
+			"canGoBack": true
+		}
+	]
+}
