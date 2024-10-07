@@ -1,3 +1,3 @@
 # VideoPath
 
-Choose your own path videos
+'Choose your own path' videos
