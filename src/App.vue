@@ -1,5 +1,8 @@
 <script setup>
 import { ref } from "vue"
+import data from "./data.json"
+
+console.log(data)
 const myVideo = ref()
 let play = true
 const announceDone = () => {

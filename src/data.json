@@ -17,9 +17,9 @@
 			"id": 1,
 			"videoId": 0,
 			"nextLocations": [
-				{ "id": 2, "prompt": "Go see some fireworks" },
-				{ "id": 3, "prompt": "View a silent film" },
-				{ "id": 4, "prompt": "See a cinefilm" }
+				{ "videoId": 2, "prompt": "Go see some fireworks" },
+				{ "videoId": 3, "prompt": "View a silent film" },
+				{ "videoId": 4, "prompt": "See a cinefilm" }
 			],
 			"canGoBack": false
 		},
