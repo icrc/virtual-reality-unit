@@ -1,45 +1,60 @@
 {
 	"videos": [
-		{ "id": 0, "file": "/videos/00.mp4", "title": "Welcome" },
-		{ "id": 1, "file": "/videos/01.mp4", "title": "Fireworks countdown" },
-		{ "id": 2, "file": "/videos/02.mp4", "title": "Silent film countdown" },
-		{ "id": 3, "file": "/videos/03.mp4", "title": "Film countdown" },
-		{ "id": 4, "file": "/videos/04.mp4", "title": "Code countdown" },
-		{ "id": 5, "file": "/videos/05.mp4", "title": "Sweep countdown" },
-		{ "id": 6, "file": "/videos/06.mp4", "title": "Bold countdown" },
-		{ "id": 7, "file": "/videos/07.mp4", "title": "Race countdown" },
-		{ "id": 8, "file": "/videos/08.mp4", "title": "Sci-Fi countdown" },
-		{ "id": 9, "file": "/videos/09.mp4", "title": "Neon countdown" },
-		{ "id": 10, "file": "/videos/10.mp4", "title": "Fire countdown" }
+		{ "id": 0, "src": "/videos/00.mp4", "title": "Welcome" },
+		{ "id": 1, "src": "/videos/01.mp4", "title": "Fireworks countdown" },
+		{ "id": 2, "src": "/videos/02.mp4", "title": "Silent film countdown" },
+		{ "id": 3, "src": "/videos/03.mp4", "title": "Film countdown" },
+		{ "id": 4, "src": "/videos/04.mp4", "title": "Code countdown" },
+		{ "id": 5, "src": "/videos/05.mp4", "title": "Sweep countdown" },
+		{ "id": 6, "src": "/videos/06.mp4", "title": "Bold countdown" },
+		{ "id": 7, "src": "/videos/07.mp4", "title": "Race countdown" },
+		{ "id": 8, "src": "/videos/08.mp4", "title": "Sci-Fi countdown" },
+		{ "id": 9, "src": "/videos/09.mp4", "title": "Neon countdown" },
+		{ "id": 10, "src": "/videos/10.mp4", "title": "Fire countdown" }
 	],
 	"locations": [
 		{
 			"id": 1,
 			"videoId": 0,
 			"nextLocations": [
-				{ "videoId": 2, "prompt": "Go see some fireworks" },
-				{ "videoId": 3, "prompt": "View a silent film" },
-				{ "videoId": 4, "prompt": "See a cinefilm" }
+				{ "locationId": 2, "prompt": "Go see some fireworks" },
+				{ "locationId": 3, "prompt": "View a silent film" },
+				{ "locationId": 4, "prompt": "See a cinefilm" }
 			],
 			"canGoBack": false
 		},
 		{
-			"id": 1,
+			"id": 2,
 			"videoId": 1,
 			"nextLocations": [],
-			"canGoBack": true
+			"canGoBack": false
 		},
 		{
-			"id": 1,
+			"id": 3,
 			"videoId": 2,
 			"nextLocations": [],
-			"canGoBack": true
+			"canGoBack": false
 		},
 		{
-			"id": 1,
+			"id": 4,
 			"videoId": 3,
+			"nextLocations": [
+				{ "locationId": 5, "prompt": "Do a code countdown" },
+				{ "locationId": 6, "prompt": "Sci-Fi!!" }
+			],
+			"canGoBack": false
+		},
+		{
+			"id": 5,
+			"videoId": 4,
 			"nextLocations": [],
-			"canGoBack": true
+			"canGoBack": false
+		},
+		{
+			"id": 6,
+			"videoId": 8,
+			"nextLocations": [],
+			"canGoBack": false
 		}
 	]
 }
