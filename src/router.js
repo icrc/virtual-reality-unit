@@ -19,6 +19,11 @@ const routes = [
     component: views.View,
   },
   {
+    path: "/test",
+    name: "test",
+    component: views.Test,
+  },
+  {
     path: "/:catchAll(.*)*",
     name: "unknown",
     component: views.NotFound,

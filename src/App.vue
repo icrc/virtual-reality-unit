@@ -10,6 +10,7 @@
         <li><RouterLink to="/">Home</RouterLink></li>
         <li><RouterLink to="/view">View</RouterLink></li>
         <li><RouterLink to="/edit">Edit</RouterLink></li>
+        <li><RouterLink to="/test">Test</RouterLink></li>
         <li><RouterLink to="/help">Help</RouterLink></li>
       </menu>
     </nav>
