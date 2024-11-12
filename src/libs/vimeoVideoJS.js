@@ -59,12 +59,19 @@ class Vimeo extends Tech {
       byline: false,
       portrait: false,
       title: false,
-      background: true,
+      background: false,
+      controls:true,
       loop: false
     };
 
     if (this.options_.autoplay) {
       vimeoOptions.autoplay = true;
+    }
+    if (this.options_.background) {
+      vimeoOptions.background = true;
+    }
+    if (this.options_.controls !== undefined) {
+      vimeoOptions.controls = this.options_.controls;
     }
     if (this.options_.height) {
       vimeoOptions.height = this.options_.height;
