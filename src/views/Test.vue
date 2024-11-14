@@ -11,6 +11,11 @@
       <button @click="pause">Pause</button>
       <button @click="jump">Jump to 43s</button>
     </div>
+    <br />
+    <div class="buttons">
+      <button @click="dbxChoose">Dropbox choose...</button>
+      <button @click="dbxSave">Dropbox save...</button>
+    </div>
   </div>
 </template>
 
@@ -36,6 +41,18 @@ const full = () => document.querySelector("html").requestFullscreen()
 const play = () => videoJS.play()
 const pause = () => videoJS.pause()
 const jump = () => videoJS.currentTime(43)
+const dbxChoose = () => {
+  Dropbox.choose({
+    success: function (files) {
+      alert("Here's the file link: " + files[0].link)
+    },
+    linkType: "direct",
+  })
+}
+const dbxSave = () => {
+  const msg = btoa("Hello world! " + new Date().toLocaleString())
+  Dropbox.save("data:text/plain;charset=utf-8;base64," + msg, "hello.txt", {})
+}
 </script>
 
 <style scoped>
