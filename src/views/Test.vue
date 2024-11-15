@@ -34,11 +34,11 @@ const playerOptions = {
   // sources: [{ type: "video/vimeo", src: "https://vimeo.com/541416221" }, { src: "/videos/05.mp4" }],
   sources: [
     { type: "video/vimeo", src: "https://player.vimeo.com/video/1025039220?h=1d3c27a454&badge=0&autopause=0&player_id=0&app_id=58479" },
-    { src: "/videos/05.mp4" },
+    { type: "video/mp4", src: "/videos/05.mp4" },
   ],
   vimeo: {
     controls: true,
-  }
+  },
   // sources: [{ src: "/videos/05.mp4" }, { type: "video/vimeo", src: "https://player.vimeo.com/video/1025039220?h=1d3c27a454&badge=0&autopause=0&player_id=0&app_id=58479&background=1" }]
 }
 
@@ -46,7 +46,11 @@ const full = () => document.querySelector("html").requestFullscreen()
 const play = () => videoJS.play()
 const pause = () => videoJS.pause()
 const jump = () => videoJS.currentTime(43)
-const vimeoChapters = () => videoJS.tech().getChapters().then(cp=>alert(JSON.stringify(cp, null, ' ')))
+const vimeoChapters = () =>
+  videoJS
+    .tech()
+    .getChapters()
+    .then(cp => alert(JSON.stringify(cp, null, " ")))
 const dbxChoose = () => {
   Dropbox.choose({
     success: function (files) {
@@ -73,14 +77,14 @@ button {
   width: 8em;
 }
 .player_container {
-  position:relative;
+  position: relative;
   display: inline-block;
 }
 .floating_test {
   position: absolute;
   top: 20%;
   left: 10%;
-  width: calc(10% / ( 16 / 9));
+  width: calc(10% / (16 / 9));
   height: 10%;
   border-radius: 50%;
   background: #f00;
