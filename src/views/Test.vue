@@ -4,7 +4,7 @@
     <h1>Testing</h1>
     <div :class="{ player_container: true, full_screen:isFullscreen }">
       <player @ready="onPlayerReady" :ref="player" :options="playerOptions" />
-      <div class="floating_test"></div>
+      <div @click="floater" class="floating_test"></div>
     </div>
     <div class="buttons">
       <button @click="full">Full screen</button>
@@ -49,6 +49,7 @@ const full = () => document.querySelector("html").requestFullscreen()
 const play = () => videoJS.play()
 const pause = () => videoJS.pause()
 const jump = () => videoJS.currentTime(43)
+const floater = () => alert('Clicked a floating button over video')
 const vimeoChapters = () =>
   videoJS
     .tech()
