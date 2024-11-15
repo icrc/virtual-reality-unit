@@ -1,0 +1,114 @@
+{
+	"version": "0.0.1",
+	"title": "Blast Trauma Triage Training",
+	"author": "Jon Randy",
+	"info": "A sample VideoPath project for testing",
+	"locales": ["en"],
+	"videos": [
+		{
+			"id": 1,
+			"title": "Main blast trauma training video",
+			"sourceType": "vimeo",
+			"url": "https://player.vimeo.com/video/1025039220?h=1d3c27a454&badge=0&autopause=0&player_id=0&app_id=58479",
+
+			"thumbnail": "TODO later - maybe we need this?",
+
+			"info": "Just a single video for this test. Will just use start and end points for scenes",
+			"audiotracks": []
+		}
+	],
+	"scenes": [
+		{
+			"id": 1,
+			"videoId": 1,
+			"title": "Only one scene for this story - all choices are timed while video continues",
+			"startTime": 0,
+			"endTime": -1,
+			"nextSceneId": -1,
+			"events": [
+				{
+					"type": "choice",
+					"launchTime": 64,
+					"data": {
+						"text": "What is your assessment of the patient?",
+						"type": "timed",
+						"options": {
+							"timeLimit": 6,
+							"defaultAction": ""
+						},
+						"layout": "",
+						"buttons": [
+							{
+								"text": "Immediate",
+								"options": {},
+								"action": ""
+							},
+							{
+								"text": "Delayed",
+								"options": {},
+								"action": ""
+							},
+							{
+								"text": "Minor",
+								"options": {},
+								"action": ""
+							},
+							{
+								"text": "Dead",
+								"options": {},
+								"action": ""
+							}
+						]
+					}
+				},
+				{
+					"type": "choice",
+					"launchTime": 101,
+					"data": {
+						"text": "What is your assessment of the patient?",
+						"type": "timed",
+						"options": {
+							"timeLimit": 6,
+							"defaultAction": ""
+						},
+						"layout": "",
+						"buttons": [
+							{
+								"text": "Immediate",
+								"options": {},
+								"action": ""
+							},
+							{
+								"text": "Delayed",
+								"options": {},
+								"action": ""
+							},
+							{
+								"text": "Minor",
+								"options": {},
+								"action": ""
+							},
+							{
+								"text": "Dead",
+								"options": {},
+								"action": ""
+							}
+						]
+					}
+				}
+			]
+		}
+	],
+	"state": {
+		"info": "TODO - this is to do with recording and returning data"
+	},
+	"translations": {
+		"en": {
+			"choice1_text": "What is your assessment of the patient?",
+			"choice1_button1": "Immediate",
+			"choice1_button2": "Delayed",
+			"choice1_button3": "Minor",
+			"choice1_button4": "Dead"
+		}
+	}
+}
