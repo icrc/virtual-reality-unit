@@ -219,6 +219,10 @@ class Vimeo extends Tech {
     return await this._player.getCuePoints()
   }
 
+  async getChapters() {
+    return await this._player.getChapters()
+  }
+
 }
 
 Vimeo.prototype.featuresTimeupdateEvents = true;
