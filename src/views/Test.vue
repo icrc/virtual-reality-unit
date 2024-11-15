@@ -2,7 +2,7 @@
 <template>
   <div class="s-container">
     <h1>Testing</h1>
-    <div class="player_container">
+    <div :class="{ player_container: true, full_screen:isFullscreen }">
       <player @ready="onPlayerReady" :ref="player" :options="playerOptions" />
       <div class="floating_test"></div>
     </div>
@@ -24,9 +24,12 @@
 <script setup>
 import { ref } from "vue"
 import Player from "@/components/Player.vue"
+import { useFullscreen } from "@/composables/fullscreen"
 
 const player = ref()
 let videoJS
+
+const { isFullscreen } = useFullscreen()
 
 const onPlayerReady = vJS => (videoJS = window.videoJS = vJS)
 
@@ -79,6 +82,14 @@ button {
 .player_container {
   position: relative;
   display: inline-block;
+  &.full_screen {
+    position: fixed;
+    inset: 0 0 0 0;
+    & .video-js {
+      width:100%;
+      height: 100%;
+    }
+  }
 }
 .floating_test {
   position: absolute;
