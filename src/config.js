@@ -10,13 +10,13 @@ export const VERSION = '0.0.1'
 // const storage = useStorage(dropboxStorage)
 export const storage = {
 	ready: false,
-	load(filename) {
+	load: async function load(filename) {
 
 	},
-	save(filename, data) {
+	save: async function  save(filename, data) {
 
 	},
-	pick() {
+	pick: async function  pick() {
 
 	}
 }
