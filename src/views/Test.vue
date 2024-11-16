@@ -31,7 +31,10 @@ let videoJS
 
 const { isFullscreen } = useFullscreen()
 
-const onPlayerReady = vJS => (videoJS = window.videoJS = vJS)
+const onPlayerReady = vJS => {
+  videoJS = window.videoJS = vJS
+  videoJS.getDimensions().then(dimensions => console.log(dimensions))
+}
 
 const playerOptions = {
   // sources: [{ type: "video/vimeo", src: "https://vimeo.com/541416221" }, { src: "/videos/05.mp4" }],
@@ -40,7 +43,7 @@ const playerOptions = {
     { type: "video/mp4", src: "/videos/05.mp4" },
   ],
   vimeo: {
-    controls: true,
+    // controls: true,
   },
   // sources: [{ src: "/videos/05.mp4" }, { type: "video/vimeo", src: "https://player.vimeo.com/video/1025039220?h=1d3c27a454&badge=0&autopause=0&player_id=0&app_id=58479&background=1" }]
 }

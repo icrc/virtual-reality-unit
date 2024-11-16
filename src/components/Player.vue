@@ -1,6 +1,6 @@
 <!-- Player Component -->
 <template>
-  <video ref="videoPlayer" class="video-js" width="650px"></video>
+  <video ref="videoPlayer" class="video-js" width="500px"></video>
 </template>
 
 <script>
@@ -41,6 +41,14 @@ const props = defineProps({
 
 const emit = defineEmits(["ready"])
 
+const getDimensions = async () => {
+  if (videoJS.tech().getDimensions) {
+    return await videoJS.tech().getDimensions()
+  } else {
+    return { width: videoJS.videoWidth(), height: videoJS.videoHeight() }
+  }
+}
+
 onMounted(() => {
   const mainOpts = {
     ...DEFAULT_OPTIONS,
@@ -56,6 +64,7 @@ onMounted(() => {
   }
 
   videoJS = videojs(videoPlayer.value, opts, () => emit("ready", videoJS))
+  videoJS.getDimensions = getDimensions
 })
 
 onBeforeUnmount(() => {

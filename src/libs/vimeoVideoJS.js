@@ -223,6 +223,12 @@ class Vimeo extends Tech {
     return await this._player.getChapters()
   }
 
+  async getDimensions() {
+    const dimensions = await Promise.all([this._player.getVideoWidth(), this._player.getVideoHeight()])
+    const [width, height] = dimensions
+    return { width, height }
+  }
+
 }
 
 Vimeo.prototype.featuresTimeupdateEvents = true;
