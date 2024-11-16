@@ -8,7 +8,6 @@ export function useFullscreen(el = window.document.querySelector('html')) {
 
   function update() {
     isFullscreen.value = checkIsFullscreen(el)
-    console.log(checkIsFullscreen(el) ? "Yes" : "No")
   }
 
   function stopWatching() {
