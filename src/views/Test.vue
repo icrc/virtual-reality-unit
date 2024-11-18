@@ -62,6 +62,8 @@ const dbxChoose = () => {
   Dropbox.choose({
     success: function (files) {
       alert("Here's the file link: " + files[0].link)
+      alert("Here's the file name: " + files[0].name)
+      alert("Here's the file id: " + files[0].id)
     },
     linkType: "direct",
   })
