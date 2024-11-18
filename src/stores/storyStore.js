@@ -3,7 +3,22 @@ import { ref, computed, reactive } from "vue"
 
 import { VERSION, storage } from "@/config"
 
-const EMPTY_STORY = {}
+// ** TODO ** make a watcher on main story state change for setting 'isSaved'
+
+
+// empty, blank story/project
+const EMPTY_STORY = {
+  version: VERSION,
+  title: "New Project",
+  author: "Unknown author",
+  info: "Test\ninfo\ndata",
+  locales: ["en"],
+
+  videos: [],
+  scenes: [],
+  initialState: {},
+  translations: {},
+}
 
 export const useStoryStore = defineStore("story", () => {
   // In returned items:
@@ -20,7 +35,14 @@ export const useStoryStore = defineStore("story", () => {
     currentStory.value = { ...EMPTY_STORY }
     currentFilename.value = null
     isSaved.value = false
-    currentHighestVideoId = 0
+    currentHighestVideoId = -1
+    currentHighestSceneId = -1
+  }
+
+  // pick a filename to load
+  async function pickStory() {
+    const filename = await storage.pick()
+    return filename
   }
 
   // load a previously saved story
@@ -31,6 +53,7 @@ export const useStoryStore = defineStore("story", () => {
       isSaved.value = true
       currentFilename.value = filename
       currentHighestVideoId = getHighestVideoId(story)
+      currentHighestSceneId = getHighestSceneId(story)
       return true
     }
     return false
@@ -52,36 +75,64 @@ export const useStoryStore = defineStore("story", () => {
 
   // delete a video from the current story
   function deleteVideo(id) {
-    currenyStory.value.videos = currentStory.value.videos.filter(video => video.id!== id)
-    currentHighestVideoId = getHighestVideoId(story)
+    currenyStory.value.videos = currentStory.value.videos.filter(video => video.id !== id)
+    currentHighestVideoId = getHighestVideoId(currentStory.value)
   }
 
   // update a video in the current story
   function updateVideo(id, data) {
-    currentStory.value.videos = currentStory.value.videos.map(video => id === id? {...video,...data } : video)
+    currentStory.value.videos = currentStory.value.videos.map(video => (video.id === id ? { ...video, ...data } : video))
   }
 
   // add a scene to the current story
-  function addScene(data) {}
+  function addScene(data) {
+    currentStory.value.scenes.push({ ...data, id: nextSceneId() })
+  }
 
   // delete a scene from the current story
-  function deleteScene(id) {}
+  function deleteScene(id) {
+    currentStory.value.scenes = currentStory.value.scenes.filter(scene => scene.id !== id)
+    currentHighestSceneId = getHighestSceneId(currentStory.value)
+  }
 
   // update a scene in the current story
-  function updateScene(id, data) {}
+  function updateScene(id, data) {
+    currentStory.value.scenes = currentStory.value.scenes.map(scene => (scene,id === id ? {...scene,...data } : scene))
+  }
 
   // add an event to a scene in the current story
-  function addEvent(sceneId, data) {}
+  function addEvent(sceneId, data) {
+    const scene = getSceneById(sceneId)
+    if (!scene) return false
+    scene.events.push({...data, id: nextEventIdForScene(scene) })
+  }
 
   // delete an event from a scene in the current story
-  function deleteEvent(sceneId, eventId) {}
+  function deleteEvent(sceneId, eventId) {
+    const scene = getSceneById(sceneId)
+    if (!scene) return false
+    scene.events = scene.events.filter(({ id }) => id!== eventId)
+  }
 
   // update an event in a scene in the current story
-  function updateEvent(sceneId, eventId, data) {}
+  function updateEvent(sceneId, eventId, data) {
+    const scene = getSceneById(sceneId)
+    if (!scene) return false
+    scene.events = scene.events.map(event => (event.id === eventId ? {...event,...data } : event))
+  }
+
+
+  const getSceneById = sceneId => currentStory.value.scenes.find(({id}) => id === sceneId)
 
   let currentHighestVideoId = 0
   const nextVideoId = () => ++currentHighestVideoId
   const getHighestVideoId = story => Math.max(...story.videos.map(({ id }) => id))
+
+  let currentHighestSceneId = 0
+  const nextSceneId = () => ++currentHighestSceneId
+  const getHighestSceneId = story => Math.max(...story.scenes.map(({ id }) => id))
+
+  const getHighestEventIdForScene = scene => scene.events.length ? Math.max(...scene.events.map(({ id }) => id)) : -1
 
   createStory()
 
@@ -93,6 +144,7 @@ export const useStoryStore = defineStore("story", () => {
     },
 
     createStory,
+    pickStory,
     loadStory,
     saveStory,
 

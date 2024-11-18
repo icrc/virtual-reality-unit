@@ -25,6 +25,7 @@
 			"nextSceneId": -1,
 			"events": [
 				{
+					"id": 0,
 					"type": "choice",
 					"launchTime": 64,
 					"data": {
@@ -60,6 +61,7 @@
 					}
 				},
 				{
+					"id": 1,
 					"type": "choice",
 					"launchTime": 101,
 					"data": {
@@ -97,7 +99,7 @@
 			]
 		}
 	],
-	"state": {
+	"initialState": {
 		"info": "TODO - this is to do with recording and returning data"
 	},
 	"translations": {}
