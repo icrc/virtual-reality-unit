@@ -1,9 +1,5 @@
-<script setup>
-
-</script>
-
 <template>
-  <header>
+  <header :class="{main_nav: true, full_screen: isFullscreen }">
     <nav class="s-container">
       <div>VideoPath</div>
       <menu>
@@ -18,4 +14,22 @@
   <RouterView />
 </template>
 
-<style scoped></style>
+<script setup>
+
+import { useFullscreen } from "@/composables/fullscreen"
+const { isFullscreen } = useFullscreen()
+
+
+
+</script>
+
+<style>
+  
+@media screen and (min-width: 1280px){:where(html){font-size:calc(100% + 2px + .0054*(80vw - 1280px));}}
+
+.main_nav.full_screen {
+  display: none;
+}
+
+
+</style>
