@@ -1,10 +1,19 @@
-import { defineConfig } from 'vite'
+import { defineConfig } from "vite"
 import path from "path"
-import vue from '@vitejs/plugin-vue'
+import vue from "@vitejs/plugin-vue"
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [
+    vue({
+      template: {
+        compilerOptions: {
+          // treat all tags with a dash as custom elements
+          isCustomElement: tag => ['search'].includes(tag),
+        },
+      },
+    }),
+  ],
   resolve: {
     alias: [
       {
@@ -17,5 +26,5 @@ export default defineConfig({
       },
     ],
     extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json", ".vue"],
-  },  
+  },
 })
