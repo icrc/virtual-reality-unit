@@ -1,5 +1,5 @@
 import { defineStore } from "pinia"
-import { ref, computed, reactive } from "vue"
+import { ref, computed, reactive, watch } from "vue"
 
 import { VERSION, storage } from "@/config"
 
@@ -27,14 +27,21 @@ export const useStoryStore = defineStore("story", () => {
   //  function()s become actions
 
   const currentStory = ref(null)
-  const isSaved = ref(null)
+  const isSaved = ref(false)
   const currentFilename = ref(null)
+
+  let mostRecentSavedJSON = ""
+
+  // watch the main story for changes to set isSaved
+  watch(() => JSON.stringify(currentStory.value), (newStoryJSON, oldStoryJSON) => {
+    isSaved.value = newStoryJSON === mostRecentSavedJSON
+  })
 
   // replace the current story with a new, blank story
   function createStory() {
     currentStory.value = { ...EMPTY_STORY }
+    mostRecentSavedJSON = JSON.stringify(currentStory.value)
     currentFilename.value = null
-    isSaved.value = false
     currentHighestVideoId = -1
     currentHighestSceneId = -1
   }
@@ -50,7 +57,7 @@ export const useStoryStore = defineStore("story", () => {
     const story = await storage.load(filename)
     if (story) {
       currentStory.value = story
-      isSaved.value = true
+      mostRecentSavedJSON = JSON.stringify(currentStory.value)
       currentFilename.value = filename
       currentHighestVideoId = getHighestVideoId(story)
       currentHighestSceneId = getHighestSceneId(story)
