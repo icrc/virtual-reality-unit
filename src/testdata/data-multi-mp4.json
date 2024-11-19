@@ -72,7 +72,7 @@
 			"id": 7,
 			"title": "Racing",
 			"sourceType": "mp4",
-			"url": "/videos/06.mp4",
+			"url": "/videos/07.mp4",
 			"thumbnail": "TODO later - maybe we need this?",
 			"info": "A short test video with a 'racing' feel",
 			"audiotracks": []
@@ -81,7 +81,7 @@
 			"id": 8,
 			"title": "SciFi",
 			"sourceType": "mp4",
-			"url": "/videos/07.mp4",
+			"url": "/videos/08.mp4",
 			"thumbnail": "TODO later - maybe we need this?",
 			"info": "A short test video with a'sci-fi' feel",
 			"audiotracks": []
@@ -90,7 +90,7 @@
 			"id": 9,
 			"title": "Neon",
 			"sourceType": "mp4",
-			"url": "/videos/08.mp4",
+			"url": "/videos/09.mp4",
 			"thumbnail": "TODO later - maybe we need this?",
 			"info": "A short test video with a 'neon' feel",
 			"audiotracks": []
@@ -99,7 +99,7 @@
 			"id": 10,
 			"title": "Fire",
 			"sourceType": "mp4",
-			"url": "/videos/09.mp4",
+			"url": "/videos/10.mp4",
 			"thumbnail": "TODO later - maybe we need this?",
 			"info": "A short test video with a 'fire' feel",
 			"audiotracks": []
@@ -108,7 +108,7 @@
 	"scenes": [
 		{
 			"id": 0,
-			"videoId": 1,
+			"videoId": 0,
 			"title": "Welcome",
 			"startTime": 0,
 			"endTime": -1,
@@ -143,6 +143,33 @@
 					}
 				}
 			]
+		},
+		{
+			"id": 1,
+			"videoId": 1,
+			"title": "A fireworks-styled countdown",
+			"startTime": 0,
+			"endTime": -1,
+			"nextSceneId": -1,
+			"events": []
+		},
+		{
+			"id": 2,
+			"videoId": 2,
+			"title": "Silent movie-styled countdown",
+			"startTime": 0,
+			"endTime": -1,
+			"nextSceneId": -1,
+			"events": []
+		},
+		{
+			"id": 3,
+			"videoId": 3,
+			"title": "A film roll-styled countdown",
+			"startTime": 0,
+			"endTime": -1,
+			"nextSceneId": -1,
+			"events": []
 		}
 	],
 	"initialState": {
