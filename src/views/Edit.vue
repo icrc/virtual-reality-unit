@@ -8,16 +8,16 @@
             <!-- <h1>Edit</h1> -->
             <menu id="side-navigation" class="svelte-1jn03lf">
               <li>
-                <a href="#">Create new</a>
+                <a href="#" @click.prevent="newStory">Create new</a>
               </li>
               <li>
-                <a href="#">Load existing</a>
+                <a href="#" @click.prevent="loadStory">Load existing</a>
               </li>
               <li>
-                <a href="#">Save current</a>
+                <a href="#" @click.prevent="saveStory" v-bind="{ ...(store.isSaved && { disabled: true }) }">Save current {{ unsavedMarker }}</a>
               </li>
               <li>
-                <a href="#">Test project</a>
+                <a href="#" @click.prevent="viewStory">View project</a>
               </li>
             </menu>
           </nav>
@@ -26,35 +26,25 @@
           <br />
           <article>
             <header>
-              <h2 :class="{ missing: !store.currentStory.title }">{{ store.currentStory.title || 'No name' }}</h2>
+              <h2 :class="{ missing: !story.title }">{{ story.title || "No name" }}</h2>
             </header>
             <form>
               <div style="--span: 4" class="s-grid">
                 <div style="align-items: end">
-                  <label style="--span: 8">Name<input placeholder="Project name" type="text" v-model="store.currentStory.title" /></label>
-                  <label style="--span: 8">Author<input placeholder="n/a" type="text" v-model="store.currentStory.author" /></label>
-                  <label style="--span: 8">Info<textarea v-model="store.currentStory.info" rows="3"></textarea></label>
+                  <label style="--span: 8">Name<input placeholder="Project name" type="text" v-model="story.title" /></label>
+                  <label style="--span: 8">Author<input placeholder="n/a" type="text" v-model="story.author" /></label>
+                  <label style="--span: 8">Info<textarea v-model="story.info" rows="3"></textarea></label>
                 </div>
               </div>
             </form>
           </article>
-          
-          <article>
-            <details>
-              <summary role="button">Videos (0)</summary>
-              <div>Hello</div>
-            </details>
-          </article>
-          
-          <article>
-            <details>
-              <summary role="button">Scenes (0)</summary>
-              <div>World</div>
-            </details>
-          </article>
+
+          <videos :store="store" />
+
+          <scenes :store="store" />
 
           <!-- Sample crap from sugar website - for reference -->
-<!--           <article style="display: none">
+          <article style="display: none">
             <form>
               <div style="--span: 4" class="s-grid">
                 <div style="align-items: end">
@@ -90,8 +80,6 @@
               </div>
             </form>
           </article>
- -->
-
         </main>
       </div>
     </div>
@@ -99,18 +87,42 @@
 </template>
 
 <script setup>
+import { computed } from "vue"
 import { useStoryStore } from "@/stores/storyStore"
 
+import Videos from "@/components/Videos.vue"
+import Scenes from "@/components/Scenes.vue"
+
 const store = useStoryStore()
+const story = computed(() => store.currentStory)
 
-window.store = store
+const unsavedMarker = computed(() => (store.isSaved ? "" : "*"))
 
+const newStory = async () => {
+  if (!(await confirmUnsaved())) return
+  store.newStory()
+}
 
+const loadStory = async () => {
+  if (!(await confirmUnsaved())) return
+  const filename = await store.pickStory()
+  filename && (await store.loadStory(filename))
+}
+
+const viewStory = () => {
+  alert("TBA")
+}
+
+const saveStory = async () => {
+  alert("TBA")
+}
+
+const confirmUnsaved = async () => {
+  return store.isSaved ? true : confirm("Current story is unsaved. Continue?")
+}
 </script>
 
-
 <style scoped>
-
 .side_nav {
   position: sticky;
   top: 5em;
@@ -119,5 +131,4 @@ window.store = store
 h2.missing {
   opacity: 0.3;
 }
-
 </style>
