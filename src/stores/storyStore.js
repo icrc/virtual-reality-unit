@@ -1,5 +1,5 @@
 import { defineStore } from "pinia"
-import { ref, computed, reactive, watch } from "vue"
+import { ref, watch } from "vue"
 
 import { VERSION, storage } from "@/config"
 
@@ -10,8 +10,8 @@ import { VERSION, storage } from "@/config"
 const EMPTY_STORY = {
   version: VERSION,
   title: "New Project",
-  author: "Unknown author",
-  info: "Test\ninfo\ndata",
+  author: "",
+  info: "",
   locales: ["en"],
 
   videos: [],
@@ -38,7 +38,7 @@ export const useStoryStore = defineStore("story", () => {
   })
 
   // replace the current story with a new, blank story
-  function createStory() {
+  function newStory() {
     currentStory.value = { ...EMPTY_STORY }
     mostRecentSavedJSON = JSON.stringify(currentStory.value)
     currentFilename.value = null
@@ -141,7 +141,7 @@ export const useStoryStore = defineStore("story", () => {
 
   const getHighestEventIdForScene = scene => scene.events.length ? Math.max(...scene.events.map(({ id }) => id)) : -1
 
-  createStory()
+  newStory()
 
   return {
     currentStory,
@@ -150,7 +150,7 @@ export const useStoryStore = defineStore("story", () => {
       return currentFilename
     },
 
-    createStory,
+    newStory,
     pickStory,
     loadStory,
     saveStory,
