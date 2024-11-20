@@ -46,7 +46,7 @@ const story = computed(() => props.store.currentStory)
 
 const deleteVideo = videoId => {
   const relatedScenes = props.store.getScenesByVideoId(videoId)
-  if (relatedScenes.length && !confirm(`This video has related scenes:\n\n${relatedScenes.map(scene => `'${scene.title}'`).join('\n')}\n\nAre you sure you want to delete?`)) return
+  if (relatedScenes.length && !confirm(`This video has related scenes:\n\n${relatedScenes.map(scene => `'${scene.title}'`).join('\n')}\n\nAre you sure you want to delete this video and related scenes?`)) return
   props.store.deleteVideo(videoId, true)
 }
 
