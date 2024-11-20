@@ -26,7 +26,7 @@
           <br />
           <article>
             <header>
-              <h2 :class="{ missing: !story.title }">{{ story.title || "No name" }}</h2>
+              <h2><span :class="{ missing: !story.title }">{{ story.title || "No name" }}</span> ({{ store.currentFilename }})</h2>
             </header>
             <form>
               <div style="--span: 4" class="s-grid">
@@ -130,7 +130,7 @@ const confirmUnsaved = async () => {
   top: 5em;
 }
 
-h2.missing {
+h2 > .missing {
   opacity: 0.3;
 }
 </style>
