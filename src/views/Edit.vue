@@ -113,8 +113,10 @@ const viewStory = () => {
   alert("TBA")
 }
 
-const saveStory = async () => {
-  alert("TBA")
+const saveStory = async (e) => {
+  if (e.target.attributes.disabled) return
+  const fname = await store.chooseStoryFilename()
+  if (fname) await store.saveStory(fname)
 }
 
 const confirmUnsaved = async () => {

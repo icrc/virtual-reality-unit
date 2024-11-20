@@ -1,24 +1,35 @@
 <!-- Scenes Component - for editing scene objects -->
 <template>
   <article>
-    <details>
-      <summary role="button">Scenes ({{ story.scenes.length }})</summary>
-      <div style="--span: 4" class="s-grid">
-
+    <details ref="header" class="scenes_header">
+      <summary role="button">Scenes ({{ story.scenes.length }})<button @click="addScene" class="add_button">+</button></summary>
+      <div style="--span: 4" class="s-grid scenes-container">
         <template v-for="(scene, idx) in story.scenes" :key="scene.id">
-          <form>
-          <label style="--span: 5">Title<input placeholder="n/a" type="text" v-model="scene.title" /></label>
-          <label style="--span: 3">Video
+          <div>
+            <label style="--span: 6">Title<input placeholder="n/a" type="text" v-model="scene.title" /></label>
+            <label style="--span: 2"
+              >Next scene
+              <select v-model="scene.nextSceneId">
+                <option :value="-1">(n/a)</option>
+                <option v-for="scene in story.scenes" idx="scene.id" :value="scene.id">{{ scene.title }}</option>
+              </select>
+            </label>
+          </div>
+          <div>
+            <label style="--span: 1">Start time (s)<input placeholder="n/a" type="number" min="-1" v-model="scene.startTime" /></label>
+            <label style="--span: 1">End time (-1: end)<input placeholder="n/a" type="number" min="-1" v-model="scene.endTime" /></label>
+            <label style="--span: 3"
+              >Video
               <select v-model="scene.videoId">
                 <option v-for="video in story.videos" idx="video.id" :value="video.id">{{ video.title }}</option>
               </select>
-          </label>
-          </form>
+            </label>
+          </div>
+          <div style="justify-items: end">
+            <button @click="deleteScene(scene.id)" class="s-outline" style="width: fit-content">Delete</button>
+          </div>
           <hr v-if="idx < story.scenes.length - 1" />
-
-
         </template>
-
       </div>
     </details>
   </article>
@@ -27,7 +38,9 @@
 <script></script>
 
 <script setup>
-import { computed } from "vue"
+import { ref, computed } from "vue"
+
+const header = ref(null)
 
 const props = defineProps({
   store: {
@@ -40,7 +53,37 @@ const props = defineProps({
 
 const story = computed(() => props.store.currentStory)
 
+const deleteScene = sceneId => props.store.deleteScene(sceneId)
+
+// TODO - maybe add some sensible defaults to newly added videos?
+const addScene = () => {
+  props.store.addScene({})
+  header.value.open = true
+}
+
 
 </script>
 
-<style scoped></style>
+<style scoped>
+
+.scenes-container {
+  font-size:90%;
+}
+
+.scenes_header {
+  position: relative;
+}
+
+.add_button {
+  width: fit-content;
+  right: 3.25em;
+  position: absolute;
+  height: 1em;
+  font-weight: bold;
+  border: 1px solid #fff;
+  &:hover {
+    background: #fff;
+    color: var(--s-color-primary-80-fg);
+  }
+}
+</style>
