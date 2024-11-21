@@ -89,7 +89,9 @@ export const useStoryStore = defineStore("story", () => {
 
   // add a video to the current story
   function addVideo(data) {
-    currentStory.value.videos.push({ ...data, id: nextVideoId() })
+    const video = { ...data, id: nextVideoId() }
+    currentStory.value.videos.push(video)
+    return video.id
   }
 
   // delete a video from the current story
@@ -106,7 +108,9 @@ export const useStoryStore = defineStore("story", () => {
 
   // add a scene to the current story
   function addScene(data) {
-    currentStory.value.scenes.push({ ...data, id: nextSceneId() })
+    const scene = { ...data, id: nextSceneId() }
+    currentStory.value.scenes.push(scene)
+    return scene.id
   }
 
   // delete a scene from the current story
@@ -124,7 +128,9 @@ export const useStoryStore = defineStore("story", () => {
   function addEvent(sceneId, data) {
     const scene = getSceneById(sceneId)
     if (!scene) return false
-    scene.events.push({ ...data, id: nextEventIdForScene(scene) })
+    const event = { ...data, id: nextEventIdForScene(scene) }
+    scene.events.push(event)
+    return event.id
   }
 
   // delete an event from a scene in the current story
