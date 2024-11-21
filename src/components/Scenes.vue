@@ -5,8 +5,8 @@
       <summary role="button">Scenes ({{ story.scenes.length }})<button @click="addScene" class="add_button">+</button></summary>
       <div style="--span: 4" class="s-grid scenes-container">
         <template v-for="(scene, idx) in story.scenes" :key="scene.id">
-          <div>
-            <label style="--span: 6">Title<input placeholder="n/a" type="text" v-model="scene.title" /></label>
+          <div :id="`scene_${scene.id}`">
+            <label style="--span: 6">Title<input class="scene_title" placeholder="n/a" type="text" v-model="scene.title" /></label>
             <label style="--span: 2"
               >Next scene
               <select v-model="scene.nextSceneId">
@@ -35,10 +35,19 @@
   </article>
 </template>
 
-<script></script>
+<script>
+const NEW_SCENE_DEFAULTS = {
+  videoId: undefined,
+  title: "",
+  startTime: 0,
+  endTime: -1,
+  nextSceneId: -1,
+  events: [],
+}
+</script>
 
 <script setup>
-import { ref, computed } from "vue"
+import { ref, computed, nextTick } from "vue"
 
 const header = ref(null)
 
@@ -55,19 +64,16 @@ const story = computed(() => props.store.currentStory)
 
 const deleteScene = sceneId => props.store.deleteScene(sceneId)
 
-// TODO - maybe add some sensible defaults to newly added videos?
 const addScene = () => {
-  props.store.addScene({})
+  const id = props.store.addScene(structuredClone(NEW_SCENE_DEFAULTS))
   header.value.open = true
+  nextTick(() => document.querySelector(`#scene_${id} .scene_title`).focus())
 }
-
-
 </script>
 
 <style scoped>
-
 .scenes-container {
-  font-size:90%;
+  font-size: 90%;
 }
 
 .scenes_header {

@@ -9,11 +9,10 @@
             <label style="--span: 1"
               >Type
               <select v-model="video.sourceType">
-                <option value="vimeo">Vimeo</option>
-                <option value="mp4">MP4</option>
+                <option v-for="type in Object.values(VIDEO_SOURCE_TYPES)" :value="type.id" :key="type.id">{{ type.name }}</option>
               </select>
             </label>
-            <label style="--span: 2">Title<input placeholder="n/a" type="text" v-model="video.title" /></label>
+            <label style="--span: 2">Title<input class="video_name" placeholder="n/a" type="text" v-model="video.title" /></label>
             <label>URL<input placeholder="n/a" type="text" v-model="video.url" /></label>
           </div>
           <div style="justify-items: end">
@@ -26,10 +25,21 @@
   </article>
 </template>
 
-<script></script>
+<script>
+import { VIDEO_SOURCE_TYPES, DEFAULT_VIDEO_SOURCE_TYPE } from "@/config"
+
+const NEW_VIDEO_DEFAULTS = {
+  title: "",
+  sourceType: DEFAULT_VIDEO_SOURCE_TYPE,
+  url: "",
+  thumbnail: "",
+  info: "",
+  audiotracks: [],
+}
+</script>
 
 <script setup>
-import { ref, computed } from "vue"
+import { ref, computed, nextTick } from "vue"
 
 const header = ref(null)
 
@@ -46,22 +56,24 @@ const story = computed(() => props.store.currentStory)
 
 const deleteVideo = videoId => {
   const relatedScenes = props.store.getScenesByVideoId(videoId)
-  if (relatedScenes.length && !confirm(`This video has related scenes:\n\n${relatedScenes.map(scene => `'${scene.title}'`).join('\n')}\n\nAre you sure you want to delete this video and related scenes?`)) return
+  if (
+    relatedScenes.length &&
+    !confirm(
+      `This video has related scenes:\n\n${relatedScenes.map(scene => `'${scene.title}'`).join("\n")}\n\nAre you sure you want to delete this video and related scenes?`
+    )
+  )
+    return
   props.store.deleteVideo(videoId, true)
 }
 
-// TODO - maybe add some sensible defaults to newly added videos?
 const addVideo = () => {
-  props.store.addVideo({})
+  const id = props.store.addVideo(structuredClone(NEW_VIDEO_DEFAULTS))
   header.value.open = true
+  nextTick(() => document.querySelector(`#video_${id} .video_name`).focus())
 }
-// TODO - HERE - make store.addVideo return id, make first editable elephant of newly added video focus on add
-
 </script>
 
 <style scoped>
-
-
 .videos-container {
   font-size: 90%;
 }
@@ -91,6 +103,5 @@ const addVideo = () => {
     background: #fff;
     color: var(--s-color-primary-80-fg);
   }
-
 }
 </style>
