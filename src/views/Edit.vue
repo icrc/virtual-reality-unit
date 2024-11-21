@@ -5,7 +5,6 @@
       <div>
         <aside style="--span: 12; --span-11: 2">
           <nav class="side_nav">
-            <!-- <h1>Edit</h1> -->
             <menu id="side-navigation" class="svelte-1jn03lf">
               <li>
                 <a href="#" @click.prevent="newStory">Create new</a>
@@ -26,7 +25,7 @@
           <br />
           <article>
             <header>
-              <h2><span :class="{ missing: !story.title }">{{ story.title || "No name" }}</span> ({{ store.currentFilename }})</h2>
+              <h2><span :class="{ missing: !story.title }">{{ story.title || "No name" }}</span> <span v-if="store.currentFilename">({{ store.currentFilename }})</span></h2>
             </header>
             <form>
               <div style="--span: 4" class="s-grid">
