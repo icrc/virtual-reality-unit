@@ -25,12 +25,22 @@
           <br />
           <article>
             <header>
-              <h2><span :class="{ missing: !story.title }">{{ story.title || "No name" }}</span> <span v-if="store.currentFilename">({{ store.currentFilename }})</span></h2>
+              <h2>
+                <span :class="{ missing: !story.title }">{{ story.title || "No name" }}</span>
+                <span v-if="store.currentFilename">({{ store.currentFilename }})</span>
+              </h2>
             </header>
             <form>
               <div style="--span: 4" class="s-grid">
                 <div style="align-items: end">
-                  <label style="--span: 8">Name<input placeholder="Project name" type="text" v-model="story.title" /></label>
+                  <label style="--span: 5">Name<input placeholder="Project name" type="text" v-model="story.title" /></label>
+                  <label style="--span: 3"
+                    >Initial scene
+                    <select v-model="story.initialSceneId">
+                      <option v-if="story.scenes.length" v-for="scene in story.scenes" idx="scene.id" :value="scene.id">{{ scene.title }}</option>
+                      <option v-else :value="-1">No scenes available. Please add one</option>
+                    </select>
+                  </label>
                   <label style="--span: 8">Author<input placeholder="n/a" type="text" v-model="story.author" /></label>
                   <label style="--span: 8">Info<textarea v-model="story.info" rows="3"></textarea></label>
                 </div>
@@ -112,7 +122,7 @@ const viewStory = () => {
   alert("TBA")
 }
 
-const saveStory = async (e) => {
+const saveStory = async e => {
   if (e.target.attributes.disabled) return
   const fname = await store.chooseStoryFilename()
   if (fname) await store.saveStory(fname)

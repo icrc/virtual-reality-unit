@@ -172,6 +172,7 @@
 			"events": []
 		}
 	],
+	"initialSceneId": 0,
 	"initialState": {
 		"info": "TODO - this is to do with recording and returning data"
 	},
