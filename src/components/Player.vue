@@ -1,6 +1,6 @@
 <!-- Player Component -->
 <template>
-  <video ref="videoPlayer" class="video-js" width="500px"></video>
+  <video ref="videoPlayer" class="video-js"></video>
 </template>
 
 <script>
@@ -72,4 +72,10 @@ onBeforeUnmount(() => {
 })
 </script>
 
-<style scoped></style>
+<style scoped>
+  
+.video-js {
+  width: 100%;
+
+}
+</style>

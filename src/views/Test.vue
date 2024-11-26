@@ -3,7 +3,7 @@
   <div class="s-container">
     <h1>Testing</h1>
     <div :class="{ player_container: true, full_screen:isFullscreen }">
-      <player @ready="onPlayerReady" :ref="player" :options="playerOptions" />
+      <player width="800px" @ready="onPlayerReady" :ref="player" :options="playerOptions" />
       <div @click="floater" class="floating_test"></div>
     </div>
     <div class="buttons">
@@ -43,7 +43,7 @@ setStateValue: @keyName, 'String test'`
     console.log({action, args})
     if (action == 'setStateValue') state[args[0]] = args[1]
   })
-  console.log(state)
+  console.log()
 }
 
 // TODO - alt code if we have to a safeEval for passing args
@@ -125,6 +125,7 @@ button {
 .player_container {
   position: relative;
   display: inline-block;
+  width: 100%;
   &.full_screen {
     position: fixed;
     inset: 0 0 0 0;
