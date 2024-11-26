@@ -27,12 +27,12 @@
             <header>
               <h2>
                 <span :class="{ missing: !story.title }">{{ story.title || "No name" }}</span>
-                <span v-if="store.currentFilename">({{ store.currentFilename }})</span>
+                <span v-if="store.currentFilename"> ({{ store.currentFilename }})</span>
               </h2>
             </header>
             <form>
               <div style="--span: 4" class="s-grid">
-                <div style="align-items: end">
+                <div>
                   <label style="--span: 5">Name<input placeholder="Project name" type="text" v-model="story.title" /></label>
                   <label style="--span: 3"
                     >Initial scene
