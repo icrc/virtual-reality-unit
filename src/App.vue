@@ -1,7 +1,7 @@
 <template>
   <header :class="{main_nav: true, full_screen: isFullscreen }">
     <nav class="s-container">
-      <div>VideoPath</div>
+      <div>ICRC VideoPath</div>
       <menu>
         <li><RouterLink to="/">Home</RouterLink></li>
         <li><RouterLink to="/view">View</RouterLink></li>
