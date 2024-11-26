@@ -15,8 +15,9 @@
             <label style="--span: 2">Title<input class="video_name" placeholder="n/a" type="text" v-model="video.title" /></label>
             <label>URL<input placeholder="n/a" type="text" v-model="video.url" /></label>
           </div>
-          <div style="justify-items: end">
-            <button @click="deleteVideo(video.id)" class="s-outline" style="width: fit-content">Delete</button>
+          <div class="action_buttons">
+            <button @click="importChapters" v-if="chaptersAvailableForSourceType(video.sourceType)" class="s-outline">Import Chapters as Scenes</button>
+            <button @click="deleteVideo(video.id)" class="s-outline">Delete</button>
           </div>
           <hr v-if="idx < story.videos.length - 1" />
         </template>
@@ -71,6 +72,12 @@ const addVideo = () => {
   header.value.open = true
   nextTick(() => document.querySelector(`#video_${id} .video_name`).focus())
 }
+
+const importChapters = () => {
+  alert('TBA')
+}
+
+const chaptersAvailableForSourceType = sourceType => VIDEO_SOURCE_TYPES[sourceType]?.features?.getChapters
 </script>
 
 <style scoped>
@@ -102,6 +109,15 @@ const addVideo = () => {
   &:hover {
     background: #fff;
     color: var(--s-color-primary-80-fg);
+  }
+}
+
+.action_buttons {
+  display:flex;
+  justify-content: flex-end;
+  gap: 0.5em;
+  & > button {
+    width: fit-content;
   }
 }
 </style>
