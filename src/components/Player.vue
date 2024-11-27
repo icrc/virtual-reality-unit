@@ -63,7 +63,16 @@ onMounted(() => {
     },
   }
 
+
   videoJS = videojs(videoPlayer.value, opts, () => emit("ready", videoJS))
+
+
+  // error testing
+  // TODO - make this an emit, so we can handle it
+  videoJS.on("error", function () {
+    console.log('Error from from videoJS', videoJS.error())
+  })
+
   videoJS.getDimensions = getDimensions
 })
 
@@ -73,9 +82,7 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-  
 .video-js {
   width: 100%;
-
 }
 </style>
