@@ -16,7 +16,7 @@
             <label>URL<input placeholder="n/a" type="text" v-model="video.url" /></label>
           </div>
           <div class="action_buttons">
-            <button @click="importChapters" v-if="chaptersAvailableForSourceType(video.sourceType)" class="s-outline">Import Chapters as Scenes</button>
+            <button @click="importChapters(video.sourceType)" v-if="chaptersAvailableForSourceType(video.sourceType)" class="s-outline">Import Chapters as Scenes</button>
             <button @click="deleteVideo(video.id)" class="s-outline">Delete</button>
           </div>
           <hr v-if="idx < story.videos.length - 1" />
@@ -73,8 +73,9 @@ const addVideo = () => {
   nextTick(() => document.querySelector(`#video_${id} .video_name`).focus())
 }
 
-const importChapters = () => {
-  alert('TBA')
+const importChapters = async sourceType => {
+  // need to instantiate a video player with the URL before the below will work
+  const chapters = await VIDEO_SOURCE_TYPES.vimeo.features.getChapters(videoJS.tech())
 }
 
 const chaptersAvailableForSourceType = sourceType => VIDEO_SOURCE_TYPES[sourceType]?.features?.getChapters

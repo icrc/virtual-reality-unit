@@ -22,6 +22,12 @@
   </div>
 </template>
 
+<script>
+
+import { VIDEO_SOURCE_TYPES } from "@/config"
+
+</script>
+
 <script setup>
 import { ref } from "vue"
 import Player from "@/components/Player.vue"
@@ -90,11 +96,17 @@ const play = () => videoJS.play()
 const pause = () => videoJS.pause()
 const jump = () => videoJS.currentTime(43)
 const floater = () => alert('Clicked a floating button over video')
-const vimeoChapters = () =>
-  videoJS
-    .tech()
-    .getChapters()
-    .then(cp => alert(JSON.stringify(cp, null, " ")))
+
+
+const vimeoChapters = () => VIDEO_SOURCE_TYPES.vimeo.features.getChapters(videoJS.tech()).then(cp => alert(JSON.stringify(cp, null, " ")))
+
+// const vimeoChapters = () =>
+//   videoJS
+//     .tech()
+//     .getChapters()
+//     .then(cp => alert(JSON.stringify(cp, null, " ")))
+
+
 const dbxChoose = () => {
   Dropbox.choose({
     success: function (files) {
