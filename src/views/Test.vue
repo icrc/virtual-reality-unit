@@ -3,7 +3,7 @@
   <div class="s-container">
     <h1>Testing</h1>
     <div :class="{ player_container: true, full_screen:isFullscreen }">
-      <player width="800px" @ready="onPlayerReady" :ref="player" :options="playerOptions" />
+      <player width="800px" @ready="onPlayerReady" @error="onPlayerError" :ref="player" :options="playerOptions" />
       <div @click="floater" class="floating_test"></div>
     </div>
     <div class="buttons">
@@ -79,10 +79,15 @@ const onPlayerReady = vJS => {
   videoJS.getDimensions().then(dimensions => console.log(dimensions))
 }
 
+const onPlayerError = error => console.error('Player error:', error)
+
 const playerOptions = {
   // sources: [{ type: "video/vimeo", src: "https://vimeo.com/541416221" }, { src: "/videos/05.mp4" }],
   sources: [
-    { type: "video/vimeo", src: "https://player.vimeo.com/video/1025039220?h=1d3c27a454&badge=0&autopause=0&player_id=0&app_id=58479" },
+    // { type: "video/vimeo", src: "https://plasyer.vimeo.com/video/1025039220?h=1d3c27a454&badge=0&autopause=0&player_id=0&app_id=58479" },
+    // { type: "video/mp4", src: "/visdeos/05.mp4" },
+    // { type: "video/mp4", src: "https://www.google.com" },
+    // { type: "video/vimeo", src: "https://player.vimeo.com/video/1025039220?h=1d3c27a454&badge=0&autopause=0&player_id=0&app_id=58479" },
     { type: "video/mp4", src: "/videos/05.mp4" },
   ],
   vimeo: {

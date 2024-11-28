@@ -94,9 +94,7 @@ class Vimeo extends Tech {
 
     this._player = new VimeoPlayer(this.el(), vimeoOptions)
 
-    this._player.ready().catch(error => {
-      this.error(4)
-    })
+    this._player.ready().catch(() => this.error(4))
 
     this.initVimeoState()
     ;["play", "pause", "ended", "timeupdate", "progress", "seeked"].forEach(e => {

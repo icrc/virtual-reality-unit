@@ -39,7 +39,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(["ready"])
+const emit = defineEmits(["ready", "error"])
 
 const getDimensions = async () => {
   if (videoJS.tech().getDimensions) {
@@ -63,17 +63,13 @@ onMounted(() => {
     },
   }
 
-
   videoJS = videojs(videoPlayer.value, opts, () => emit("ready", videoJS))
 
-
-  // error testing
-  // TODO - make this an emit, so we can handle it
-  videoJS.on("error", function () {
-    console.log('Error from from videoJS', videoJS.error())
-  })
+  // emit errors from VideoJS
+  videoJS.on("error", event => emit("error", videoJS.error()))
 
   videoJS.getDimensions = getDimensions
+
 })
 
 onBeforeUnmount(() => {
