@@ -2,8 +2,8 @@
 <template>
   <div class="s-container">
     <h1>Testing</h1>
-    <div :class="{ player_container: true, full_screen:isFullscreen }">
-      <player width="800px" @ready="onPlayerReady" @error="onPlayerError" :ref="player" :options="playerOptions" />
+    <div :class="{ player_container: true, full_screen: isFullscreen }">
+      <player width="800px" @ready="onPlayerReady" @error="onPlayerError" :ref="myPlayer" :options="playerOptions" />
       <div @click="floater" class="floating_test"></div>
     </div>
     <div class="buttons">
@@ -23,9 +23,7 @@
 </template>
 
 <script>
-
 import { VIDEO_SOURCE_TYPES } from "@/config"
-
 </script>
 
 <script setup>
@@ -45,9 +43,9 @@ setStateValue: 'myVal', @myVal+36
 setStateValue: 'myVal', 'Hello' + @myVal
 setStateValue: @keyName, 'String test'`
   const state = { jonScene: 48 }
-  parser(code, state).forEach(({action, args}) => {
-    console.log({action, args})
-    if (action == 'setStateValue') state[args[0]] = args[1]
+  parser(code, state).forEach(({ action, args }) => {
+    console.log({ action, args })
+    if (action == "setStateValue") state[args[0]] = args[1]
   })
   console.log()
 }
@@ -67,9 +65,7 @@ setStateValue: @keyName, 'String test'`
 //   }
 // }
 
-
-
-const player = ref()
+const myPlayer = ref()
 let videoJS
 
 const { isFullscreen } = useFullscreen()
@@ -79,7 +75,7 @@ const onPlayerReady = vJS => {
   videoJS.getDimensions().then(dimensions => console.log(dimensions))
 }
 
-const onPlayerError = error => console.error('Player error:', error)
+const onPlayerError = error => console.error("Player error:", error)
 
 const playerOptions = {
   // sources: [{ type: "video/vimeo", src: "https://vimeo.com/541416221" }, { src: "/videos/05.mp4" }],
@@ -87,8 +83,8 @@ const playerOptions = {
     // { type: "video/vimeo", src: "https://plasyer.vimeo.com/video/1025039220?h=1d3c27a454&badge=0&autopause=0&player_id=0&app_id=58479" },
     // { type: "video/mp4", src: "/visdeos/05.mp4" },
     // { type: "video/mp4", src: "https://www.google.com" },
-    // { type: "video/vimeo", src: "https://player.vimeo.com/video/1025039220?h=1d3c27a454&badge=0&autopause=0&player_id=0&app_id=58479" },
-    { type: "video/mp4", src: "/videos/05.mp4" },
+    { type: "video/vimeo", src: "https://player.vimeo.com/video/1025039220?h=1d3c27a454&badge=0&autopause=0&player_id=0&app_id=58479" },
+    //{ type: "video/mp4", src: "/videos/05.mp4" },
   ],
   vimeo: {
     // controls: true,
@@ -100,8 +96,7 @@ const full = () => document.querySelector("html").requestFullscreen()
 const play = () => videoJS.play()
 const pause = () => videoJS.pause()
 const jump = () => videoJS.currentTime(43)
-const floater = () => alert('Clicked a floating button over video')
-
+const floater = () => alert("Clicked a floating button over video")
 
 const vimeoChapters = () => VIDEO_SOURCE_TYPES.vimeo.features.getChapters(videoJS.tech()).then(cp => alert(JSON.stringify(cp, null, " ")))
 
@@ -110,7 +105,6 @@ const vimeoChapters = () => VIDEO_SOURCE_TYPES.vimeo.features.getChapters(videoJ
 //     .tech()
 //     .getChapters()
 //     .then(cp => alert(JSON.stringify(cp, null, " ")))
-
 
 const dbxChoose = () => {
   Dropbox.choose({
@@ -147,7 +141,7 @@ button {
     position: fixed;
     inset: 0 0 0 0;
     & .video-js {
-      width:100%;
+      width: 100%;
       height: 100%;
     }
   }
