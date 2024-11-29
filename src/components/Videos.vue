@@ -16,7 +16,14 @@
             <label>URL<input type="text" v-model="video.url" /></label>
           </div>
           <div class="action_buttons">
-            <button @click="importChapters(video.sourceType)" v-if="chaptersAvailableForSourceType(video.sourceType)" class="s-outline">Import Chapters as Scenes</button>
+            <button
+              :disabled="chapterImportInProgress"
+              :aria-busy="chapterImportInProgress"
+              @click="importChapters(video.id, video.sourceType, video.url)"
+              v-if="chaptersAvailableForSourceType(video.sourceType)"
+              class="s-outline">
+              Import Chapters as Scenes
+            </button>
             <button @click="deleteVideo(video.id)" class="s-outline">Delete</button>
           </div>
           <hr v-if="idx < story.videos.length - 1" />
@@ -24,6 +31,10 @@
       </div>
     </details>
   </article>
+
+  <div v-if="useUtilPlayer" class="util_player">
+    <player width="200px" @ready="onPlayerReady" @error="onPlayerError" :options="playerOptions" />
+  </div>
 </template>
 
 <script>
@@ -37,10 +48,16 @@ const NEW_VIDEO_DEFAULTS = {
   info: "",
   audiotracks: [],
 }
+
+const NEW_SCENE_DEFAULTS = {
+  nextSceneId: -1,
+  events: [],
+}
 </script>
 
 <script setup>
 import { ref, computed, nextTick } from "vue"
+import Player from "@/components/Player.vue"
 
 const header = ref(null)
 
@@ -53,6 +70,66 @@ const props = defineProps({
   },
 })
 
+// --- ***HERE*** - TODO - relocate to some generic component for doing VideoJS utility calls -------------------------------------------------------------------
+
+const useUtilPlayer = ref(false)
+const playerOptions = ref(null)
+const onPlayerReady = ref(null)
+const onPlayerError = ref(null)
+
+async function getVideoChapters(sourceType, URL) {
+  let videoJS, chapters
+  try {
+    videoJS = await getVideoJS(sourceType, URL)
+    chapters = videoJS ? await VIDEO_SOURCE_TYPES[sourceType].features.getChapters(videoJS.tech()) : false
+  } catch (error) {
+    alert(`Failed to get chapters for video from ${sourceType} source with URL:\n\n${URL}`)
+    videoJS = false
+  }
+  teardownVideoJS()
+  return chapters
+}
+
+function getVideoJS(sourceType, URL) {
+  return new Promise((resolve, reject) => {
+    playerOptions.value = {
+      sources: [{ type: `video/${sourceType}`, src: URL }],
+    }
+    onPlayerReady.value = videoJS => {
+      onPlayerError.value = undefined
+      resolve(videoJS)
+    }
+    onPlayerError.value = reject
+    useUtilPlayer.value = true
+    setTimeout(reject, 5000)
+  })
+}
+
+function teardownVideoJS() {
+  useUtilPlayer.value = false
+}
+
+const chapterImportInProgress = ref(false)
+const importChapters = async (videoId, sourceType, URL) => {
+  chapterImportInProgress.value = true
+  const chapters = await getVideoChapters(sourceType, URL)
+  if (chapters) {
+    if (chapters.length) {
+      chapters.forEach(({ title, startTime, endTime }) => {
+        props.store.addScene({ ...structuredClone(NEW_SCENE_DEFAULTS), videoId, title, startTime, endTime })
+      })
+      alert(`${chapters.length} chapters imported.`)
+    } else {
+      alert("Video has no chapters to import.")
+    }
+  }
+  chapterImportInProgress.value = false
+}
+
+const chaptersAvailableForSourceType = sourceType => VIDEO_SOURCE_TYPES[sourceType]?.features?.getChapters
+
+// ----------------------------------------------------------------------
+
 const story = computed(() => props.store.currentStory)
 
 const deleteVideo = videoId => {
@@ -60,7 +137,7 @@ const deleteVideo = videoId => {
   if (
     relatedScenes.length &&
     !confirm(
-      `This video has related scenes:\n\n${relatedScenes.map(scene => `'${scene.title}'`).join("\n")}\n\nAre you sure you want to delete this video and related scenes?`
+      `This video has ${relatedScenes.length} related scene${relatedScenes.length > 1 ? "s" : ""}:\n\n${relatedScenes.map(scene => `'${scene.title}'`).join("\n")}\n\nAre you sure you want to delete this video and related scenes?`
     )
   )
     return
@@ -72,13 +149,6 @@ const addVideo = () => {
   header.value.open = true
   nextTick(() => document.querySelector(`#video_${id} .video_name`).focus())
 }
-
-const importChapters = async sourceType => {
-  // need to instantiate a video player with the URL before the below will work
-  const chapters = await VIDEO_SOURCE_TYPES.vimeo.features.getChapters(videoJS.tech())
-}
-
-const chaptersAvailableForSourceType = sourceType => VIDEO_SOURCE_TYPES[sourceType]?.features?.getChapters
 </script>
 
 <style scoped>
@@ -114,11 +184,18 @@ const chaptersAvailableForSourceType = sourceType => VIDEO_SOURCE_TYPES[sourceTy
 }
 
 .action_buttons {
-  display:flex;
+  display: flex;
   justify-content: flex-end;
   gap: 0.5em;
-  & > button {
+  & > button:nth-child(1) {
+    width: 30%;
+  }
+  & > button:last-child {
     width: fit-content;
   }
+}
+
+.util_player {
+  display: none;
 }
 </style>
