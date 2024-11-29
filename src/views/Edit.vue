@@ -26,7 +26,7 @@
           <article>
             <header>
               <h2>
-                <span :class="{ missing: !story.title }">{{ story.title || "No name" }}</span>
+                <span :class="{ missing: !story.title }">{{ story.title || "No title" }}</span>
                 <span v-if="store.currentFilename"> ({{ store.currentFilename }})</span>
               </h2>
             </header>
@@ -37,7 +37,8 @@
                   <label style="--span: 3"
                     >Initial scene
                     <select v-model="story.initialSceneId">
-                      <option v-if="story.scenes.length" v-for="scene in story.scenes" idx="scene.id" :value="scene.id">{{ scene.title }}</option>
+                      <option v-if="story.scenes.length" :value="-1">Please select a scene...</option>
+                      <option v-if="story.scenes.length" v-for="scene in story.scenes" idx="scene.id" :value="scene.id">{{ scene.title || '(No title)' }}</option>
                       <option v-else :value="-1">No scenes available. Please add one</option>
                     </select>
                   </label>

@@ -12,8 +12,8 @@
                 <option v-for="type in Object.values(VIDEO_SOURCE_TYPES)" :value="type.id" :key="type.id">{{ type.name }}</option>
               </select>
             </label>
-            <label style="--span: 2">Title<input class="video_name" placeholder="n/a" type="text" v-model="video.title" /></label>
-            <label>URL<input placeholder="n/a" type="text" v-model="video.url" /></label>
+            <label style="--span: 2">Title<input class="video_name" placeholder="(Untitled video)" type="text" v-model="video.title" /></label>
+            <label>URL<input type="text" v-model="video.url" /></label>
           </div>
           <div class="action_buttons">
             <button @click="importChapters(video.sourceType)" v-if="chaptersAvailableForSourceType(video.sourceType)" class="s-outline">Import Chapters as Scenes</button>

@@ -6,12 +6,12 @@
       <div style="--span: 4" class="s-grid scenes-container">
         <template v-for="(scene, idx) in story.scenes" :key="scene.id">
           <div :id="`scene_${scene.id}`">
-            <label style="--span: 5">Title<input class="scene_title" placeholder="n/a" type="text" v-model="scene.title" /></label>
+            <label style="--span: 5">Title<input class="scene_title" placeholder="(No title)" type="text" v-model="scene.title" /></label>
             <label style="--span: 3"
               >Next scene
               <select v-model="scene.nextSceneId">
                 <option :value="-1">(n/a)</option>
-                <option v-for="scene in story.scenes" idx="scene.id" :value="scene.id">{{ scene.title }}</option>
+                <option v-for="scene in story.scenes" idx="scene.id" :value="scene.id">{{ scene.title || '(No title)' }}</option>
               </select>
             </label>
           </div>
@@ -21,7 +21,7 @@
             <label style="--span: 3"
               >Video
               <select v-model="scene.videoId">
-                <option v-if="story.videos.length" v-for="video in story.videos" idx="video.id" :value="video.id">{{ video.title }}</option>
+                <option v-if="story.videos.length" v-for="video in story.videos" idx="video.id" :value="video.id">{{ video.title || '(Untitled video)' }}</option>
                 <option v-else :value="-1">No videos available. Please add one</option>
               </select>
             </label>

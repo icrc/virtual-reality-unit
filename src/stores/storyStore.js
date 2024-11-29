@@ -11,6 +11,7 @@ const EMPTY_STORY = {
   title: "New Project",
   author: "",
   info: "",
+  initialSceneId: -1,
   locales: ["en"],
 
   videos: [],
