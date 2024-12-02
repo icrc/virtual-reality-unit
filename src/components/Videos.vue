@@ -32,9 +32,13 @@
     </details>
   </article>
 
-  <div v-if="useUtilPlayer" class="util_player">
-    <player width="200px" @ready="onPlayerReady" @error="onPlayerError" :options="playerOptions" />
+<!--   <div v-if="useUtilPlayer" class="util_player">
+    <player @ready="onPlayerReady" @error="onPlayerError" :options="playerOptions" />
   </div>
+ -->
+
+  <video-info-provider ref="videoInfo"/>
+
 </template>
 
 <script>
@@ -57,7 +61,9 @@ const NEW_SCENE_DEFAULTS = {
 
 <script setup>
 import { ref, computed, nextTick } from "vue"
-import Player from "@/components/Player.vue"
+
+import VideoInfoProvider from "@/components/VideoInfoProvider.vue"
+const videoInfo = ref(null)
 
 const header = ref(null)
 
@@ -70,49 +76,12 @@ const props = defineProps({
   },
 })
 
-// --- ***HERE*** - TODO - relocate to some generic component for doing VideoJS utility calls -------------------------------------------------------------------
-
-const useUtilPlayer = ref(false)
-const playerOptions = ref(null)
-const onPlayerReady = ref(null)
-const onPlayerError = ref(null)
-
-async function getVideoChapters(sourceType, URL) {
-  let videoJS, chapters
-  try {
-    videoJS = await getVideoJS(sourceType, URL)
-    chapters = videoJS ? await VIDEO_SOURCE_TYPES[sourceType].features.getChapters(videoJS.tech()) : false
-  } catch (error) {
-    alert(`Failed to get chapters for video from ${sourceType} source with URL:\n\n${URL}`)
-    videoJS = false
-  }
-  teardownVideoJS()
-  return chapters
-}
-
-function getVideoJS(sourceType, URL) {
-  return new Promise((resolve, reject) => {
-    playerOptions.value = {
-      sources: [{ type: `video/${sourceType}`, src: URL }],
-    }
-    onPlayerReady.value = videoJS => {
-      onPlayerError.value = undefined
-      resolve(videoJS)
-    }
-    onPlayerError.value = reject
-    useUtilPlayer.value = true
-    setTimeout(reject, 5000)
-  })
-}
-
-function teardownVideoJS() {
-  useUtilPlayer.value = false
-}
 
 const chapterImportInProgress = ref(false)
+
 const importChapters = async (videoId, sourceType, URL) => {
   chapterImportInProgress.value = true
-  const chapters = await getVideoChapters(sourceType, URL)
+  const  [ chapters, error ] = await videoInfo.value.getChapters(sourceType, URL)
   if (chapters) {
     if (chapters.length) {
       chapters.forEach(({ title, startTime, endTime }) => {
@@ -123,12 +92,11 @@ const importChapters = async (videoId, sourceType, URL) => {
       alert("Video has no chapters to import.")
     }
   }
+  if (error) alert(`Failed to get chapters for video from ${sourceType} source with URL:\n\n${URL}`)
   chapterImportInProgress.value = false
 }
 
 const chaptersAvailableForSourceType = sourceType => VIDEO_SOURCE_TYPES[sourceType]?.features?.getChapters
-
-// ----------------------------------------------------------------------
 
 const story = computed(() => props.store.currentStory)
 
@@ -195,7 +163,4 @@ const addVideo = () => {
   }
 }
 
-.util_player {
-  display: none;
-}
 </style>
