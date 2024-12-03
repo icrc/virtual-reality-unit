@@ -83,7 +83,8 @@ const playerOptions = {
     // { type: "video/vimeo", src: "https://plasyer.vimeo.com/video/1025039220?h=1d3c27a454&badge=0&autopause=0&player_id=0&app_id=58479" },
     // { type: "video/mp4", src: "/visdeos/05.mp4" },
     // { type: "video/mp4", src: "https://www.google.com" },
-    { type: "video/vimeo", src: "https://player.vimeo.com/video/1025039220?h=1d3c27a454&badge=0&autopause=0&player_id=0&app_id=58479" },
+    { type: "video/vimeo", src: "https://player.vimeo.com/video/1025039220?h=1d3c27a454" },
+    { type: "video/vimeo", src: "https://player.vimeo.com/video/1013449905?h=9f1e8eb33a" },
     //{ type: "video/mp4", src: "/videos/05.mp4" },
   ],
   vimeo: {
