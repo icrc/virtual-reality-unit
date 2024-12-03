@@ -27,27 +27,31 @@ const props = defineProps({
 		default: null,
 	},
 })
-const emit = defineEmits(['ready', 'error'])
-
+const emit = defineEmits(["ready", "error", "showable"])
 
 const { isFullscreen } = useFullscreen()
 
 const playerAspect = ref(1)
 const playerWidth = ref(1)
 const playerHeight = ref(1)
+const playbackActive = ref(false)
 
 let videoJS
 
 const onPlayerReady = vJS => {
-	console.log("Player ready")
 	videoJS = window.videoJS = vJS
+	setTimeout(getAllDimensions, 1000)
+	resizePlayerToContainerWidth()
+	emit("showable", { videoJS })
+}
+
+const getAllDimensions = () => {
 	videoJS.getDimensions().then(dimensions => {
 		playerAspect.value = dimensions.width / dimensions.height
 		playerWidth.value = dimensions.width
 		playerHeight.value = dimensions.height
+		emit("ready", { videoJS })
 	})
-	resizePlayerToContainerWidth()
-	emit('ready', { videoJS })
 }
 
 const resizePlayer = ({ width, height }) => {
@@ -63,21 +67,53 @@ const goFullscreen = () => {
 	document.querySelector("html").requestFullscreen()
 }
 
+const getSceneSourceObject = scene => getVideoSourceObject(getVideo(scene.videoId))
+const getVideoSourceObject = ({ sourceType: type, url: src }) => ({ type: "video/" + type, src })
+const getVideo = id => props.data.videos.find(v => v.id === id)
+const getScene = id => props.data.scenes.find(s => s.id === id)
+
 const getInitialPlayerOptions = () => ({
-	// // sources: [{ type: "video/vimeo", src: "https://vimeo.com/541416221" }, { src: "/videos/05.mp4" }],
-	sources: [
-		{ type: "video/vimeo", src: "https://player.vimeo.com/video/1025039220?h=1d3c27a454" },
-		// { type: "video/mp4", src: "/videos/05.mp4" },
-	],
-	// vimeo: {
-	//   // controls: true,
-	// },
-	// // sources: [{ src: "/videos/05.mp4" }, { type: "video/vimeo", src: "https://player.vimeo.com/video/1025039220?h=1d3c27a454&badge=0&autopause=0&player_id=0&app_id=58479&background=1" }]
+	sources: [getSceneSourceObject(getScene(props.data.initialSceneId))],
 })
 const playerOptions = getInitialPlayerOptions()
 
+async function start(abortSignal = undefined) {
+	let currentScene = getScene(props.data.initialSceneId)
+	let result
+	if (abortSignal?.aborted) return handleAbort({ aborted: true, error: "Playback aborted" })
+	playbackActive.value = true
+	result = await playScene(currentScene, abortSignal)
+	if (result?.aborted || result?.error) return handleAbort(result)
+	return result
+}
+
+function handleAbort(err) {
+	playbackActive.value = false
+	videoJS.pause()
+	return err
+}
+
+function playScene(scene, abortSignal) {
+	return new Promise(resolve => {
+		let timeout
+		const abortHandler = () => {
+			clearTimeout(timeout)
+			resolve({ aborted: true, error: "Playback aborted" })
+		}
+		videoJS.play()
+		setTimeout(() => {
+			resolve({ result: true })
+			abortSignal?.removeEventListener("abort", abortHandler)
+			videoJS.pause()
+		}, 10000)
+		abortSignal?.addEventListener("abort", abortHandler)
+	})
+}
+
 defineExpose({
 	goFullscreen,
+	playbackActive,
+	start,
 })
 </script>
 

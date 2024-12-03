@@ -16,7 +16,7 @@
                 <a href="#" @click.prevent="saveStory" v-bind="{ ...(store.isSaved && { disabled: true }) }">Save current {{ unsavedMarker }}</a>
               </li>
               <li>
-                <a href="#" @click.prevent="viewStory">View project</a>
+                <RouterLink to="/view">View project</RouterLink>
               </li>
             </menu>
           </nav>

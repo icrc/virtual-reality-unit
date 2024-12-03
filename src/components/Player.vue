@@ -63,13 +63,13 @@ onMounted(() => {
     },
   }
 
-  videoJS = videojs(videoPlayer.value, opts, () => emit("ready", videoJS))
+  videoJS = videojs(videoPlayer.value, opts, function() {
+    emit("ready", videoJS)
+  })
 
   // emit errors from VideoJS
   videoJS.on("error", event => emit("error", videoJS.error()))
-
   videoJS.getDimensions = getDimensions
-
 })
 
 onBeforeUnmount(() => {
