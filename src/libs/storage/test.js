@@ -21,10 +21,11 @@ export const testStorage = {
 		return true
 	},
 	load: async function load(filename) {
-		console.log(`Loading test data: ${filename}`)
-		if (!testData[filename]) console.log('Data does not exist!')
-		console.log(testData[filename])
-		return structuredClone(testData[filename]) || null
+		const fname = filename.trim()
+		console.log(`Loading test data: ${fname}`)
+		if (!testData[fname]) console.log('Data does not exist!')
+		console.log(testData[fname])
+		return structuredClone(testData[fname]) || null
 	},
 	save: async function save(filename, data) {
 		console.log('saving data', filename)
@@ -35,7 +36,8 @@ export const testStorage = {
 		return true
 	},
 	pick: async function pick() {
-		return prompt(`Which test data would you like to load?\n\n${Object.keys(testData).join("\n")}\n `)
+		const fname = prompt(`Which test data would you like to load?\n\n${Object.keys(testData).join("\n")}\n `)
+		return typeof fname ==='string' ? fname.trim() : null
 	},
 	chooseSaveFilename: async function chooseSaveFilename(suggestedFilename = '') {
 		return prompt('Enter a filename to save the data to:', suggestedFilename)
