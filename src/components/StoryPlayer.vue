@@ -84,6 +84,8 @@ async function start(abortSignal = undefined) {
 	playbackActive.value = true
 	result = await playScene(currentScene, abortSignal)
 	if (result?.aborted || result?.error) return handleAbort(result)
+
+	// TODO - here, check for a number in result.nextSceneId. If it is === false then we're done (finalState will be in result.finalState) - if not, play next scene
 	return result
 }
 
@@ -101,11 +103,16 @@ function playScene(scene, abortSignal) {
 			resolve({ aborted: true, error: "Playback aborted" })
 		}
 		videoJS.play()
+
+		// TODO - on an event listener / timed routine in here, check to see if a next event or end of scene has occurred
+		// deal with event (do actions or show choice), or return { nextSceneId } if we're going to next scene
+
 		setTimeout(() => {
-			resolve({ result: true })
+			resolve({ nextSceneId: false })
 			abortSignal?.removeEventListener("abort", abortHandler)
 			videoJS.pause()
 		}, 10000)
+
 		abortSignal?.addEventListener("abort", abortHandler)
 	})
 }
