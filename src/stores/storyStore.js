@@ -3,7 +3,7 @@ import { ref, watch, toRaw } from "vue"
 
 import { VERSION, storage } from "@/config"
 
-// ** TODO ** make a watcher on main story state change for setting 'isSaved'
+const STORAGE_KEY = "videopath_story"
 
 // empty, blank story/project
 const EMPTY_STORY = {
@@ -35,18 +35,30 @@ export const useStoryStore = defineStore("story", () => {
 
   let mostRecentSavedJSON = ""
 
-  // watch the main story for changes to set isSaved
+  // watch the main story for changes to set isSaved and persist data
   watch(
     () => JSON.stringify(currentStory.value),
     (newStoryJSON, oldStoryJSON) => {
       isSaved.value = newStoryJSON === mostRecentSavedJSON
+      persistStory(JSON.parse(newStoryJSON))
     }
   )
 
+  // set everything up
+  function setup() {
+    const persistedStory = JSON.parse(localStorage.getItem(STORAGE_KEY))
+    newStory(persistedStory || undefined)
+  }
+
+  // persist the story
+  function persistStory(story) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(story))
+  }
+
   // replace the current story with a new, blank story
-  function newStory() {
-    currentStory.value = structuredClone(EMPTY_STORY)
-    mostRecentSavedJSON = JSON.stringify(currentStory.value)
+  function newStory(data = EMPTY_STORY) {
+    currentStory.value = structuredClone(data)
+    mostRecentSavedJSON = data===EMPTY_STORY ? JSON.stringify(currentStory.value) : ''
     currentFilename.value = ""
     currentHighestVideoId = -1
     currentHighestSceneId = -1
@@ -156,14 +168,14 @@ export const useStoryStore = defineStore("story", () => {
   const getSceneById = sceneId => currentStory.value.scenes.find(({ id }) => id === sceneId)
 
   const nextVideoId = () => ++currentHighestVideoId
-  const getHighestVideoId = story => story.videos.length ? Math.max(...story.videos.map(({ id }) => id)) : null
+  const getHighestVideoId = story => (story.videos.length ? Math.max(...story.videos.map(({ id }) => id)) : null)
 
   const nextSceneId = () => ++currentHighestSceneId
-  const getHighestSceneId = story => story.scenes.length ? Math.max(...story.scenes.map(({ id }) => id)) : null
+  const getHighestSceneId = story => (story.scenes.length ? Math.max(...story.scenes.map(({ id }) => id)) : null)
 
   const getHighestEventIdForScene = scene => (scene.events.length ? Math.max(...scene.events.map(({ id }) => id)) : -1)
 
-  newStory()
+  setup()
 
   return {
     currentStory,
