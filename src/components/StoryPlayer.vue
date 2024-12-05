@@ -140,7 +140,7 @@ function playScene(scene, abortSignal) {
 			},
 			seeked() {
 				if (videoJS.paused()) {
-					if (videoJS.currentTime() == scene.startTime) play()
+					if (videoJS.currentTime() == scene.startTime) videoJS.play()
 						else videoJS.currentTime(scene.startTime)
 				}
 			}
