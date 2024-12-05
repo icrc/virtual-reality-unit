@@ -1,0 +1,143 @@
+{
+	"version": "0.0.1",
+	"title": "Play through test for Multiple MP4 videos",
+	"author": "Jon Randy",
+	"info": "Should play through hacker, racing, sci-fi",
+	"locales": ["en"],
+	"videos": [
+		{
+			"id": 0,
+			"title": "Welcome",
+			"sourceType": "mp4",
+			"url": "/videos/00.mp4",
+			"thumbnail": "TODO later - maybe we need this?",
+			"info": "A short test video with a 'welcome' feel",
+			"audiotracks": []
+		},
+		{
+			"id": 1,
+			"title": "Fireworks",
+			"sourceType": "mp4",
+			"url": "/videos/01.mp4",
+			"thumbnail": "TODO later - maybe we need this?",
+			"info": "A short test video with a 'fireworks' feel",
+			"audiotracks": []
+		},
+		{
+			"id": 2,
+			"title": "Silent Movie",
+			"sourceType": "mp4",
+			"url": "/videos/02.mp4",
+			"thumbnail": "TODO later - maybe we need this?",
+			"info": "A short test video with a 'silent movie' feel",
+			"audiotracks": []
+		},
+		{
+			"id": 3,
+			"title": "Film Roll",
+			"sourceType": "mp4",
+			"url": "/videos/03.mp4",
+			"thumbnail": "TODO later - maybe we need this?",
+			"info": "A short test video with a 'film roll' feel",
+			"audiotracks": []
+		},
+		{
+			"id": 4,
+			"title": "Hacker",
+			"sourceType": "mp4",
+			"url": "/videos/04.mp4",
+			"thumbnail": "TODO later - maybe we need this?",
+			"info": "A short test video with a 'hacker' feel",
+			"audiotracks": []
+		},
+		{
+			"id": 5,
+			"title": "Radar Sweep",
+			"sourceType": "mp4",
+			"url": "/videos/05.mp4",
+			"thumbnail": "TODO later - maybe we need this?",
+			"info": "A short test video with a 'radar sweep' feel",
+			"audiotracks": []
+		},
+		{
+			"id": 6,
+			"title": "Bold Green",
+			"sourceType": "mp4",
+			"url": "/videos/06.mp4",
+			"thumbnail": "TODO later - maybe we need this?",
+			"info": "A short test video with a 'bold green' feel",
+			"audiotracks": []
+		},
+		{
+			"id": 7,
+			"title": "Racing",
+			"sourceType": "mp4",
+			"url": "/videos/07.mp4",
+			"thumbnail": "TODO later - maybe we need this?",
+			"info": "A short test video with a 'racing' feel",
+			"audiotracks": []
+		},
+		{
+			"id": 8,
+			"title": "SciFi",
+			"sourceType": "mp4",
+			"url": "/videos/08.mp4",
+			"thumbnail": "TODO later - maybe we need this?",
+			"info": "A short test video with a'sci-fi' feel",
+			"audiotracks": []
+		},
+		{
+			"id": 9,
+			"title": "Neon",
+			"sourceType": "mp4",
+			"url": "/videos/09.mp4",
+			"thumbnail": "TODO later - maybe we need this?",
+			"info": "A short test video with a 'neon' feel",
+			"audiotracks": []
+		},
+		{
+			"id": 10,
+			"title": "Fire",
+			"sourceType": "mp4",
+			"url": "/videos/10.mp4",
+			"thumbnail": "TODO later - maybe we need this?",
+			"info": "A short test video with a 'fire' feel",
+			"audiotracks": []
+		}
+	],
+	"scenes": [
+		{
+			"id": 0,
+			"videoId": 4,
+			"title": "Hacker",
+			"startTime": 0,
+			"endTime": -1,
+			"nextSceneId": 1,
+			"events": [
+			]
+		},
+		{
+			"id": 1,
+			"videoId": 7,
+			"title": "Racing",
+			"startTime": 0,
+			"endTime": -1,
+			"nextSceneId": 2,
+			"events": []
+		},
+		{
+			"id": 2,
+			"videoId": 8,
+			"title": "Sci-fi (from 4s)",
+			"startTime": 4,
+			"endTime": -1,
+			"nextSceneId": -1,
+			"events": []
+		}
+	],
+	"initialSceneId": 0,
+	"initialState": {
+		"info": "TODO - this is to do with recording and returning data"
+	},
+	"translations": {}
+}

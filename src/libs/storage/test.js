@@ -4,10 +4,12 @@ let ready = false
 
 import blastVimeo from '@/testdata/data-blast.json'
 import multiMP4 from '@/testdata/data-multi-mp4.json'
+import playthru from '@/testdata/data-playthru.json'
 
 const testData = {
 	blastVimeo,
-	multiMP4
+	multiMP4,
+	playthru,
 }
 
 export const testStorage = {
