@@ -34,7 +34,10 @@ let abortController
 const handleStart = async () => {
   abortController = new AbortController()
   const res = await player.value.start(abortController.signal)
-  console.log(res)
+  if (!res.aborted) {
+    alert('Finished')
+    handleReset()
+  }
 }
 
 const handleReset = () => {

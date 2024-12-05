@@ -1,7 +1,7 @@
 <!-- Full player for a project/story -->
 <template>
 	<div :class="{ player_container: true, full_screen: isFullscreen }">
-		<player @ready="onPlayerReady" :ref="videoPlayer" :options="playerOptions" />
+		<player @ready="onPlayerReady" :options="playerOptions" />
 		<div class="overlay">
 			<div class="marker"></div>
 		</div>
@@ -78,14 +78,19 @@ const getInitialPlayerOptions = () => ({
 const playerOptions = getInitialPlayerOptions()
 
 async function start(abortSignal = undefined) {
-	let currentScene = getScene(props.data.initialSceneId)
-	let result
+	let currentSceneId = props.data.initialSceneId
+	let result, currentScene
 	if (abortSignal?.aborted) return handleAbort({ aborted: true, error: "Playback aborted" })
 	playbackActive.value = true
-	result = await playScene(currentScene, abortSignal)
-	if (result?.aborted || result?.error) return handleAbort(result)
 
-	// TODO - here, check for a number in result.nextSceneId. If it is === false then we're done (finalState will be in result.finalState) - if not, play next scene
+	do {
+		currentScene = getScene(currentSceneId)
+		result = await playScene(currentScene, abortSignal)
+		console.log('result', result)
+		if (result?.aborted || result?.error) return handleAbort(result)
+		currentSceneId = result.nextSceneId
+	} while (currentSceneId !== false)
+
 	return result
 }
 
@@ -97,23 +102,51 @@ function handleAbort(err) {
 
 function playScene(scene, abortSignal) {
 	return new Promise(resolve => {
+
 		let timeout
 		const abortHandler = () => {
-			clearTimeout(timeout)
-			resolve({ aborted: true, error: "Playback aborted" })
+			// clearTimeout(timeout)
+			announceDone({ aborted: true, error: "Playback aborted" })
 		}
-		videoJS.play()
-
-		// TODO - on an event listener / timed routine in here, check to see if a next event or end of scene has occurred
-		// deal with event (do actions or show choice), or return { nextSceneId } if we're going to next scene
-
-		setTimeout(() => {
-			resolve({ nextSceneId: false })
-			abortSignal?.removeEventListener("abort", abortHandler)
-			videoJS.pause()
-		}, 10000)
-
+		
 		abortSignal?.addEventListener("abort", abortHandler)
+
+		function setup() {
+			activateHandlers()
+			const srcObj = getSceneSourceObject(scene)
+			if (srcObj.type !== videoJS.currentType() || srcObj.src!== videoJS.currentSrc()) videoJS.src(srcObj)
+			videoJS.currentTime(scene.startTime)
+		}
+
+		function teardown() {
+			activateHandlers(false)
+		}
+
+		const activateHandlers = (state = true) => {
+			Object.entries(handlers).forEach(([event, handler]) => videoJS[state? 'on' : 'off'](event, handler))
+		}
+
+		function announceDone(result) {
+			teardown()
+			resolve(result)
+		}
+
+		const handlers = {
+			timeupdate() {
+				console.log('time updated:' + videoJS.currentTime())
+			},
+			ended() {
+				announceDone({nextSceneId: (scene.nextSceneId == -1) ? false : scene.nextSceneId  })
+			},
+			seeked() {
+				if (videoJS.paused()) {
+					videoJS.play()
+				}
+			}
+		}
+
+		setup()
+
 	})
 }
 
