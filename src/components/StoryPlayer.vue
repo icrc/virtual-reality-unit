@@ -86,7 +86,6 @@ async function start(abortSignal = undefined) {
 	do {
 		currentScene = getScene(currentSceneId)
 		result = await playScene(currentScene, abortSignal)
-		console.log('result', result)
 		if (result?.aborted || result?.error) return handleAbort(result)
 		currentSceneId = result.nextSceneId
 	} while (currentSceneId !== false)
@@ -133,9 +132,10 @@ function playScene(scene, abortSignal) {
 
 		const handlers = {
 			timeupdate() {
-				console.log('time updated:' + videoJS.currentTime())
+				// console.log('time updated:' + videoJS.currentTime())
 			},
 			ended() {
+				videoJS.pause()
 				announceDone({nextSceneId: (scene.nextSceneId == -1) ? false : scene.nextSceneId  })
 			},
 			seeked() {
