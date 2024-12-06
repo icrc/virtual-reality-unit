@@ -46,12 +46,12 @@ const onPlayerReady = vJS => {
 	emit("showable", { videoJS })
 }
 
-const getAllDimensions = () => {
+const getAllDimensions = (announce=true) => {
 	videoJS.getDimensions().then(dimensions => {
 		playerAspect.value = dimensions.width / dimensions.height
 		playerWidth.value = dimensions.width
 		playerHeight.value = dimensions.height
-		emit("ready", { videoJS })
+		announce && emit("ready", { videoJS })
 	})
 }
 
@@ -81,6 +81,8 @@ const playerOptions = getInitialPlayerOptions()
 
 async function start(abortSignal = undefined) {
 	let currentSceneId = props.data.initialSceneId
+
+	getAllDimensions(false) // make sure we have dimensions (fails sometimes intially)
 
 	currentState = structuredClone(props.data.initialState)
 
