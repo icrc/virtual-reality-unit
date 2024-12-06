@@ -37,6 +37,7 @@ const playerHeight = ref(1)
 const playbackActive = ref(false)
 
 let videoJS
+let currentState
 
 const onPlayerReady = vJS => {
 	videoJS = window.videoJS = vJS
@@ -55,6 +56,7 @@ const getAllDimensions = () => {
 }
 
 const resizePlayer = ({ width, height }) => {
+	if (!videoJS) return
 	if (width !== undefined && height !== undefined) videoJS.dimensions(width, height)
 	else if (width !== undefined) videoJS.dimension("width", width)
 	else if (height !== undefined) videoJS.dimensions("height", height)
@@ -79,6 +81,9 @@ const playerOptions = getInitialPlayerOptions()
 
 async function start(abortSignal = undefined) {
 	let currentSceneId = props.data.initialSceneId
+
+	currentState = structuredClone(props.data.initialState)
+
 	let result, currentScene
 	if (abortSignal?.aborted) return handleAbort({ aborted: true, error: "Playback aborted" })
 	playbackActive.value = true
@@ -101,19 +106,18 @@ function handleAbort(err) {
 
 function playScene(scene, abortSignal) {
 	return new Promise(resolve => {
-
 		let timeout
 		const abortHandler = () => {
 			// clearTimeout(timeout)
 			announceDone({ aborted: true, error: "Playback aborted" })
 		}
-		
+
 		abortSignal?.addEventListener("abort", abortHandler)
 
 		function setup() {
 			activateHandlers()
 			const srcObj = getSceneSourceObject(scene)
-			if (srcObj.type !== videoJS.currentType() || srcObj.src!== videoJS.currentSrc()) videoJS.src(srcObj)
+			if (srcObj.type !== videoJS.currentType() || srcObj.src !== videoJS.currentSrc()) videoJS.src(srcObj)
 			videoJS.currentTime(scene.startTime)
 		}
 
@@ -122,7 +126,7 @@ function playScene(scene, abortSignal) {
 		}
 
 		const activateHandlers = (state = true) => {
-			Object.entries(handlers).forEach(([event, handler]) => videoJS[state? 'on' : 'off'](event, handler))
+			Object.entries(handlers).forEach(([event, handler]) => videoJS[state ? "on" : "off"](event, handler))
 		}
 
 		function announceDone(result) {
@@ -130,24 +134,39 @@ function playScene(scene, abortSignal) {
 			resolve(result)
 		}
 
+		function handleSceneEnd() {
+			// go to next scene if we have one
+			if (scene.nextSceneId !== -1) {
+				announceDone({ nextSceneId: scene.nextSceneId })
+				// otherwise we're done - no next scene, return final state
+			} else {
+				announceDone({ nextSceneId: false, finalState: currentState })
+			}
+		}
+
 		const handlers = {
 			timeupdate() {
 				// console.log('time updated:' + videoJS.currentTime())
+				const time = videoJS.currentTime()
+
+				// check to see if scene end time has passed (if it has one)
+				if (scene.endTime !== -1 && time >= scene.endTime) {
+					handleSceneEnd()
+				}
 			},
 			ended() {
 				videoJS.pause()
-				announceDone({nextSceneId: (scene.nextSceneId == -1) ? false : scene.nextSceneId  })
+				handleSceneEnd()
 			},
 			seeked() {
 				if (videoJS.paused()) {
 					if (videoJS.currentTime() == scene.startTime) videoJS.play()
-						else videoJS.currentTime(scene.startTime)
+					else videoJS.currentTime(scene.startTime)
 				}
-			}
+			},
 		}
 
 		setup()
-
 	})
 }
 
