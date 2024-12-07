@@ -17,7 +17,7 @@
       <button @click="dbxChoose">Dropbox choose...</button>
       <button @click="dbxSave">Dropbox save...</button>
       <button @click="vimeoChapters">Chapters Info</button>
-      <button @click="testActionCode">Test ActionCode parser</button>
+      <button @click="testActionCode">Test ActionCode</button>
     </div>
   </div>
 </template>
@@ -31,8 +31,31 @@ import { ref } from "vue"
 import Player from "@/components/Player.vue"
 import { useFullscreen } from "@/composables/fullscreen"
 
-import { parser } from "@/libs/actionCode"
+import { parser, runCode } from "@/libs/actionCode"
 
+// const testActionCode2 = () => {
+//   const code = `setStateValue: 'myVal',1
+// gotoScene: 8
+// gotoScene: @jonScene
+// gotoScene: @myVal
+// setStateValue: 'keyName', 'myKey'
+// setStateValue: 'myVal', @myVal+36
+// setStateValue: 'myVal', 'Hello' + @myVal
+// setStateValue: @keyName, 'String test'`
+//   const state = { jonScene: 48 }
+//   parser(code, state).forEach(({ command, args }) => {
+//     console.log({ command, args })
+//     if (command == "setStateValue") state[args[0]] = args[1]
+//   })
+//   console.log()
+// }
+
+
+const commandLibrary = {
+  gotoScene(sceneID) {
+    console.log('go to scene ' + sceneID)
+  }
+}
 const testActionCode = () => {
   const code = `setStateValue: 'myVal',1
 gotoScene: 8
@@ -43,27 +66,11 @@ setStateValue: 'myVal', @myVal+36
 setStateValue: 'myVal', 'Hello' + @myVal
 setStateValue: @keyName, 'String test'`
   const state = { jonScene: 48 }
-  parser(code, state).forEach(({ action, args }) => {
-    console.log({ action, args })
-    if (action == "setStateValue") state[args[0]] = args[1]
-  })
-  console.log()
+  const finalState = runCode(code, state, commandLibrary).newState
+  console.log(finalState)
 }
 
-// TODO - alt code if we have to a safeEval for passing args
-// const testActionCode = async () => {
-//   const code = `setStateValue: myVal,1
-// gotoScene: 8
-// gotoScene: @myVal
-// setStateValue: keyName, 'myKey'
-// setStateValue: myVal, @myVal+36
-// setStateValue: myVal, 'Hello' + @myVal
-// setStateValue: @keyName, 'String test'`
-//   const state = {}
-//   for await (const action of parser(code, state)) {
-//     console.log(action)
-//   }
-// }
+
 
 const myPlayer = ref()
 let videoJS

@@ -1,4 +1,26 @@
-// functions for dealing with actionCode (mainly parsing)
+// functions for dealing with actionCode (parsing and running)
+
+const getBaseCommands = state => ({
+  setStateValue: (key, val) => state[key] = val,
+  deleteStateValue: key => delete state[key],
+})
+
+
+export const runCode = (actionCode, initialState, commandLibrary = {}) => {
+  const state = structuredClone(initialState)
+  const commands = { ...getBaseCommands(state),...commandLibrary }
+  let bailed = false
+  console.log(actionCode)
+  for (const { command, args } of parser(actionCode, state)) {
+    if (!commands[command]) throw new Error(`Unknown actionCode command: ${command}`)
+    const result = commands[command](...args)
+    if (result === null) {
+      bailed = true
+      break
+    }
+  }
+  return { newState: state, bailed }
+}
 
 export function* parser(code, state) {
   const c = code.trim()
@@ -7,13 +29,11 @@ export function* parser(code, state) {
   const lines = c.split("\n").map(line => line.trim())
 
   for (let line of lines) {
-    const [action, argString] = line.split(":").map(part => part.trim())
+    const [command, argString] = line.split(":").map(part => part.trim())
     const args = splitArgs(argString)
-    yield { action, args: args.map(arg => getArgValue(arg, state)) }
+    yield { command, args: args.map(arg => getArgValue(arg, state)) }
   }
 
-  // yield {action: 'test1', args: [1, 2]}
-  // yield {action: 'test2', args: [3, 4, 5]}
 }
 
 function getArgValue(expression, state) {
@@ -30,32 +50,8 @@ function splitArgs(allArgsStr) {
 }
 
 
+
+
 // TODO - getArgValue above is potentially VERY unsage - consider mobing to a safeEval function
 // See - https://stackoverflow.com/a/37154736
 
-// export async function* parser(code, state) {
-//  const c = code.trim()
-//  if (!c) return
-
-//  const lines = c.split("\n").map(line => line.trim())
-
-//  for (let line of lines) {
-//    const [action, argString] = line.split(":").map(part => part.trim())
-//    const args = await Promise.all(splitArgs(argString).map(async arg => await getArgValue(arg, state)))
-//    yield { action, args }
-//  }
-
-//  // yield {action: 'test1', args: [1, 2]}
-//  // yield {action: 'test2', args: [3, 4, 5]}
-// }
-
-// async function getArgValue(expression, state) {
-
-// }
-
-// function splitArgs(allArgsStr) {
-//  return allArgsStr
-//    .split(/,(.*)/)
-//    .map(x => x.trim())
-//    .filter(x => x)
-// }
