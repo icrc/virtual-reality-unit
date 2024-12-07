@@ -1,4 +1,4 @@
-<!-- Player Component -->
+<!-- Player Component (encapsulate VideoJS) -->
 <template>
   <video ref="videoPlayer" class="video-js"></video>
 </template>

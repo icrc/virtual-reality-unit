@@ -17,7 +17,7 @@ import StoryPlayer from "@/components/StoryPlayer.vue"
 
 import { useStoryStore } from "@/stores/storyStore"
 const store = useStoryStore()
-const storyData = toRaw(store.currentStory)
+const storyData = ref()
 
 const player = ref()
 
@@ -41,11 +41,16 @@ const handleStart = async () => {
   }
 }
 
+const getStoryData = () => structuredClone(toRaw(store.currentStory))
+
 const handleReset = () => {
   abortController.abort()
   alive.value = false
+  storyData.value = getStoryData()
   nextTick(() => alive.value = true)
 }
+
+storyData.value = getStoryData()
 
 
 

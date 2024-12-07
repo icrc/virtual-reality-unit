@@ -8,14 +8,22 @@
 	</div>
 </template>
 
-<script></script>
+<script>
+
+import { EVENT_TYPES } from "@/stores/storyStore"
+import { runCode } from "@/libs/actionCode"
+
+</script>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue"
+import { ref, onMounted, onUnmounted, toRaw } from "vue"
 import Player from "@/components/Player.vue"
 
 import { useFullscreen } from "@/composables/fullscreen"
 import { useWindowSize } from "@/composables/windowSize"
+
+import { parser, runCode } from "@/libs/actionCode"
+
 
 const props = defineProps({
 	data: {
@@ -72,7 +80,7 @@ const goFullscreen = () => {
 const getSceneSourceObject = scene => getVideoSourceObject(getVideo(scene.videoId))
 const getVideoSourceObject = ({ sourceType: type, url: src }) => ({ type: "video/" + type, src })
 const getVideo = id => props.data.videos.find(v => v.id === id)
-const getScene = id => props.data.scenes.find(s => s.id === id)
+const getScene = id => structuredClone(toRaw(props.data.scenes.find(s => s.id === id)))
 
 const getInitialPlayerOptions = () => ({
 	sources: [getSceneSourceObject(getScene(props.data.initialSceneId))],
@@ -84,7 +92,7 @@ async function start(abortSignal = undefined) {
 
 	getAllDimensions(false) // make sure we have dimensions (fails sometimes intially)
 
-	currentState = structuredClone(props.data.initialState)
+	currentState = structuredClone(toRaw(props.data.initialState))
 
 	let result, currentScene
 	if (abortSignal?.aborted) return handleAbort({ aborted: true, error: "Playback aborted" })
@@ -108,9 +116,24 @@ function handleAbort(err) {
 
 function playScene(scene, abortSignal) {
 	return new Promise(resolve => {
-		let timeout
+
+		const completedEventIds = []
+
+		const CMD_LIBRARY = {
+			gotoScene(id) {
+				announceDone({ nextSceneId: id })
+				return null // bail on any more commands
+			},
+			setNextScene(id) {
+				scene.nextSceneId = id
+			},	
+			gotoNextScene() {
+				announceDone({ nextSceneId: scene.nextSceneId })
+				return null // bail on any more commands
+			}
+		}
+
 		const abortHandler = () => {
-			// clearTimeout(timeout)
 			announceDone({ aborted: true, error: "Playback aborted" })
 		}
 
@@ -120,7 +143,8 @@ function playScene(scene, abortSignal) {
 			activateHandlers()
 			const srcObj = getSceneSourceObject(scene)
 			if (srcObj.type !== videoJS.currentType() || srcObj.src !== videoJS.currentSrc()) videoJS.src(srcObj)
-			videoJS.currentTime(scene.startTime)
+			if (!scene.startTime) videoJS.play() 
+				else videoJS.currentTime(scene.startTime)
 		}
 
 		function teardown() {
@@ -137,6 +161,8 @@ function playScene(scene, abortSignal) {
 		}
 
 		function handleSceneEnd() {
+			// TODO -- end of scene events (launchTime = -1)
+
 			// go to next scene if we have one
 			if (scene.nextSceneId !== -1) {
 				announceDone({ nextSceneId: scene.nextSceneId })
@@ -144,6 +170,21 @@ function playScene(scene, abortSignal) {
 			} else {
 				announceDone({ nextSceneId: false, finalState: currentState })
 			}
+		}
+
+		function handleEvent(event) {
+			completedEventIds.push(event.id)
+			console.log('event: ', event.type, event.id)
+			if (event.type == EVENT_TYPES.action) {
+				runActionCode(event.data)
+			} else if (event.type = EVENT_TYPES.choice) {
+				// TODO - choice handling
+				console.log('Choice time!', event.data)
+			}
+		}
+
+		function runActionCode(code) {
+			const res = runCode(code, currentState, CMD_LIBRARY)
 		}
 
 		const handlers = {
@@ -155,6 +196,12 @@ function playScene(scene, abortSignal) {
 				if (scene.endTime !== -1 && time >= scene.endTime) {
 					handleSceneEnd()
 				}
+
+				// check to see if it is time for an event
+				scene.events.forEach(event => {
+					if (event.launchTime!== -1 && time >= event.launchTime && !completedEventIds.includes(event.id)) handleEvent(event)
+				})
+
 			},
 			ended() {
 				videoJS.pause()
