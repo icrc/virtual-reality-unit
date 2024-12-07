@@ -20,6 +20,11 @@ const EMPTY_STORY = {
   translations: {},
 }
 
+export const EVENT_TYPES = {
+  action: "action",
+  choice: "choice",
+}
+
 export const useStoryStore = defineStore("story", () => {
   // In returned items:
   //  ref()s become state properties (can get actual refs by using pina.storeToRefs)
@@ -174,6 +179,7 @@ export const useStoryStore = defineStore("story", () => {
   const getHighestSceneId = story => (story.scenes.length ? Math.max(...story.scenes.map(({ id }) => id)) : null)
 
   const getHighestEventIdForScene = scene => (scene.events.length ? Math.max(...scene.events.map(({ id }) => id)) : -1)
+  const nextEventIdForScene = scene => getHighestEventIdForScene(scene) + 1
 
   setup()
 
