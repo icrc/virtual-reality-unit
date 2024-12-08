@@ -1,16 +1,28 @@
 // functions for dealing with actionCode (parsing and running)
 
+/**
+ * Gets the base commands.
+ *
+ * @param      {Object}  state   The state - passed in so commands have access.
+ */
 const getBaseCommands = state => ({
-  setStateValue: (key, val) => state[key] = val,
+  setStateValue: (key, val) => (state[key] = val),
   deleteStateValue: key => delete state[key],
 })
 
-
+/**
+ * Runs some action code - command by command.
+ *
+ * @param      {String}  actionCode           The action code - commands (separated by \n)
+ * @param      {Object}  initialState         The initial system state
+ * @param      {Object}  [commandLibrary={}]  Command library of additional available ({ commandName: Function })
+ * @return     {Object}  { newState: final state after running commands, bailed: boolean to determine if any terminating
+ *                       commands ran - ones that return null}
+ */
 export const runCode = (actionCode, initialState, commandLibrary = {}) => {
   const state = structuredClone(initialState)
-  const commands = { ...getBaseCommands(state),...commandLibrary }
+  const commands = { ...getBaseCommands(state), ...commandLibrary }
   let bailed = false
-  console.log(actionCode)
   for (const { command, args } of parser(actionCode, state)) {
     if (!commands[command]) throw new Error(`Unknown actionCode command: ${command}`)
     const result = commands[command](...args)
@@ -22,6 +34,13 @@ export const runCode = (actionCode, initialState, commandLibrary = {}) => {
   return { newState: state, bailed }
 }
 
+/**
+ * Parses passed actionCode, yields parsed commands with their arguments.
+ *
+ * @param      {String}  code    The code to parse
+ * @param      {Object}  state   The current state (needed so we can reference state values in expressions)
+ * @return     {Object}  Yields objects: { command: 'commandName', args: [] }
+ */
 export function* parser(code, state) {
   const c = code.trim()
   if (!c) return
@@ -33,25 +52,34 @@ export function* parser(code, state) {
     const args = splitArgs(argString)
     yield { command, args: args.map(arg => getArgValue(arg, state)) }
   }
-
 }
 
+/**
+ * Gets the value of an argument.
+ *
+ * @param      {String}  expression  The expression to evaluate
+ * @param      {Object}  state       The current state (so we can retrieve values)
+ * @return     {Any}     The argument value
+ */
 function getArgValue(expression, state) {
   window.__tmpActionCode__ = structuredClone(state)
   const xp = expression.replace(/@([a-zA-Z]*)/g, 'window.__tmpActionCode__["$1"]')
   return eval(xp)
 }
 
+/**
+ * Splits and trims arguments from string (comma separated, trimming too).
+ *
+ * @param      {String}    allArgsStr  All arguments string
+ * @return     {String[]}  array of arguments (strings ready to be evaluated)
+ */
 function splitArgs(allArgsStr) {
+  // BEWARE - we will have issues with commas inside args - so this should be avoided
   return allArgsStr
     .split(/,(.*)/)
     .map(x => x.trim())
     .filter(x => x)
 }
 
-
-
-
 // TODO - getArgValue above is potentially VERY unsage - consider mobing to a safeEval function
 // See - https://stackoverflow.com/a/37154736
-
