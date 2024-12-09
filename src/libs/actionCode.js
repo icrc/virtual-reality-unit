@@ -24,6 +24,7 @@ export const runCode = (actionCode, initialState, commandLibrary = {}) => {
   const commands = { ...getBaseCommands(state), ...commandLibrary }
   let bailed = false
   for (const { command, args } of parser(actionCode, state)) {
+    console.log(command, args)
     if (!commands[command]) throw new Error(`Unknown actionCode command: ${command}`)
     const result = commands[command](...args)
     if (result === null) {
@@ -49,8 +50,8 @@ export function* parser(code, state) {
 
   for (let line of lines) {
     const [command, argString] = line.split(":").map(part => part.trim())
-    const args = splitArgs(argString)
-    yield { command, args: args.map(arg => getArgValue(arg, state)) }
+    const args = argString && splitArgs(argString)
+    yield { command, args: args ? args.map(arg => getArgValue(arg, state)) : [] }
   }
 }
 
