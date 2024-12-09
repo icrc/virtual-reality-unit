@@ -168,6 +168,7 @@ function playScene(scene, abortSignal = undefined) {
 				scene.nextSceneId = id
 			},
 			gotoNextScene() {
+				if (scene.nextSceneId === -1) return // do nothing if no next scene
 				announceDone({ nextSceneId: scene.nextSceneId })
 				return null // bail on any more commands
 			},
@@ -213,15 +214,20 @@ function playScene(scene, abortSignal = undefined) {
 			completedEventIds.push(event.id)
 			console.log("event: ", event.type, event.id)
 			if (event.type == EVENT_TYPES.action) {
-				runActionCode(event.data)
+				runActionCodeAndUpdateState(event.data)
 			} else if ((event.type = EVENT_TYPES.choice)) {
 				// TODO - choice handling
 				console.log("Choice time!", event.data)
 			}
 		}
 
+		function runActionCodeAndUpdateState(code) {
+			const res = runActionCode(code)
+			currentState = structuredClone(toRaw(res.newState))
+		}
+
 		function runActionCode(code) {
-			const res = runCode(code, currentState, CMD_LIBRARY)
+			return runCode(code, currentState, CMD_LIBRARY)
 		}
 
 		const handlers = {
