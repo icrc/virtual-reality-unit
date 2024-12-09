@@ -22,7 +22,18 @@ const onPlayerError = ref(null)
 const getChapters = functionWithVideoJS(async (vjs, sourceType) =>
   await VIDEO_SOURCE_TYPES[sourceType].features.getChapters(vjs.tech()))
 
-function functionWithVideoJS(fn) {
+// TODO - add a preload/cache function that we will expose 
+
+/**
+ * Turns a function that expects a videoJS instance into one that will expect a sourceType and a URL that will be used
+ * to create the videoJS instance to pass into the original function
+ *
+ * @param      {Function}  fn                         The function expecting args in the form (vjs, [sourceType], [url])
+ * @param      {Boolean}   [destroyVJSWhenDone=true]  Flag to determine if player should be destroyed when function is
+ *                                                    complete
+ * @return     {Function}  Function expecting args (sourceType, url)
+ */
+function functionWithVideoJS(fn, destroyVJSWhenDone = true) {
   return async (sourceType, URL) => {
     let videoJS,
       result = null,
@@ -36,11 +47,18 @@ function functionWithVideoJS(fn) {
     } catch (err) {
       error = err
     }
-    teardownVideoJS()
+    destroyVJSWhenDone && teardownVideoJS()
     return [result, error]
   }
 }
 
+/**
+ * Gets a video js instance.
+ *
+ * @param      {String}   sourceType  The source type ('vimeo', 'mp4', etc.)
+ * @param      {String}   URL         The url
+ * @return     {Promise}  Resolves to the videojs instance
+ */
 function getVideoJS(sourceType, URL) {
   return new Promise((resolve, reject) => {
     playerOptions.value = {
@@ -56,6 +74,9 @@ function getVideoJS(sourceType, URL) {
   })
 }
 
+/**
+ * Destroy the player
+ */
 function teardownVideoJS() {
   usePlayer.value = false
 }

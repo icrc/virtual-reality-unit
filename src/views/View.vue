@@ -5,7 +5,9 @@
       <story-player v-if="alive" @ready="handlePlayerReady" @showable="handlePlayerShowable" :data="storyData" ref="player" :containerEl="mainViewContainer" />
     </main>
     <div class="buttons">
-      <button :disabled="!isVideoReady" @click="() => player?.playbackActive ? handleReset() : handleStart()">{{ player?.playbackActive ? "Reset" : "Start" }}</button>
+      <button :disabled="!isVideoReady" @click="() => (player?.playbackActive ? handleReset() : handleStart())">
+        {{ player?.playbackActive ? "Reset" : "Start" }}
+      </button>
       <button style="width: 30%" @click="player.goFullscreen">Full Screen</button>
     </div>
   </div>
@@ -26,34 +28,42 @@ const isShowable = ref(false)
 const mainViewContainer = ref(null)
 const alive = ref(true)
 
-const handlePlayerReady = () => isVideoReady.value = true
-const handlePlayerShowable = () => isShowable.value = true
+const handlePlayerReady = () => (isVideoReady.value = true)
+const handlePlayerShowable = () => (isShowable.value = true)
 
 let abortController
 
+/**
+ * Start the playback
+ */
 const handleStart = async () => {
   abortController = new AbortController()
   const res = await player.value.start(abortController.signal)
   if (!res.aborted) {
     console.log(res)
-    alert('Finished! (check console for final state)')
+    alert("Finished! (check console for final state)")
     handleReset()
   }
 }
 
+/**
+ * Gets the current story data.
+ *
+ * @return     {Object>}  The story data.
+ */
 const getStoryData = () => structuredClone(toRaw(store.currentStory))
 
+/**
+ * Handle resetting playback (teardown player, then reinstantiate on next tick)
+ */
 const handleReset = () => {
   abortController.abort()
   alive.value = false
   storyData.value = getStoryData()
-  nextTick(() => alive.value = true)
+  nextTick(() => (alive.value = true))
 }
 
 storyData.value = getStoryData()
-
-
-
 </script>
 
 <style scoped>
@@ -62,5 +72,4 @@ storyData.value = getStoryData()
   display: flex;
   gap: 1em;
 }
-
 </style>

@@ -1,6 +1,7 @@
 // General System Config
 //
 import { useStorage } from "@/libs/storage"
+
 // import { dropboxStorage } from '@/libs/storage/dropbox'
 import { testStorage } from "@/libs/storage/test"
 
@@ -13,7 +14,7 @@ export const VIDEO_SOURCE_TYPES = {
 		features: {
 			getChapters: async tech => {
 				const data = await tech.getChapters()
-				return data.map(({startTime, title}, idx, arr) => ({
+				return data.map(({ startTime, title }, idx, arr) => ({
 					title: title || `Chapter ${idx + 1}`,
 					startTime,
 					endTime: idx === arr.length - 1 ? -1 : arr[idx + 1].startTime,

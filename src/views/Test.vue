@@ -50,11 +50,10 @@ import { parser, runCode } from "@/libs/actionCode"
 //   console.log()
 // }
 
-
 const commandLibrary = {
   gotoScene(sceneID) {
-    console.log('go to scene ' + sceneID)
-  }
+    console.log("go to scene " + sceneID)
+  },
 }
 const testActionCode = () => {
   const code = `setStateValue: 'myVal',1
@@ -69,8 +68,6 @@ setStateValue: @keyName, 'String test'`
   const finalState = runCode(code, state, commandLibrary).newState
   console.log(finalState)
 }
-
-
 
 const myPlayer = ref()
 let videoJS

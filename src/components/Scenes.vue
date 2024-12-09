@@ -11,7 +11,7 @@
               >Next scene
               <select v-model="scene.nextSceneId">
                 <option :value="-1">(n/a)</option>
-                <option v-for="scene in story.scenes" idx="scene.id" :value="scene.id">{{ scene.title || '(No title)' }}</option>
+                <option v-for="scene in story.scenes" idx="scene.id" :value="scene.id">{{ scene.title || "(No title)" }}</option>
               </select>
             </label>
           </div>
@@ -21,7 +21,9 @@
             <label style="--span: 3"
               >Video
               <select v-model="scene.videoId">
-                <option v-if="story.videos.length" v-for="video in story.videos" idx="video.id" :value="video.id">{{ video.title || '(Untitled video)' }}</option>
+                <option v-if="story.videos.length" v-for="video in story.videos" idx="video.id" :value="video.id">
+                  {{ video.title || "(Untitled video)" }}
+                </option>
                 <option v-else :value="-1">No videos available. Please add one</option>
               </select>
             </label>
@@ -62,9 +64,11 @@ const props = defineProps({
 })
 
 const story = computed(() => props.store.currentStory)
+const deleteScene = props.store.deleteScene
 
-const deleteScene = sceneId => props.store.deleteScene(sceneId)
-
+/**
+ * Adds a scene. Also makes sure first field on new scene is focused when it appears
+ */
 const addScene = () => {
   const id = props.store.addScene(structuredClone(NEW_SCENE_DEFAULTS))
   header.value.open = true

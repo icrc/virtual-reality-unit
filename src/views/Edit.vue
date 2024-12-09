@@ -13,7 +13,12 @@
                 <a href="#" @click.prevent="loadStory">Load existing</a>
               </li>
               <li>
-                <a href="#" @click.prevent="saveStory" v-bind="{ ...(store.isSaved && { disabled: true }) }">Save current {{ unsavedMarker }}</a>
+                <a
+                  href="#"
+                  @click.prevent="async e => !e.target.attributes.disabled && (await saveStory())"
+                  v-bind="{ ...(store.isSaved && { disabled: true }) }"
+                  >Save current {{ unsavedMarker }}</a
+                >
               </li>
               <li>
                 <RouterLink to="/view">View project</RouterLink>
@@ -38,7 +43,9 @@
                     >Initial scene
                     <select v-model="story.initialSceneId">
                       <option v-if="story.scenes.length" :value="-1">Please select a scene...</option>
-                      <option v-if="story.scenes.length" v-for="scene in story.scenes" idx="scene.id" :value="scene.id">{{ scene.title || '(No title)' }}</option>
+                      <option v-if="story.scenes.length" v-for="scene in story.scenes" idx="scene.id" :value="scene.id">
+                        {{ scene.title || "(No title)" }}
+                      </option>
                       <option v-else :value="-1">No scenes available. Please add one</option>
                     </select>
                   </label>
@@ -108,27 +115,40 @@ const story = computed(() => store.currentStory)
 
 const unsavedMarker = computed(() => (store.isSaved ? "" : "*"))
 
+/**
+ * Add a new story/project (checking if current saved first)
+ *
+ * @return     {Any}  n/a
+ */
 const newStory = async () => {
   if (!(await confirmUnsaved())) return
   store.newStory()
 }
 
+/**
+ * Picks and loads a story (checking saved status of current first).
+ *
+ * @return     {Any}  n/a
+ */
 const loadStory = async () => {
   if (!(await confirmUnsaved())) return
   const filename = await store.pickStory()
   filename && (await store.loadStory(filename))
 }
 
-const viewStory = () => {
-  alert("TBA")
-}
-
-const saveStory = async e => {
-  if (e.target.attributes.disabled) return
+/**
+ * Chooses a name, and saves current story.
+ */
+const saveStory = async () => {
   const fname = await store.chooseStoryFilename()
-  if (fname) await store.saveStory(fname)
+  if (fname) await store.saveStory(fname.trim())
 }
 
+/**
+ * Confirm continue action if current project is unsaved
+ *
+ * @return     {Boolean}  yes/no
+ */
 const confirmUnsaved = async () => {
   return store.isSaved ? true : confirm("Current story is unsaved. Continue?")
 }

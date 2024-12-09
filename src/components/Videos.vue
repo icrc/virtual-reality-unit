@@ -19,7 +19,7 @@
             <button
               :disabled="chapterImportInProgress"
               :aria-busy="chapterImportInProgress"
-              @click="importChapters(video.id, video.sourceType, video.url)"
+              @click="importChapters(video)"
               v-if="chaptersAvailableForSourceType(video.sourceType)"
               class="s-outline">
               Import Chapters as Scenes
@@ -32,13 +32,12 @@
     </details>
   </article>
 
-<!--   <div v-if="useUtilPlayer" class="util_player">
+  <!--   <div v-if="useUtilPlayer" class="util_player">
     <player @ready="onPlayerReady" @error="onPlayerError" :options="playerOptions" />
   </div>
  -->
 
-  <video-info-provider ref="videoInfo"/>
-
+  <video-info-provider ref="videoInfo" />
 </template>
 
 <script>
@@ -76,12 +75,19 @@ const props = defineProps({
   },
 })
 
-
 const chapterImportInProgress = ref(false)
 
-const importChapters = async (videoId, sourceType, URL) => {
+/**
+ * Import chapter info from a video into scenes for a video with given id in current project
+ *
+ * @param      {Object}  arg1             Video object
+ * @param      {Number}  arg1.id          Id of the video
+ * @param      {String}  arg1.sourceType  The source type
+ * @param      {String}  arg1.url         The url
+ */
+const importChapters = async ({ id: videoId, sourceType, url: URL }) => {
   chapterImportInProgress.value = true
-  const  [ chapters, error ] = await videoInfo.value.getChapters(sourceType, URL)
+  const [chapters, error] = await videoInfo.value.getChapters(sourceType, URL)
   if (chapters) {
     if (chapters.length) {
       chapters.forEach(({ title, startTime, endTime }) => {
@@ -96,10 +102,22 @@ const importChapters = async (videoId, sourceType, URL) => {
   chapterImportInProgress.value = false
 }
 
+/**
+ * Check given sourceType is capable of providing chapter info
+ *
+ * @param      {String}   sourceType  The source type
+ * @return     {Boolean}  Yes/No
+ */
 const chaptersAvailableForSourceType = sourceType => VIDEO_SOURCE_TYPES[sourceType]?.features?.getChapters
 
 const story = computed(() => props.store.currentStory)
 
+/**
+ * Delete video with given id (with confirmation)
+ *
+ * @param      {Number}  videoId  The video identifier
+ * @return     {Any}     n/a
+ */
 const deleteVideo = videoId => {
   const relatedScenes = props.store.getScenesByVideoId(videoId)
   if (
@@ -112,6 +130,9 @@ const deleteVideo = videoId => {
   props.store.deleteVideo(videoId, true)
 }
 
+/**
+ * Adds a new video and focuses newly added row (first field).
+ */
 const addVideo = () => {
   const id = props.store.addVideo(structuredClone(NEW_VIDEO_DEFAULTS))
   header.value.open = true
@@ -162,5 +183,4 @@ const addVideo = () => {
     width: fit-content;
   }
 }
-
 </style>

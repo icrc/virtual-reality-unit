@@ -1,7 +1,5 @@
 <!-- Home Page -->
-<script setup>
-
-</script>
+<script setup></script>
 
 <template>
   <div class="s-container">
