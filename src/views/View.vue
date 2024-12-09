@@ -40,7 +40,7 @@ const handleStart = async () => {
   abortController = new AbortController()
   const res = await player.value.start(abortController.signal)
   if (!res.aborted) {
-    console.log(res)
+    console.log(res.finalState)
     alert("Finished! (check console for final state)")
     handleReset()
   }
