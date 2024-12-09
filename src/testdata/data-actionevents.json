@@ -1,0 +1,77 @@
+{
+  "version": "0.0.1",
+  "title": "Action Events Test",
+  "author": "Jon Randy",
+  "info": "Should just play through hacker, racing, sci-fi",
+  "locales": ["en"],
+  "videos": [
+    {
+      "id": 4,
+      "title": "Hacker",
+      "sourceType": "mp4",
+      "url": "/videos/04.mp4",
+      "thumbnail": "TODO later - maybe we need this?",
+      "info": "A short test video with a 'hacker' feel",
+      "audiotracks": []
+    },
+    {
+      "title": "Radar",
+      "sourceType": "mp4",
+      "url": "/videos/05.mp4",
+      "thumbnail": "",
+      "info": "",
+      "audiotracks": [],
+      "id": 5
+    },
+    {
+      "title": "Green Bold",
+      "sourceType": "mp4",
+      "url": "/videos/06.mp4",
+      "thumbnail": "",
+      "info": "",
+      "audiotracks": [],
+      "id": 6
+    }
+  ],
+  "scenes": [
+    {
+      "id": 0,
+      "videoId": 4,
+      "title": "Hacker",
+      "startTime": 0,
+      "endTime": -1,
+      "nextSceneId": -1,
+      "events": [
+        {
+          "id": 0,
+          "type": "action",
+          "launchTime": 5,
+          "data": "setStateValue:'myKey','info'\nsetStateValue:'info2',@info\nsetStateValue:'jon',2\nsetNextScene:@jon\ndeleteStateValue:'jon'\ndeleteStateValue:@myKey\ngotoNextScene"
+        }
+      ]
+    },
+    {
+      "videoId": 5,
+      "title": "Radar",
+      "startTime": 0,
+      "endTime": -1,
+      "nextSceneId": -1,
+      "events": [],
+      "id": 1
+    },
+    {
+      "videoId": 6,
+      "title": "Green bold",
+      "startTime": 0,
+      "endTime": -1,
+      "nextSceneId": -1,
+      "events": [],
+      "id": 2
+    }
+  ],
+  "initialSceneId": 0,
+  "initialState": {
+    "info": "TODO - this is to do with recording and returning data"
+  },
+  "translations": {}
+}
