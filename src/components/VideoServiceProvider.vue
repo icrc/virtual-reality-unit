@@ -21,7 +21,7 @@ const onPlayerError = ref(null)
 
 // getChapters(sourceType, URL)
 const getChapters = functionWithVideoJS(async function getChapters(vjs, sourceType) {
-  await VIDEO_SOURCE_TYPES[sourceType].features.getChapters(vjs.tech())
+  return await VIDEO_SOURCE_TYPES[sourceType].features.getChapters(vjs.tech())
 })
 
 // preload(sourceType, URL, startTime=0)
