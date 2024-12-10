@@ -19,6 +19,9 @@
       <button @click="vimeoChapters">Chapters Info</button>
       <button @click="testActionCode">Test ActionCode</button>
     </div>
+
+    <!-- Video service providers for doing preloads -->
+    <video-service-provider v-for="n in 10" ref="serviceProviders" />
   </div>
 </template>
 
@@ -27,28 +30,24 @@ import { VIDEO_SOURCE_TYPES } from "@/config"
 </script>
 
 <script setup>
-import { ref } from "vue"
+import { ref, useTemplateRef, onMounted, nextTick } from "vue"
 import Player from "@/components/Player.vue"
+import VideoServiceProvider from "@/components/VideoServiceProvider.vue"
+
 import { useFullscreen } from "@/composables/fullscreen"
 
-import { parser, runCode } from "@/libs/actionCode"
+import { runCode } from "@/libs/actionCode"
 
-// const testActionCode2 = () => {
-//   const code = `setStateValue: 'myVal',1
-// gotoScene: 8
-// gotoScene: @jonScene
-// gotoScene: @myVal
-// setStateValue: 'keyName', 'myKey'
-// setStateValue: 'myVal', @myVal+36
-// setStateValue: 'myVal', 'Hello' + @myVal
-// setStateValue: @keyName, 'String test'`
-//   const state = { jonScene: 48 }
-//   parser(code, state).forEach(({ command, args }) => {
-//     console.log({ command, args })
-//     if (command == "setStateValue") state[args[0]] = args[1]
-//   })
-//   console.log()
-// }
+// test preloading
+const serviceProviderRefs = useTemplateRef("serviceProviders")
+onMounted(() => {
+  nextTick(() => {
+    serviceProviderRefs.value.forEach((ref, index) => {
+      const startTime = index
+      ref.preload("mp4", `/videos/0${index}.mp4`, startTime)
+    })
+  })
+})
 
 const commandLibrary = {
   gotoScene(sceneID) {
