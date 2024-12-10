@@ -37,7 +37,7 @@
   </div>
  -->
 
-  <video-info-provider ref="videoInfo" />
+  <video-service-provider ref="videoInfo" />
 </template>
 
 <script>
@@ -61,7 +61,7 @@ const NEW_SCENE_DEFAULTS = {
 <script setup>
 import { ref, computed, nextTick } from "vue"
 
-import VideoInfoProvider from "@/components/VideoInfoProvider.vue"
+import VideoServiceProvider from "@/components/VideoServiceProvider.vue"
 const videoInfo = ref(null)
 
 const header = ref(null)

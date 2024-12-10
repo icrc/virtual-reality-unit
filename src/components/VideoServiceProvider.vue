@@ -1,6 +1,6 @@
-<!-- Video Info Provider Component - for loading a video (hidden) and using functions (exposed) to retrieve info about the video -->
+<!-- Video Service Provider Component - for loading a video (hidden) and using functions (exposed) to retrieve info about the video -->
 <template>
-  <div v-if="usePlayer" class="player_wraapper">
+  <div v-if="usePlayer" class="player_wrapper">
     <player @ready="onPlayerReady" @error="onPlayerError" :options="playerOptions" />
   </div>
 </template>
@@ -19,10 +19,15 @@ const playerOptions = ref(null)
 const onPlayerReady = ref(null)
 const onPlayerError = ref(null)
 
-const getChapters = functionWithVideoJS(async (vjs, sourceType) =>
-  await VIDEO_SOURCE_TYPES[sourceType].features.getChapters(vjs.tech()))
+// getChapters(sourceType, URL)
+const getChapters = functionWithVideoJS(async function getChapters(vjs, sourceType) {
+  await VIDEO_SOURCE_TYPES[sourceType].features.getChapters(vjs.tech())
+})
 
-// TODO - add a preload/cache function that we will expose 
+// preload(sourceType, URL, startTime=0)
+const preload = functionWithVideoJS(async function preload(vjs, sourceType, URL, startTime = 0) {
+  startTime && vjs.currentTime(startTime)
+}, false)
 
 /**
  * Turns a function that expects a videoJS instance into one that will expect a sourceType and a URL that will be used
@@ -34,22 +39,25 @@ const getChapters = functionWithVideoJS(async (vjs, sourceType) =>
  * @return     {Function}  Function expecting args (sourceType, url)
  */
 function functionWithVideoJS(fn, destroyVJSWhenDone = true) {
-  return async (sourceType, URL) => {
-    let videoJS,
-      result = null,
-      error
-    try {
-      if ((videoJS = await getVideoJS(sourceType, URL))) {
-        result = await fn(videoJS, sourceType, URL)
-      } else {
-        error = true
+  const functionName = fn.name || "anonymous"
+  return {
+    [functionName]: async (sourceType, URL, ...otherArgs) => {
+      let videoJS,
+        result = null,
+        error
+      try {
+        if ((videoJS = await getVideoJS(sourceType, URL))) {
+          result = await fn(videoJS, sourceType, URL, ...otherArgs)
+        } else {
+          error = true
+        }
+      } catch (err) {
+        error = err
       }
-    } catch (err) {
-      error = err
-    }
-    destroyVJSWhenDone && teardownVideoJS()
-    return [result, error]
-  }
+      destroyVJSWhenDone && teardownVideoJS()
+      return [result, error]
+    },
+  }[functionName]
 }
 
 /**
@@ -85,11 +93,17 @@ onUnmounted(teardownVideoJS)
 
 defineExpose({
   getChapters,
+  preload,
 })
 </script>
 
 <style scoped>
-.player_wraapper {
-  display: none;
+.player_wrapper {
+  position: absolute;
+  inset: 0 0 0 0;
+  width:10px;
+  height:10px;
+  opacity: 0;
+  pointer-events: none;
 }
 </style>
