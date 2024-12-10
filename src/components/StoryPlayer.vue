@@ -198,8 +198,11 @@ function playScene(scene, abortSignal = undefined) {
 			resolve(result)
 		}
 
-		function handleSceneEnd() {
-			// TODO -- end of scene events (launchTime = -1)
+		async function handleSceneEnd() {
+			// check for 'end of scene' events
+			scene.events.forEach(event => {
+				if (event.launchTime == -1 && !completedEventIds.includes(event.id)) handleEvent(event)
+			})
 
 			// go to next scene if we have one
 			if (scene.nextSceneId !== -1) {
@@ -245,9 +248,9 @@ function playScene(scene, abortSignal = undefined) {
 					if (event.launchTime !== -1 && time >= event.launchTime && !completedEventIds.includes(event.id)) handleEvent(event)
 				})
 			},
-			ended() {
+			async ended() {
 				videoJS.pause()
-				handleSceneEnd()
+				await handleSceneEnd()
 			},
 			seeked() {
 				if (videoJS.paused()) {
