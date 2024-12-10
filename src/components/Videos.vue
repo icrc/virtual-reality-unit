@@ -42,6 +42,7 @@
 
 <script>
 import { VIDEO_SOURCE_TYPES, DEFAULT_VIDEO_SOURCE_TYPE } from "@/config"
+import { alert, confirm } from "@/libs/popups"
 
 const NEW_VIDEO_DEFAULTS = {
   title: "",
@@ -93,12 +94,12 @@ const importChapters = async ({ id: videoId, sourceType, url: URL }) => {
       chapters.forEach(({ title, startTime, endTime }) => {
         props.store.addScene({ ...structuredClone(NEW_SCENE_DEFAULTS), videoId, title, startTime, endTime })
       })
-      alert(`${chapters.length} chapters imported.`)
+      await alert(`${chapters.length} chapters imported.`)
     } else {
-      alert("Video has no chapters to import.")
+      await alert("Video has no chapters to import.")
     }
   }
-  if (error) alert(`Failed to get chapters for video from ${sourceType} source with URL:\n\n${URL}`)
+  if (error) await alert(`Failed to get chapters for video from ${sourceType} source with URL:\n\n${URL}`)
   chapterImportInProgress.value = false
 }
 
@@ -118,13 +119,13 @@ const story = computed(() => props.store.currentStory)
  * @param      {Number}  videoId  The video identifier
  * @return     {Any}     n/a
  */
-const deleteVideo = videoId => {
+const deleteVideo = async videoId => {
   const relatedScenes = props.store.getScenesByVideoId(videoId)
   if (
     relatedScenes.length &&
-    !confirm(
+    !(await confirm(
       `This video has ${relatedScenes.length} related scene${relatedScenes.length > 1 ? "s" : ""}:\n\n${relatedScenes.map(scene => `'${scene.title}'`).join("\n")}\n\nAre you sure you want to delete this video and related scenes?`
-    )
+    ))
   )
     return
   props.store.deleteVideo(videoId, true)

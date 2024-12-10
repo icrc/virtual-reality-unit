@@ -2,6 +2,8 @@
 
 let ready = false
 
+import { alert, prompt } from "@/libs/popups"
+
 import blastVimeo from "@/testdata/data-blast.json"
 import multiMP4 from "@/testdata/data-multi-mp4.json"
 import playthru from "@/testdata/data-playthru.json"
@@ -36,14 +38,14 @@ export const testStorage = {
 		console.log(data)
 		testData[filename] = { ...data }
 		const msg = `Saved data from '${filename}':\n\n${JSON.stringify(data, null, 2)}`
-		alert(msg)
+		await alert(msg)
 		return true
 	},
 	pick: async function pick() {
-		const fname = prompt(`Which test data would you like to load?\n\n${Object.keys(testData).join("\n")}\n `)
+		const fname = await prompt(`Which test data would you like to load?\n\n${Object.keys(testData).join("\n")}\n `)
 		return typeof fname === "string" ? fname.trim() : null
 	},
 	chooseSaveFilename: async function chooseSaveFilename(suggestedFilename = "") {
-		return prompt("Enter a filename to save the data to:", suggestedFilename)
+		return await prompt("Enter a filename to save the data to:", suggestedFilename)
 	},
 }

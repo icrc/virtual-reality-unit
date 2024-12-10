@@ -103,6 +103,10 @@
   </div>
 </template>
 
+<script>
+import { confirm } from "@/libs/popups"
+</script>
+
 <script setup>
 import { computed } from "vue"
 import { useStoryStore } from "@/stores/storyStore"
@@ -150,7 +154,7 @@ const saveStory = async () => {
  * @return     {Boolean}  yes/no
  */
 const confirmUnsaved = async () => {
-  return store.isSaved ? true : confirm("Current story is unsaved. Continue?")
+  return store.isSaved ? true : await confirm("Current story is unsaved. Continue?")
 }
 </script>
 

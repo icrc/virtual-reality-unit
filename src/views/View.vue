@@ -13,6 +13,10 @@
   </div>
 </template>
 
+<script>
+import { alert } from "@/libs/popups"
+</script>
+
 <script setup>
 import { ref, nextTick, toRaw } from "vue"
 import StoryPlayer from "@/components/StoryPlayer.vue"
@@ -41,7 +45,7 @@ const handleStart = async () => {
   const res = await player.value.start(abortController.signal)
   if (!res.aborted) {
     console.log(res.finalState)
-    alert("Finished! (check console for final state)")
+    await alert("Finished! (check console for final state)")
     handleReset()
   }
 }
