@@ -5,6 +5,9 @@
 		<div class="overlay">
 			<div class="marker"></div>
 		</div>
+		<div v-if="props?.data?.scenes?.length">
+			<span v-for="(scene, index) in props.data.scenes">{{ `Service scene ${ index + 1 }` }} --- </span>
+		</div>
 	</div>
 </template>
 
@@ -58,7 +61,6 @@ const onPlayerReady = vJS => {
 	emit("showable", { videoJS })
 }
 
-
 /**
  * Get all deimensions of the video (optionally announcing we're ready once done)
  *
@@ -72,7 +74,6 @@ const getAllDimensions = (announceReady = true) => {
 		announceReady && emit("ready", { videoJS })
 	})
 }
-
 
 /**
  * Resize player to given width (optional) and height (optional)
@@ -190,7 +191,7 @@ function playScene(scene, abortSignal = undefined) {
 
 		const activateHandlers = (state = true) => {
 			Object.entries(handlers).forEach(([event, handler]) => videoJS[state ? "on" : "off"](event, handler))
-			abortSignal?.[state? "addEventListener" : "removeEventListener"]("abort", abortHandler)
+			abortSignal?.[state ? "addEventListener" : "removeEventListener"]("abort", abortHandler)
 		}
 
 		function announceDone(result) {
