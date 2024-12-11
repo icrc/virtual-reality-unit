@@ -1,5 +1,7 @@
 // functions for dealing with actionCode (parsing and running)
 
+const TEMP_VAR_NAME = "__tmpActionCode__"
+
 /**
  * Gets the base commands.
  *
@@ -63,8 +65,8 @@ export function* parser(code, state) {
  * @return     {Any}     The argument value
  */
 function getArgValue(expression, state) {
-  window.__tmpActionCode__ = structuredClone(state)
-  const xp = expression.replace(/@([a-zA-Z]*)/g, 'window.__tmpActionCode__["$1"]')
+  window[TEMP_VAR_NAME] = structuredClone(state)
+  const xp = expression.replace(/@([a-zA-Z]*)/g, `window.${TEMP_VAR_NAME}["$1"]`)
   return eval(xp)
 }
 
