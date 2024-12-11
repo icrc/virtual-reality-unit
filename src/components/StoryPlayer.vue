@@ -6,7 +6,7 @@
 			<div class="marker"></div>
 		</div>
 		<div v-if="props?.data?.scenes?.length">
-			<span v-for="(scene, index) in props.data.scenes">{{ `Service scene ${ index + 1 }` }} --- </span>
+			<video-service-provider v-for="(scene, index) in props.data.scenes" ref="serviceProviders" />
 		</div>
 	</div>
 </template>
@@ -17,8 +17,9 @@ import { runCode } from "@/libs/actionCode"
 </script>
 
 <script setup>
-import { ref, toRaw, onUnmounted } from "vue"
+import { ref, toRaw, onMounted, onUnmounted, useTemplateRef, nextTick } from "vue"
 import Player from "@/components/Player.vue"
+import VideoServiceProvider from "@/components/VideoServiceProvider.vue"
 
 import { useFullscreen } from "@/composables/fullscreen"
 import { useWindowSize } from "@/composables/windowSize"
@@ -48,6 +49,18 @@ const playbackActive = ref(false)
 
 let videoJS
 let currentState
+
+const serviceProviderRefs = useTemplateRef("serviceProviders")
+onMounted(() => {
+	if (props.data.scenes && props.data.scenes.length) {
+		nextTick(() => {
+			props.data.scenes.forEach((scene, index) => {
+				const {type, src} = getSceneSourceObject(scene)
+				serviceProviderRefs.value[index].preload(type.replace('video/', ''), src, scene.startTime)
+			})
+		})
+	}
+})
 
 /**
  * Do some setup when video player ready.
