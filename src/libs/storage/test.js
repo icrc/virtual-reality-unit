@@ -5,7 +5,7 @@ let ready = false
 import { alert, prompt } from "@/libs/popups"
 
 import blastVimeo from "@/testdata/data-blast.json"
-import multiMP4 from "@/testdata/data-multi-mp4.json"
+import multiMP4 from "@/testdata/data-multi-mp4.json5"
 import playthru from "@/testdata/data-playthru.json"
 import actionEvents from "@/testdata/data-actionevents.json"
 

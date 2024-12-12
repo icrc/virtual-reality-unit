@@ -1,6 +1,7 @@
 import { defineConfig } from "vite"
 import path from "path"
 import vue from "@vitejs/plugin-vue"
+import { json5Plugin } from 'vite-plugin-json5'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -8,6 +9,7 @@ export default defineConfig({
     target: "esnext",
   },
   plugins: [
+    json5Plugin(),
     vue({
       template: {
         compilerOptions: {
