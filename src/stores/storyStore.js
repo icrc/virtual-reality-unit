@@ -115,7 +115,7 @@ export const useStoryStore = defineStore("story", () => {
   // delete a video from the current story
   function deleteVideo(id, includeRelatedScenes = false) {
     if (includeRelatedScenes) getScenesByVideoId(id).forEach(scene => deleteScene(scene.id))
-    currentStory.value.videos = currentStory.value.videos.filter(video => video.id !== id)
+    currentStory.value.videos = currentStory.value.videos.filter(video => video.id !== id).map(video => toRaw(video))
     currentHighestVideoId = getHighestVideoId(currentStory.value) ?? -1
   }
 
@@ -133,7 +133,7 @@ export const useStoryStore = defineStore("story", () => {
 
   // delete a scene from the current story
   function deleteScene(id) {
-    currentStory.value.scenes = currentStory.value.scenes.filter(scene => scene.id !== id)
+    currentStory.value.scenes = currentStory.value.scenes.filter(scene => scene.id !== id).map(scene => toRaw(scene))
     currentHighestSceneId = getHighestSceneId(currentStory.value) ?? -1
   }
 
