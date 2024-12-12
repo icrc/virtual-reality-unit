@@ -1,5 +1,5 @@
 import { defineStore } from "pinia"
-import { ref, watch, toRaw } from "vue"
+import { ref, computed, watch, toRaw } from "vue"
 
 import { VERSION, storage } from "@/config"
 
@@ -171,6 +171,7 @@ export const useStoryStore = defineStore("story", () => {
   }
 
   const getSceneById = sceneId => currentStory.value.scenes.find(({ id }) => id === sceneId)
+  const getVideoById = videoId => currentStory.value.videos.find(({ id }) => id === videoId)
 
   const nextVideoId = () => ++currentHighestVideoId
   const getHighestVideoId = story => (story.videos.length ? Math.max(...story.videos.map(({ id }) => id)) : null)
@@ -180,6 +181,25 @@ export const useStoryStore = defineStore("story", () => {
 
   const getHighestEventIdForScene = scene => (scene.events.length ? Math.max(...scene.events.map(({ id }) => id)) : -1)
   const nextEventIdForScene = scene => getHighestEventIdForScene(scene) + 1
+
+
+  const isCurrentStoryPlayable = computed(() => {
+    // Initial scene set?
+    const sceneId = currentStory.value.initialSceneId
+    if ([undefined, -1].includes(sceneId)) return false
+    // Initial scene exists
+    const scene = getSceneById(sceneId)
+    if (!scene) return false
+    // Initial scene has video
+    const video = getVideoById(scene.videoId)
+    if (!video) return false
+    // Video has sourceType and url
+    if (!video.sourceType ||!video.url) return false
+    // probably playable (although we're not checking for valid URL)
+    return true
+  })
+
+
 
   setup()
 
@@ -209,5 +229,7 @@ export const useStoryStore = defineStore("story", () => {
     updateEvent,
 
     getScenesByVideoId,
+
+    isCurrentStoryPlayable
   }
 })

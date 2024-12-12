@@ -1,14 +1,15 @@
 <!-- View Page -->
 <template>
   <div class="s-container">
-    <main ref="mainViewContainer" style="--span: 12" class="main_view_container" :style="{ visibility: isShowable ? 'visible' : 'hidden' }">
-      <story-player v-if="alive" @ready="handlePlayerReady" @showable="handlePlayerShowable" :data="storyData" ref="player" :containerEl="mainViewContainer" />
+    <main ref="mainViewContainer" style="--span: 12" class="main_view_container" :style="{ visibility: (isShowable || !isPlayable) ? 'visible' : 'hidden' }">
+      <story-player v-if="alive && isPlayable" @ready="handlePlayerReady" @showable="handlePlayerShowable" :data="storyData" ref="player" :containerEl="mainViewContainer" />
+      <div class="unplayable_message" v-if="!isPlayable">Current project is not playable.<br>Please check for a valid start scene and video.</div>
     </main>
     <div class="buttons">
       <button :disabled="!isVideoReady" @click="() => (player?.playbackActive ? handleReset() : handleStart())">
         {{ player?.playbackActive ? "Reset" : "Start" }}
       </button>
-      <button style="width: 30%" @click="player.goFullscreen">Full Screen</button>
+      <button :disabled="!isPlayable" style="width: 30%" @click="player.goFullscreen">Full Screen</button>
     </div>
   </div>
 </template>
@@ -24,6 +25,7 @@ import StoryPlayer from "@/components/StoryPlayer.vue"
 import { useStoryStore } from "@/stores/storyStore"
 const store = useStoryStore()
 const storyData = ref()
+const isPlayable = ref()
 
 const player = ref()
 
@@ -68,6 +70,7 @@ const handleReset = () => {
 }
 
 storyData.value = getStoryData()
+isPlayable.value = store.isCurrentStoryPlayable
 </script>
 
 <style scoped>
@@ -75,5 +78,16 @@ storyData.value = getStoryData()
   padding-top: 1em;
   display: flex;
   gap: 1em;
+}
+
+.unplayable_message {
+  aspect-ratio: 16/9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  color: #fff;
+  font-size: 2.5vw;
+  text-align: center;
 }
 </style>
