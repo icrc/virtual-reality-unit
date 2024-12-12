@@ -134,7 +134,8 @@ const resizePlayer = ({ width = undefined, height = undefined }) => {
 // make sure player sizes appropriately with window resizes
 const resizePlayerToContainerWidth = () => {
 	resizePlayer({ width: props.containerEl.clientWidth })
-	playerFullHeight.value = props.containerEl.clientHeight
+	/* TODO - if isFullscreen.value && screenAspect > videoAspect */
+	playerFullHeight.value = isFullscreen.value ? document.getElementsByClassName('video-js')[0].clientHeight : props.containerEl.clientHeight
 }
 let { stopWatching: stopWatchingWindowResize } = useWindowSize(resizePlayerToContainerWidth) // make sure player gets sized appropriately on window resize
 
@@ -357,10 +358,13 @@ defineExpose({
 }
 
 .full_screen .overlay {
-	top: calc(50% - (100vw / var(--aspect) / 2));
-	bottom: calc(50% - (100vw / var(--aspect) / 2));
-	left: 0;
-	right: 0;
-	--playerfullheight: calc(100vw/var(--aspect));
+  /* TODO - the below if screen aspect > video aspect */
+/*	top: calc(50% - (100vw / var(--aspect) / 2));
+  bottom: calc(50% - (100vw / var(--aspect) / 2));
+*//*  --playerfullheight: calc(100vw/var(--aspect));*/
+	top: calc(50% - (var(--playerfullheight) / 2));
+  bottom: calc(50% - (var(--playerfullheight) / 2));
+  left: calc(50% - ((var(--playerfullheight)*var(--aspect)) )/2);
+  right: calc(50% - ((var(--playerfullheight)*var(--aspect)) )/2);
 }
 </style>
