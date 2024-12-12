@@ -3,7 +3,8 @@
 	<div :class="{ player_container: true, full_screen: isFullscreen }">
 		<player @ready="onPlayerReady" :options="playerOptions" />
 		<div class="overlay">
-			<div class="marker"></div>
+			<choices v-if="choiceData" :message="choiceData.text" :buttons="choiceData.buttons" @choice-made="handleChoiceMade" />
+			<div v-else class="marker"></div>
 		</div>
 		<div v-if="props?.data?.scenes?.length">
 			<video-service-provider v-for="(scene, index) in props.data.scenes" ref="serviceProviders" />
@@ -20,11 +21,37 @@ import { runCode } from "@/libs/actionCode"
 import { ref, toRaw, onMounted, onUnmounted, useTemplateRef, nextTick } from "vue"
 import Player from "@/components/Player.vue"
 import VideoServiceProvider from "@/components/VideoServiceProvider.vue"
+import Choices from "@/components/Choices.vue"
 
 import { useFullscreen } from "@/composables/fullscreen"
 import { useWindowSize } from "@/composables/windowSize"
 
 import { runCode } from "@/libs/actionCode"
+
+const choiceData = {
+	text: "Where to next?",
+	type: "block",
+	options: {},
+	layout: "",
+	buttons: [
+		{
+			text: "Fireworks",
+			options: {},
+			action: "setNextScene:1",
+		},
+		{
+			text: "Silent Movie",
+			options: {},
+			action: "setNextScene:2",
+		},
+		{
+			text: "Film Roll",
+			options: {},
+			action: "setNextScene:3",
+		},
+	],
+}
+const handleChoiceMade = choice => console.log("Choice made:", choice)
 
 const props = defineProps({
 	// story data we'll be playing
@@ -45,6 +72,7 @@ const { isFullscreen } = useFullscreen()
 const playerAspect = ref(1)
 const playerWidth = ref(1)
 const playerHeight = ref(1)
+const playerFullHeight = ref(1)
 const playbackActive = ref(false)
 
 let videoJS
@@ -55,8 +83,8 @@ onMounted(() => {
 	if (props.data.scenes && props.data.scenes.length) {
 		nextTick(() => {
 			props.data.scenes.forEach((scene, index) => {
-				const {type, src} = getSceneSourceObject(scene)
-				serviceProviderRefs.value[index].preload(type.replace('video/', ''), src, scene.startTime)
+				const { type, src } = getSceneSourceObject(scene)
+				serviceProviderRefs.value[index].preload(type.replace("video/", ""), src, scene.startTime)
 			})
 		})
 	}
@@ -104,7 +132,10 @@ const resizePlayer = ({ width = undefined, height = undefined }) => {
 }
 
 // make sure player sizes appropriately with window resizes
-const resizePlayerToContainerWidth = () => resizePlayer({ width: props.containerEl.clientWidth })
+const resizePlayerToContainerWidth = () => {
+	resizePlayer({ width: props.containerEl.clientWidth })
+	playerFullHeight.value = props.containerEl.clientHeight
+}
 let { stopWatching: stopWatchingWindowResize } = useWindowSize(resizePlayerToContainerWidth) // make sure player gets sized appropriately on window resize
 
 // go to full screen player
@@ -296,6 +327,7 @@ defineExpose({
 <style scoped>
 .player_container {
 	position: relative;
+	--playerfullheight: v-bind(playerFullHeight + "px");
 	--aspect: v-bind(playerAspect);
 	--pwidth: v-bind(playerWidth + "px");
 	--pheight: v-bind(playerHeight + "px");
@@ -329,5 +361,6 @@ defineExpose({
 	bottom: calc(50% - (100vw / var(--aspect) / 2));
 	left: 0;
 	right: 0;
+	--playerfullheight: calc(100vw/var(--aspect));
 }
 </style>
