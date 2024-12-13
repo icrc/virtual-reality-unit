@@ -125,8 +125,7 @@ let { stopWatching: stopWatchingWindowResize } = useWindowSize(resizePlayerToCon
 
 // go to full screen player
 const goFullscreen = () => {
-	document.querySelector("html").requestFullscreen()
-	nextTick(() => resizePlayerToContainerWidth({ width: window.innerWidth, height: window.innerHeight }))
+	document.querySelector("html").requestFullscreen().then(() => resizePlayerToContainerWidth({ width: window.innerWidth, height: window.innerHeight }))
 }
 
 // getting videos, scenes, source objects for videoJS
