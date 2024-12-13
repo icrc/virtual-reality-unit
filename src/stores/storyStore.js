@@ -25,6 +25,11 @@ export const EVENT_TYPES = {
   choice: "choice",
 }
 
+export const CHOICE_TYPES = {
+  block: "block",
+  timed: "timed",
+}
+
 export const useStoryStore = defineStore("story", () => {
   // In returned items:
   //  ref()s become state properties (can get actual refs by using pina.storeToRefs)

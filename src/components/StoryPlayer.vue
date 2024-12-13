@@ -3,8 +3,8 @@
 	<div :class="{ player_container: true, [superWide ? 'full_screen_superwide' : 'full_screen']: isFullscreen }">
 		<player @ready="onPlayerReady" :options="playerOptions" />
 		<div class="overlay">
-			<choices v-if="choiceData" :message="choiceData.text" :buttons="choiceData.buttons" @choice-made="handleChoiceMade" />
-			<div v-else class="marker"></div>
+			<choices v-if="currentChoiceData" :message="currentChoiceData.text" :buttons="currentChoiceData.buttons" @choice-made="choiceMadeHandler" />
+			}
 		</div>
 		<div v-if="props?.data?.scenes?.length">
 			<video-service-provider v-for="(scene, index) in props.data.scenes" ref="serviceProviders" />
@@ -13,8 +13,10 @@
 </template>
 
 <script>
-import { EVENT_TYPES } from "@/stores/storyStore"
+import { EVENT_TYPES, CHOICE_TYPES } from "@/stores/storyStore"
 import { runCode } from "@/libs/actionCode"
+
+const noop = () => {}
 </script>
 
 <script setup>
@@ -27,31 +29,6 @@ import { useFullscreen } from "@/composables/fullscreen"
 import { useWindowSize } from "@/composables/windowSize"
 
 import { runCode } from "@/libs/actionCode"
-
-const choiceData = {
-	text: "Where to next?",
-	type: "block",
-	options: {},
-	layout: "",
-	buttons: [
-		{
-			text: "Fireworks",
-			options: {},
-			action: "setNextScene:1",
-		},
-		{
-			text: "Silent Movie",
-			options: {},
-			action: "setNextScene:2",
-		},
-		{
-			text: "Film Roll",
-			options: {},
-			action: "setNextScene:3",
-		},
-	],
-}
-const handleChoiceMade = choice => console.log("Choice made:", choice)
 
 const props = defineProps({
 	// story data we'll be playing
@@ -79,6 +56,11 @@ const superWide = ref(false)
 let videoJS
 let currentState
 
+const currentChoiceData = ref()
+let inChoice,
+	choiceMadeHandler = noop
+
+// preloading videos
 const serviceProviderRefs = useTemplateRef("serviceProviders")
 onMounted(() => {
 	if (props.data.scenes && props.data.scenes.length) {
@@ -251,29 +233,62 @@ function playScene(scene, abortSignal = undefined) {
 
 		async function handleSceneEnd() {
 			// check for 'end of scene' events
-			scene.events.forEach(event => {
-				if (event.launchTime == -1 && !completedEventIds.includes(event.id)) handleEvent(event)
-			})
+			for (const event of scene.events) {
+				if (event.launchTime == -1 && !completedEventIds.includes(event.id)) {
+					if (event.type == EVENT_TYPES.choice) {
+						console.log("awiting choice")
+						await handleEvent(event)
+					} else {
+						handleEvent(event)
+					}
+				}
+			}
 
-			// go to next scene if we have one
 			if (scene.nextSceneId !== -1) {
+				// go to next scene if we have one
 				announceDone({ nextSceneId: scene.nextSceneId })
-				// otherwise we're done - no next scene, return final state
 			} else {
+				// otherwise we're done - no next scene, return final state
 				announceDone({ nextSceneId: false, finalState: currentState })
 			}
 		}
 
-		function handleEvent(event) {
+		async function handleEvent(event) {
 			completedEventIds.push(event.id)
-			console.log("event: ", event.type, event.id)
 			if (event.type == EVENT_TYPES.action) {
 				runActionCodeAndUpdateState(event.data)
 			} else if ((event.type = EVENT_TYPES.choice)) {
-				// TODO - choice handling
-				console.log("Choice time!", event.data)
+				return await handleChoice(event.data)
 			}
 		}
+
+		async function handleChoice(choiceData) {
+			if (choiceData.type == CHOICE_TYPES.block) {
+				await handleBlockChoice(choiceData)
+			} else {
+				handleTimedChoice(choiceData)
+			}
+		}
+
+		function handleBlockChoice(choiceData) {
+			const initiallyPlaying = !videoJS.paused()
+			// return promise
+			return new Promise(resolve => {
+				videoJS.pause()
+				inChoice = true
+				choiceMadeHandler = choiceButton => {
+					choiceButton.action && runActionCodeAndUpdateState(choiceButton.action)
+					currentChoiceData.value = null
+					choiceMadeHandler = noop
+					inChoice = false
+					if (initiallyPlaying) videoJS.play()
+					resolve()
+				}
+				currentChoiceData.value = choiceData
+			})
+		}
+
+		function handleTimedChoice(choiceData) {}
 
 		function runActionCodeAndUpdateState(code) {
 			const res = runActionCode(code)
@@ -352,15 +367,6 @@ defineExpose({
 	position: absolute;
 	box-sizing: border-box;
 	inset: 0 0 0 0;
-	.marker {
-		position: absolute;
-		left: 47.5%;
-		top: calc(50% - 2.5% * var(--aspect));
-		background: #f00;
-		border-radius: 50%;
-		width: 5%;
-		height: calc(5% * var(--aspect));
-	}
 }
 
 .full_screen .overlay {

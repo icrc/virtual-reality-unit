@@ -137,7 +137,7 @@
 								"action": "setNextScene:2"
 							},
 							{
-								"text": "Film Roll",
+								"text": "Film Roll (+ more)",
 								"options": {},
 								"action": "setNextScene:3"
 							}
@@ -172,8 +172,44 @@
 			"startTime": 0,
 			"endTime": -1,
 			"nextSceneId": -1,
+			"events": [
+
+				// Blocked choice at a time
+				{
+					"id": 0,
+					"type": "choice",
+					"launchTime": 3,
+					"data": {
+						"text": "Go somewhere else?",
+						"type": "block",
+						"options": {},
+						"layout": "",
+						"buttons": [
+							{
+								"text": "Yes",
+								"options": {},
+								"action": "gotoScene:4"
+							},
+							{
+								"text": "No",
+								"options": {},
+								"action": ""
+							},
+						]
+					}
+				},
+
+			]
+		},
+		{
+			"id": 4,
+			"videoId": 6,
+			"title": "Bonus scene",
+			"startTime": 0,
+			"endTime": -1,
+			"nextSceneId": -1,
 			"events": []
-		}
+		},
 	],
 	"initialSceneId": 0,
 	"initialState": {
