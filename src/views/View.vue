@@ -48,7 +48,7 @@ const handleStart = async () => {
   if (!res.aborted) {
     console.log(res.finalState)
     await alert("Finished! (check console for final state)")
-    document.exitFullscreen()
+    if (document.fullscreen) document.exitFullscreen()
     handleReset()
   }
 }
