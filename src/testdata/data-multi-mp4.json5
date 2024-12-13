@@ -114,16 +114,15 @@
 			"endTime": -1,
 			"nextSceneId": -1,
 			"events": [
-
 				// Simple block choice for testing
 				{
 					"id": 0,
 					"type": "choice",
 					"launchTime": -1,
 					"data": {
-						"text": "Where to next?",
+						"text": "Where to next? (Choice should be on top of looping video)",
 						"type": "block",
-						"options": {},
+						"options": { "loop": [1, 2] },
 						"layout": "",
 						"buttons": [
 							{
@@ -143,8 +142,7 @@
 							}
 						]
 					}
-				},
-
+				}
 			]
 		},
 		{
@@ -163,7 +161,31 @@
 			"startTime": 0,
 			"endTime": -1,
 			"nextSceneId": -1,
-			"events": []
+			"events": [
+				{
+					"id": 0,
+					"type": "choice",
+					"launchTime": -1,
+					"data": {
+						"text": "Play again? (Choice should be on top of frame with a 3)",
+						"type": "block",
+						"options": { "frame": 7 },
+						"layout": "",
+						"buttons": [
+							{
+								"text": "Yes",
+								"options": {},
+								"action": "gotoScene:2"
+							},
+							{
+								"text": "No",
+								"options": {},
+								"action": ""
+							}
+						]
+					}
+				}
+			]
 		},
 		{
 			"id": 3,
@@ -173,7 +195,6 @@
 			"endTime": -1,
 			"nextSceneId": -1,
 			"events": [
-
 				// Blocked choice at a time
 				{
 					"id": 0,
@@ -194,11 +215,10 @@
 								"text": "No",
 								"options": {},
 								"action": ""
-							},
+							}
 						]
 					}
-				},
-
+				}
 			]
 		},
 		{
@@ -209,7 +229,7 @@
 			"endTime": -1,
 			"nextSceneId": -1,
 			"events": []
-		},
+		}
 	],
 	"initialSceneId": 0,
 	"initialState": {

@@ -57,8 +57,9 @@ let videoJS
 let currentState
 
 const currentChoiceData = ref()
-let inChoice,
-	choiceMadeHandler = noop
+let inBlockChoice
+let activeLoop = false
+let choiceMadeHandler = noop
 
 // preloading videos
 const serviceProviderRefs = useTemplateRef("serviceProviders")
@@ -214,7 +215,7 @@ function playScene(scene, abortSignal = undefined) {
 			activateHandlers()
 			const srcObj = getSceneSourceObject(scene)
 			if (srcObj.type !== videoJS.currentType() || srcObj.src !== videoJS.currentSrc()) videoJS.src(srcObj)
-			if (!scene.startTime) videoJS.play()
+			if (!scene.startTime && !videoJS.currentTime()) videoJS.play()
 			else videoJS.currentTime(scene.startTime)
 		}
 
@@ -273,15 +274,35 @@ function playScene(scene, abortSignal = undefined) {
 
 		function handleBlockChoice(choiceData) {
 			const initiallyPlaying = !videoJS.paused()
+			videoJS.pause()
+			const initialTime = videoJS.currentTime()
+
+			// show a frame if requested
+			if (choiceData?.options?.frame !== undefined) videoJS.currentTime(choiceData.options.frame)
+
+			// show a loop if requested
+			if (choiceData?.options?.loop !== undefined) {
+				videoJS.currentTime(choiceData.options.loop[0])
+				activeLoop = choiceData.options.loop
+				videoJS.play()
+			}
+
 			// return promise
 			return new Promise(resolve => {
-				videoJS.pause()
-				inChoice = true
+
+				inBlockChoice = true
 				choiceMadeHandler = choiceButton => {
-					choiceButton.action && runActionCodeAndUpdateState(choiceButton.action)
+					let result
+					choiceButton.action && (result = runActionCodeAndUpdateState(choiceButton.action))
 					currentChoiceData.value = null
 					choiceMadeHandler = noop
-					inChoice = false
+					inBlockChoice = false
+					activeLoop = false
+					if (result?.bailed) {
+						resolve()
+						return
+					}
+					if ((choiceData?.options?.frame !== undefined) || (choiceData?.options?.loop !== undefined)) videoJS.currentTime(initialTime)
 					if (initiallyPlaying) videoJS.play()
 					resolve()
 				}
@@ -294,6 +315,7 @@ function playScene(scene, abortSignal = undefined) {
 		function runActionCodeAndUpdateState(code) {
 			const res = runActionCode(code)
 			currentState = structuredClone(toRaw(res.newState))
+			return res
 		}
 
 		function runActionCode(code) {
@@ -305,15 +327,26 @@ function playScene(scene, abortSignal = undefined) {
 				// console.log('time updated:' + videoJS.currentTime())
 				const time = videoJS.currentTime()
 
-				// check to see if scene end time has passed (if it has one)
-				if (scene.endTime !== -1 && time >= scene.endTime) {
-					handleSceneEnd()
+				if (!inBlockChoice) {
+					// check to see if scene end time has passed (if it has one)
+					if (scene.endTime !== -1 && time >= scene.endTime) {
+						handleSceneEnd()
+					}
+
+					// check to see if it is time for an event
+					scene.events.forEach(event => {
+						if (event.launchTime !== -1 && time >= event.launchTime && !completedEventIds.includes(event.id)) handleEvent(event)
+					})
 				}
 
-				// check to see if it is time for an event
-				scene.events.forEach(event => {
-					if (event.launchTime !== -1 && time >= event.launchTime && !completedEventIds.includes(event.id)) handleEvent(event)
-				})
+				// looping? Possibly (probably in a blocked choice)
+				const [startTime, endTime] = activeLoop || []
+				if (startTime && endTime) {
+					const realEndTime = endTime === -1 ? scene.endTime : endTime
+					if (time >= realEndTime) videoJS.currentTime(startTime)
+				}
+
+
 			},
 			async ended() {
 				videoJS.pause()
@@ -321,6 +354,7 @@ function playScene(scene, abortSignal = undefined) {
 			},
 			seeked() {
 				if (videoJS.paused()) {
+					if (inBlockChoice) return
 					if (videoJS.currentTime() == scene.startTime) videoJS.play()
 					else videoJS.currentTime(scene.startTime)
 				}
