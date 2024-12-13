@@ -1,6 +1,6 @@
 <!-- Full player for a project/story -->
 <template>
-	<div :class="{ player_container: true, full_screen: isFullscreen }">
+	<div :class="{ player_container: true, [superWide ? 'full_screen_superwide' : 'full_screen']: isFullscreen }">
 		<player @ready="onPlayerReady" :options="playerOptions" />
 		<div class="overlay">
 			<choices v-if="choiceData" :message="choiceData.text" :buttons="choiceData.buttons" @choice-made="handleChoiceMade" />
@@ -74,6 +74,7 @@ const playerWidth = ref(1)
 const playerHeight = ref(1)
 const playerFullHeight = ref(1)
 const playbackActive = ref(false)
+const superWide = ref(false)
 
 let videoJS
 let currentState
@@ -132,15 +133,19 @@ const resizePlayer = ({ width = undefined, height = undefined }) => {
 }
 
 // make sure player sizes appropriately with window resizes
-const resizePlayerToContainerWidth = () => {
+const resizePlayerToContainerWidth = ({ width: screenWidth, height: screenHeight } = {}) => {
 	resizePlayer({ width: props.containerEl.clientWidth })
-	/* TODO - if isFullscreen.value && screenAspect > videoAspect */
-	playerFullHeight.value = isFullscreen.value ? document.getElementsByClassName('video-js')[0].clientHeight : props.containerEl.clientHeight
+	// check if we're on a screen with a wider aspect than the player
+	if (screenWidth && screenHeight) superWide.value = playerAspect.value <= screenWidth / screenHeight
+	playerFullHeight.value = isFullscreen.value && superWide.value ? document.getElementsByClassName("video-js")[0].clientHeight : props.containerEl.clientHeight
 }
 let { stopWatching: stopWatchingWindowResize } = useWindowSize(resizePlayerToContainerWidth) // make sure player gets sized appropriately on window resize
 
 // go to full screen player
-const goFullscreen = () => document.querySelector("html").requestFullscreen()
+const goFullscreen = () => {
+	document.querySelector("html").requestFullscreen()
+	nextTick(() => resizePlayerToContainerWidth({ width: window.innerWidth, height: window.innerHeight }))
+}
 
 // getting videos, scenes, source objects for videoJS
 const getSceneSourceObject = scene => getVideoSourceObject(getVideo(scene.videoId))
@@ -332,7 +337,8 @@ defineExpose({
 	--aspect: v-bind(playerAspect);
 	--pwidth: v-bind(playerWidth + "px");
 	--pheight: v-bind(playerHeight + "px");
-	&.full_screen {
+	&.full_screen,
+	&.full_screen_superwide {
 		position: fixed;
 		inset: 0 0 0 0;
 		& .video-js {
@@ -358,13 +364,17 @@ defineExpose({
 }
 
 .full_screen .overlay {
-  /* TODO - the below if screen aspect > video aspect */
-/*	top: calc(50% - (100vw / var(--aspect) / 2));
-  bottom: calc(50% - (100vw / var(--aspect) / 2));
-*//*  --playerfullheight: calc(100vw/var(--aspect));*/
+	top: calc(50% - (100vw / var(--aspect) / 2));
+	bottom: calc(50% - (100vw / var(--aspect) / 2));
+	--playerfullheight: calc(100vw / var(--aspect));
+	left: 0;
+	right: 0;
+}
+
+.full_screen_superwide .overlay {
 	top: calc(50% - (var(--playerfullheight) / 2));
-  bottom: calc(50% - (var(--playerfullheight) / 2));
-  left: calc(50% - ((var(--playerfullheight)*var(--aspect)) )/2);
-  right: calc(50% - ((var(--playerfullheight)*var(--aspect)) )/2);
+	bottom: calc(50% - (var(--playerfullheight) / 2));
+	left: calc(50% - ((var(--playerfullheight) * var(--aspect))) / 2);
+	right: calc(50% - ((var(--playerfullheight) * var(--aspect))) / 2);
 }
 </style>
