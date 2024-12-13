@@ -131,7 +131,7 @@
 								"action": "setNextScene:1"
 							},
 							{
-								"text": "Silent Movie",
+								"text": "Silent Movie (+)",
 								"options": {},
 								"action": "setNextScene:2"
 							},
