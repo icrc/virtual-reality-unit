@@ -330,7 +330,7 @@ function playScene(scene, abortSignal = undefined) {
 			timerTimeoutId = setTimeout(() => {
 				if (choiceData?.options?.defaultAction) runActionCodeAndUpdateState(choiceData.options.defaultAction)
 				clearChoices()
-			}, duration * 1000)
+			}, 100 + duration * 1000)
 		}
 
 		function runActionCodeAndUpdateState(code) {

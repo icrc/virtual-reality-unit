@@ -1,7 +1,7 @@
 <!-- Choices Component -->
 <template>
   <div class="choice_container">
-    <div class="timer"><div :class="{ time_indicator: true, reset: !timerActive, go: timerActive }"></div></div>
+    <div v-if="timeLimit" class="timer"><div :class="{ time_indicator: true, go: timerActive }">&nbsp;</div></div>
     <div class="message" v-if="message">{{ message }}</div>
     <div class="buttons">
       <div
@@ -38,7 +38,7 @@ const timerActive = ref(false)
 
 onMounted(() => {
   if (props.timeLimit) {
-    nextTick(() => (timerActive.value = true))
+    setTimeout(() => (timerActive.value = true), 100)
   }
 })
 
@@ -56,6 +56,7 @@ const emit = defineEmits(["choiceMade"])
   opacity: 0.9;
   height: 100%;
   & .timer {
+    font-size: 0;
     display: flex;
     justify-content: center;
     padding-bottom: calc(var(--unit) * 2);
@@ -64,15 +65,10 @@ const emit = defineEmits(["choiceMade"])
       height: calc(var(--unit) * 4);
       transition-property: width;
       transition-timing-function: linear;
-      &.reset {
-        transition-duration: 0s;
-        width: 96%;
-        visibility: hidden;
-      }
+      transition-duration: v-bind(timeLimit + "s");
+      width: 96%;
       &.go {
-        transition-duration: v-bind(timeLimit + "s");
-        width: 0;
-        visibility: visible;
+        width: 0 !important;
       }
     }
   }
