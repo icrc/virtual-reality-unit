@@ -3,8 +3,7 @@
 	<div :class="{ player_container: true, [superWide ? 'full_screen_superwide' : 'full_screen']: isFullscreen }">
 		<player @ready="onPlayerReady" :options="playerOptions" />
 		<div class="overlay">
-			<choices v-if="currentChoiceData" :message="currentChoiceData.text" :buttons="currentChoiceData.buttons" @choice-made="choiceMadeHandler" />
-			}
+			<choices v-if="currentChoiceData" :timeLimit="currentChoiceData.timeLimit" :message="currentChoiceData.text" :buttons="currentChoiceData.buttons" @choice-made="choiceMadeHandler" />
 		</div>
 		<div v-if="props?.data?.scenes?.length">
 			<video-service-provider v-for="(scene, index) in props.data.scenes" ref="serviceProviders" />
@@ -60,6 +59,7 @@ const currentChoiceData = ref()
 let inBlockChoice
 let activeLoop = false
 let choiceMadeHandler = noop
+let timerTimeoutId = 0
 
 // preloading videos
 const serviceProviderRefs = useTemplateRef("serviceProviders")
@@ -127,7 +127,7 @@ let { stopWatching: stopWatchingWindowResize } = useWindowSize(resizePlayerToCon
 // go to full screen player
 const goFullscreen = () => {
 	document.querySelector("html").requestFullscreen().then(
-		window.setTimeout(() => resizePlayerToContainerWidth({ width: window.innerWidth, height: window.innerHeight }), 100)
+		setTimeout(() => resizePlayerToContainerWidth({ width: window.innerWidth, height: window.innerHeight }), 250)
 	)
 }
 
@@ -213,13 +213,24 @@ function playScene(scene, abortSignal = undefined) {
 
 		function setup() {
 			activateHandlers()
+			clearChoices()
 			const srcObj = getSceneSourceObject(scene)
 			if (srcObj.type !== videoJS.currentType() || srcObj.src !== videoJS.currentSrc()) videoJS.src(srcObj)
 			if (!scene.startTime && !videoJS.currentTime()) videoJS.play()
 			else videoJS.currentTime(scene.startTime)
 		}
 
+		function clearChoices() {
+			currentChoiceData.value = null
+			timerTimeoutId && clearTimeout(timerTimeoutId)
+			timerTimeoutId = 0
+			choiceMadeHandler = noop
+			inBlockChoice = false
+			activeLoop = false
+		}
+
 		function teardown() {
+			clearChoices()
 			activateHandlers(false)
 		}
 
@@ -294,10 +305,7 @@ function playScene(scene, abortSignal = undefined) {
 				choiceMadeHandler = choiceButton => {
 					let result
 					choiceButton.action && (result = runActionCodeAndUpdateState(choiceButton.action))
-					currentChoiceData.value = null
-					choiceMadeHandler = noop
-					inBlockChoice = false
-					activeLoop = false
+					clearChoices()
 					if (result?.bailed) {
 						resolve()
 						return
@@ -310,11 +318,25 @@ function playScene(scene, abortSignal = undefined) {
 			})
 		}
 
-		function handleTimedChoice(choiceData) {}
+		function handleTimedChoice(choiceData) {
+			const duration = choiceData?.options?.timeLimit
+			if (!duration) return
+			choiceMadeHandler = choiceButton => {
+				let result
+				choiceButton.action && (result = runActionCodeAndUpdateState(choiceButton.action))
+				clearChoices()
+			}
+			currentChoiceData.value = { ...choiceData, timeLimit: duration }
+			timerTimeoutId = setTimeout(() => {
+				if (choiceData?.options?.defaultAction) runActionCodeAndUpdateState(choiceData.options.defaultAction)
+				clearChoices()
+			}, duration * 1000)
+		}
 
 		function runActionCodeAndUpdateState(code) {
 			const res = runActionCode(code)
 			currentState = structuredClone(toRaw(res.newState))
+			console.log(currentState)
 			return res
 		}
 
@@ -330,6 +352,7 @@ function playScene(scene, abortSignal = undefined) {
 				if (!inBlockChoice) {
 					// check to see if scene end time has passed (if it has one)
 					if (scene.endTime !== -1 && time >= scene.endTime) {
+						videoJS.pause()
 						handleSceneEnd()
 					}
 

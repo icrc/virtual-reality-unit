@@ -20,8 +20,8 @@
 			"id": 0,
 			"videoId": 0,
 			"title": "Only scene for this story - all choices are timed while video continues",
-			"startTime": 0,
-			"endTime": -1,
+			"startTime": 40,
+			"endTime": 110,
 			"nextSceneId": -1,
 			"events": [
 				{
@@ -33,29 +33,29 @@
 						"type": "timed",
 						"options": {
 							"timeLimit": 6,
-							"defaultAction": ""
+							"defaultAction": "setStateValue:'skippedAssessments', @skippedAssessments + 1"
 						},
 						"layout": "",
 						"buttons": [
 							{
 								"text": "Immediate",
 								"options": {},
-								"action": ""
+								"action": "setStateValue:'wrongAssessments', @wrongAssessments + 1"
 							},
 							{
 								"text": "Delayed",
 								"options": {},
-								"action": ""
+								"action": "setStateValue:'wrongAssessments', @wrongAssessments + 1"
 							},
 							{
 								"text": "Minor",
 								"options": {},
-								"action": ""
+								"action": "setStateValue:'correctAssessments', @correctAssessments + 1"
 							},
 							{
 								"text": "Dead",
 								"options": {},
-								"action": ""
+								"action": "setStateValue:'wrongAssessments', @wrongAssessments + 1"
 							}
 						]
 					}
@@ -69,29 +69,29 @@
 						"type": "timed",
 						"options": {
 							"timeLimit": 6,
-							"defaultAction": ""
+							"defaultAction": "setStateValue:'skippedAssessments', @skippedAssessments + 1"
 						},
 						"layout": "",
 						"buttons": [
 							{
 								"text": "Immediate",
 								"options": {},
-								"action": ""
+								"action": "setStateValue:'wrongAssessments', @wrongAssessments + 1"
 							},
 							{
 								"text": "Delayed",
 								"options": {},
-								"action": ""
+								"action": "setStateValue:'wrongAssessments', @wrongAssessments + 1"
 							},
 							{
 								"text": "Minor",
 								"options": {},
-								"action": ""
+								"action": "setStateValue:'wrongAssessments', @wrongAssessments + 1"
 							},
 							{
 								"text": "Dead",
 								"options": {},
-								"action": ""
+								"action": "setStateValue:'correctAssessments', @correctAssessments + 1"
 							}
 						]
 					}
@@ -101,7 +101,9 @@
 	],
 	"initialSceneId": 0,
 	"initialState": {
-		"info": "TODO - this is to do with recording and returning data"
+		"skippedAssessments": 0,
+		"correctAssessments": 0,
+		"wrongAssessments": 0,
 	},
 	"translations": {}
 }

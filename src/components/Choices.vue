@@ -1,6 +1,7 @@
 <!-- Choices Component -->
 <template>
   <div class="choice_container">
+    <div class="timer"><div :class="{ time_indicator: true, reset: !timerActive, go: timerActive }"></div></div>
     <div class="message" v-if="message">{{ message }}</div>
     <div class="buttons">
       <div
@@ -17,7 +18,7 @@
 <script></script>
 
 <script setup>
-
+import { onMounted, nextTick, ref } from "vue"
 const props = defineProps({
   message: {
     type: String,
@@ -27,6 +28,18 @@ const props = defineProps({
     type: Array,
     default: [],
   },
+  timeLimit: {
+    type: Number,
+    default: 0,
+  },
+})
+
+const timerActive = ref(false)
+
+onMounted(() => {
+  if (props.timeLimit) {
+    nextTick(() => (timerActive.value = true))
+  }
 })
 
 const emit = defineEmits(["choiceMade"])
@@ -42,6 +55,27 @@ const emit = defineEmits(["choiceMade"])
   justify-content: flex-end;
   opacity: 0.9;
   height: 100%;
+  & .timer {
+    display: flex;
+    justify-content: center;
+    padding-bottom: calc(var(--unit) * 2);
+    & .time_indicator {
+      background: #fff;
+      height: calc(var(--unit) * 4);
+      transition-property: width;
+      transition-timing-function: linear;
+      &.reset {
+        transition-duration: 0s;
+        width: 96%;
+        visibility: hidden;
+      }
+      &.go {
+        transition-duration: v-bind(timeLimit + "s");
+        width: 0;
+        visibility: visible;
+      }
+    }
+  }
   & .message {
     align-content: end;
     padding: 0 calc(var(--unit) * 5);
