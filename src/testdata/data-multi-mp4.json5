@@ -202,8 +202,8 @@
 					"launchTime": 3,
 					"data": {
 						"text": "Go somewhere else?",
-						"type": "block",
-						"options": {},
+						"type": "timed",
+						"options": {timeLimit:4},
 						"layout": "",
 						"buttons": [
 							{
