@@ -7,8 +7,8 @@
 /**
  * Show an alert message
  *
- * @param      {String}     [message=undefined]  Message to show
- * @return     {undefined}  Returns nothing
+ * @param      {String}              [message=undefined]  Message to show
+ * @return     {Promise<undefined>}  Returns nothing
  */
 export const alert = async (message = undefined) => {
 	return window.alert(message)
@@ -17,9 +17,9 @@ export const alert = async (message = undefined) => {
 /**
  * Prompts user for an input value (string)
  *
- * @param      {String}         [message=undefined]       Message to show
- * @param      {String}         [defaultValue=undefined]  Default value
- * @return     {(String|Null)}  Entered value or null if cancelled
+ * @param      {String}                  [message=undefined]       Message to show
+ * @param      {String}                  [defaultValue=undefined]  Default value
+ * @return     {Promise<(String|null)>}  Entered value or null if cancelled
  */
 export const prompt = async (message = undefined, defaultValue = undefined) => {
 	return window.prompt(message, defaultValue)
@@ -29,7 +29,7 @@ export const prompt = async (message = undefined, defaultValue = undefined) => {
  * Show a confirmation prompt (with OK/Cancel)
  *
  * @param      {String}   [message=undefined]  Message to show
- * @return     {Boolean}  true - OK, false - Cancel
+ * @return     {Promise<Boolean>}  true - OK, false - Cancel
  */
 export const confirm = async (message = undefined) => {
 	return window.confirm(message)
