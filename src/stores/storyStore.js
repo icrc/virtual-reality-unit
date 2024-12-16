@@ -40,8 +40,8 @@ export const useStoryStore = defineStore("story", () => {
   const isSaved = ref(false)
   const currentFilename = ref(null)
 
-  let currentHighestVideoId = -1
-  let currentHighestSceneId = -1
+  let currentHighestVideoId = 0
+  let currentHighestSceneId = 0
 
   let mostRecentSavedJSON = ""
 
@@ -70,8 +70,8 @@ export const useStoryStore = defineStore("story", () => {
     currentStory.value = structuredClone(data)
     mostRecentSavedJSON = data===EMPTY_STORY ? JSON.stringify(currentStory.value) : ''
     currentFilename.value = ""
-    currentHighestVideoId = -1
-    currentHighestSceneId = -1
+    currentHighestVideoId = 0
+    currentHighestSceneId = 0
   }
 
   // pick a filename to load
@@ -87,8 +87,8 @@ export const useStoryStore = defineStore("story", () => {
       currentStory.value = story
       mostRecentSavedJSON = JSON.stringify(currentStory.value)
       currentFilename.value = filename
-      currentHighestVideoId = getHighestVideoId(story) ?? -1
-      currentHighestSceneId = getHighestSceneId(story) ?? -1
+      currentHighestVideoId = getHighestVideoId(story) ?? 0
+      currentHighestSceneId = getHighestSceneId(story) ?? 0
       return true
     }
     return false
@@ -121,7 +121,7 @@ export const useStoryStore = defineStore("story", () => {
   function deleteVideo(id, includeRelatedScenes = false) {
     if (includeRelatedScenes) getScenesByVideoId(id).forEach(scene => deleteScene(scene.id))
     currentStory.value.videos = currentStory.value.videos.filter(video => video.id !== id).map(video => toRaw(video))
-    currentHighestVideoId = getHighestVideoId(currentStory.value) ?? -1
+    currentHighestVideoId = getHighestVideoId(currentStory.value) ?? 0
   }
 
   // update a video in the current story
@@ -139,7 +139,7 @@ export const useStoryStore = defineStore("story", () => {
   // delete a scene from the current story
   function deleteScene(id) {
     currentStory.value.scenes = currentStory.value.scenes.filter(scene => scene.id !== id).map(scene => toRaw(scene))
-    currentHighestSceneId = getHighestSceneId(currentStory.value) ?? -1
+    currentHighestSceneId = getHighestSceneId(currentStory.value) ?? 0
   }
 
   // update a scene in the current story
@@ -184,7 +184,7 @@ export const useStoryStore = defineStore("story", () => {
   const nextSceneId = () => ++currentHighestSceneId
   const getHighestSceneId = story => (story.scenes.length ? Math.max(...story.scenes.map(({ id }) => id)) : null)
 
-  const getHighestEventIdForScene = scene => (scene.events.length ? Math.max(...scene.events.map(({ id }) => id)) : -1)
+  const getHighestEventIdForScene = scene => (scene.events.length ? Math.max(...scene.events.map(({ id }) => id)) : 0)
   const nextEventIdForScene = scene => getHighestEventIdForScene(scene) + 1
 
 

@@ -6,7 +6,7 @@
 	"locales": ["en"],
 	"videos": [
 		{
-			"id": 0,
+			"id": 1,
 			"title": "Main blast trauma training video",
 			"sourceType": "vimeo",
 			"url": "https://player.vimeo.com/video/1025039220?h=1d3c27a454&badge=0&autopause=0&player_id=0&app_id=58479",
@@ -17,15 +17,15 @@
 	],
 	"scenes": [
 		{
-			"id": 0,
-			"videoId": 0,
+			"id": 1,
+			"videoId": 1,
 			"title": "Only scene for this story - all choices are timed while video continues",
 			"startTime": 45,
 			"endTime": 110,
 			"nextSceneId": -1,
 			"events": [
 				{
-					"id": 0,
+					"id": 1,
 					"type": "choice",
 					"launchTime": 64,
 					"data": {
@@ -61,7 +61,7 @@
 					}
 				},
 				{
-					"id": 1,
+					"id": 2,
 					"type": "choice",
 					"launchTime": 101,
 					"data": {
@@ -99,7 +99,7 @@
 			]
 		}
 	],
-	"initialSceneId": 0,
+	"initialSceneId": 1,
 	"initialState": {
 		"skippedAssessments": 0,
 		"correctAssessments": 0,

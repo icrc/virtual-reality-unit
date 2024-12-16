@@ -6,7 +6,7 @@
   "locales": ["en"],
   "videos": [
     {
-      "id": 4,
+      "id": 1,
       "title": "Hacker",
       "sourceType": "mp4",
       "url": "/videos/04.mp4",
@@ -21,7 +21,7 @@
       "thumbnail": "",
       "info": "",
       "audiotracks": [],
-      "id": 5
+      "id": 2
     },
     {
       "title": "Green Bold",
@@ -30,26 +30,26 @@
       "thumbnail": "",
       "info": "",
       "audiotracks": [],
-      "id": 6
+      "id": 3
     }
   ],
   "scenes": [
     {
-      "id": 0,
-      "videoId": 4,
+      "id": 1,
+      "videoId": 1,
       "title": "Hacker",
       "startTime": 0,
       "endTime": -1,
       "nextSceneId": -1,
       "events": [
         {
-          "id": 0,
+          "id": 1,
           "type": "action",
           "launchTime": 5,
           "data": "setStateValue:'myKey','info'\nsetStateValue:'info2',@info\nsetStateValue:'jon',2\nsetNextScene:@jon\ndeleteStateValue:'jon'\ndeleteStateValue:@myKey"
         },
         {
-          "id": 1,
+          "id": 2,
           "type": "action",
           "launchTime": -1,
           "data": "setStateValue:'endAction','End action complete (scene 1)'"
@@ -57,16 +57,16 @@
       ]
     },
     {
-      "videoId": 5,
+      "videoId": 2,
       "title": "Radar",
       "startTime": 0,
       "endTime": -1,
       "nextSceneId": -1,
       "events": [],
-      "id": 1
+      "id": 2
     },
     {
-      "videoId": 6,
+      "videoId": 3,
       "title": "Green bold",
       "startTime": 0,
       "endTime": -1,
@@ -79,7 +79,7 @@
           "data": "setStateValue:'endAction2','End action complete (scene 2)'"
         }
       ],
-      "id": 2
+      "id": 3
     }
   ],
   "initialSceneId": 0,

@@ -2,12 +2,12 @@
 <template>
   <article>
     <details ref="header" class="videos_header">
-      <summary role="button">Video Sources ({{ story.videos.length }})<button @click="addVideo" class="add_button">+</button></summary>
+      <summary role="button">Video Sources ({{ story.videos.length }})<button title="Add video" @click="addVideo" class="add_button">+</button></summary>
       <div style="--span: 4" class="s-grid videos-container">
         <template v-for="(video, idx) in story.videos" :key="idx">
           <div :id="`video_${video.id}`">
-            <label style="--span: 1"
-              >Type
+            <label style="--span: 1">
+              <strong>{{ video.id }}</strong> - Type
               <select v-model="video.sourceType">
                 <option v-for="type in Object.values(VIDEO_SOURCE_TYPES)" :value="type.id" :key="type.id">{{ type.name }}</option>
               </select>
@@ -20,11 +20,11 @@
               :disabled="chapterImportInProgress"
               :aria-busy="chapterImportInProgress"
               @click="importChapters(video)"
-              v-if="chaptersAvailableForSourceType(video.sourceType)"
+              v-if="chaptersAvailableForSourceType(video.sourceType) && video.url.trim()"
               class="s-outline">
               Import Chapters as Scenes
             </button>
-            <button @click="deleteVideo(video.id)" class="s-outline">Delete</button>
+            <button @click="deleteVideo(video.id)">Delete</button>
           </div>
           <hr v-if="idx < story.videos.length - 1" />
         </template>

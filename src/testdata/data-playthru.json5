@@ -6,7 +6,7 @@
 	"locales": ["en"],
 	"videos": [
 		{
-			"id": 0,
+			"id": 1,
 			"title": "Welcome",
 			"sourceType": "mp4",
 			"url": "/videos/00.mp4",
@@ -15,7 +15,7 @@
 			"audiotracks": []
 		},
 		{
-			"id": 1,
+			"id": 2,
 			"title": "Fireworks",
 			"sourceType": "mp4",
 			"url": "/videos/01.mp4",
@@ -24,7 +24,7 @@
 			"audiotracks": []
 		},
 		{
-			"id": 2,
+			"id": 3,
 			"title": "Silent Movie",
 			"sourceType": "mp4",
 			"url": "/videos/02.mp4",
@@ -33,7 +33,7 @@
 			"audiotracks": []
 		},
 		{
-			"id": 3,
+			"id": 4,
 			"title": "Film Roll",
 			"sourceType": "mp4",
 			"url": "/videos/03.mp4",
@@ -42,7 +42,7 @@
 			"audiotracks": []
 		},
 		{
-			"id": 4,
+			"id": 5,
 			"title": "Hacker",
 			"sourceType": "mp4",
 			"url": "/videos/04.mp4",
@@ -51,7 +51,7 @@
 			"audiotracks": []
 		},
 		{
-			"id": 5,
+			"id": 6,
 			"title": "Radar Sweep",
 			"sourceType": "mp4",
 			"url": "/videos/05.mp4",
@@ -60,7 +60,7 @@
 			"audiotracks": []
 		},
 		{
-			"id": 6,
+			"id": 7,
 			"title": "Bold Green",
 			"sourceType": "mp4",
 			"url": "/videos/06.mp4",
@@ -69,7 +69,7 @@
 			"audiotracks": []
 		},
 		{
-			"id": 7,
+			"id": 8,
 			"title": "Racing",
 			"sourceType": "mp4",
 			"url": "/videos/07.mp4",
@@ -78,7 +78,7 @@
 			"audiotracks": []
 		},
 		{
-			"id": 8,
+			"id": 9,
 			"title": "SciFi",
 			"sourceType": "mp4",
 			"url": "/videos/08.mp4",
@@ -87,7 +87,7 @@
 			"audiotracks": []
 		},
 		{
-			"id": 9,
+			"id": 10,
 			"title": "Neon",
 			"sourceType": "mp4",
 			"url": "/videos/09.mp4",
@@ -96,7 +96,7 @@
 			"audiotracks": []
 		},
 		{
-			"id": 10,
+			"id": 11,
 			"title": "Fire",
 			"sourceType": "mp4",
 			"url": "/videos/10.mp4",
@@ -107,27 +107,27 @@
 	],
 	"scenes": [
 		{
-			"id": 0,
-			"videoId": 4,
+			"id": 1,
+			"videoId": 5,
 			"title": "Hacker",
 			"startTime": 0,
 			"endTime": -1,
-			"nextSceneId": 1,
+			"nextSceneId": 2,
 			"events": [
 			]
 		},
 		{
-			"id": 1,
-			"videoId": 7,
+			"id": 2,
+			"videoId": 8,
 			"title": "Racing (end at 5s)",
 			"startTime": 0,
 			"endTime": 5,
-			"nextSceneId": 3,
+			"nextSceneId": 4,
 			"events": []
 		},
 		{
-			"id": 2,
-			"videoId": 8,
+			"id": 3,
+			"videoId": 9,
 			"title": "Sci-fi (from 4s)",
 			"startTime": 4,
 			"endTime": -1,
@@ -135,16 +135,16 @@
 			"events": []
 		},
 		{
-			"id": 3,
-			"videoId": 10,
+			"id": 4,
+			"videoId": 11,
 			"title": "Fire (8s to 9s)",
 			"startTime": 8,
 			"endTime": 9,
-			"nextSceneId": 2,
+			"nextSceneId": 3,
 			"events": []
 		}
 	],
-	"initialSceneId": 0,
+	"initialSceneId": 1,
 	"initialState": {
 		"info": "TODO - this is to do with recording and returning data"
 	},

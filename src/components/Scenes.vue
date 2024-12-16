@@ -2,16 +2,18 @@
 <template>
   <article>
     <details ref="header" class="scenes_header">
-      <summary role="button">Scenes ({{ story.scenes.length }})<button @click="addScene" class="add_button">+</button></summary>
+      <summary role="button">Scenes ({{ story.scenes.length }})<button title="Add scene" @click="addScene" class="add_button">+</button></summary>
       <div style="--span: 4" class="s-grid scenes-container">
         <template v-for="(scene, idx) in story.scenes" :key="scene.id">
           <div :id="`scene_${scene.id}`">
-            <label style="--span: 5">Title<input class="scene_title" placeholder="(No title)" type="text" v-model="scene.title" /></label>
+            <label style="--span: 5"
+              ><strong>{{ scene.id }}</strong> - Title<input class="scene_title" placeholder="(No title)" type="text" v-model="scene.title"
+            /></label>
             <label style="--span: 3"
               >Next scene
               <select v-model="scene.nextSceneId">
                 <option :value="-1">(n/a)</option>
-                <option v-for="scene in story.scenes" idx="scene.id" :value="scene.id">{{ scene.title || "(No title)" }}</option>
+                <option v-for="scene in story.scenes" idx="scene.id" :value="scene.id">{{ scene.id }} - {{ scene.title || "(No title)" }}</option>
               </select>
             </label>
           </div>
@@ -21,15 +23,16 @@
             <label style="--span: 3"
               >Video
               <select v-model="scene.videoId">
-                <option v-if="story.videos.length" v-for="video in story.videos" idx="video.id" :value="video.id">
-                  {{ video.title || "(Untitled video)" }}
-                </option>
+                <template v-if="story.videos.length">
+                  <option :value="-1">(n/a)</option>
+                  <option v-for="video in story.videos" idx="video.id" :value="video.id">{{ video.id }} - {{ video.title || "(Untitled video)" }}</option>
+                </template>
                 <option v-else :value="-1">No videos available. Please add one</option>
               </select>
             </label>
           </div>
           <div style="justify-items: end">
-            <button @click="deleteScene(scene.id)" class="s-outline" style="width: fit-content">Delete</button>
+            <button @click="deleteScene(scene.id)" style="width: fit-content">Delete</button>
           </div>
           <hr v-if="idx < story.scenes.length - 1" />
         </template>
@@ -40,7 +43,7 @@
 
 <script>
 const NEW_SCENE_DEFAULTS = {
-  videoId: undefined,
+  videoId: -1,
   title: "",
   startTime: 0,
   endTime: -1,

@@ -31,22 +31,22 @@
           <article>
             <header>
               <h2>
-                <span :class="{ missing: !story.title }">{{ story.title || "No title" }}</span>
+                <span :class="{ missing: !story.title }">{{ story.title || "No name" }}</span>
                 <span v-if="store.currentFilename"> ({{ store.currentFilename }})</span>
               </h2>
             </header>
             <form>
               <div style="--span: 4" class="s-grid">
                 <div>
-                  <label style="--span: 5">Name<input placeholder="Project name" type="text" v-model="story.title" /></label>
+                  <label style="--span: 5">Project name<input placeholder="(No name)" type="text" v-model="story.title" /></label>
                   <label style="--span: 3"
                     >Initial scene
                     <select v-model="story.initialSceneId">
                       <option v-if="story.scenes.length" :value="-1">Please select a scene...</option>
                       <option v-if="story.scenes.length" v-for="scene in story.scenes" idx="scene.id" :value="scene.id">
-                        {{ scene.title || "(No title)" }}
+                        {{ scene.id }} - {{ scene.title || "(No title)" }}
                       </option>
-                      <option v-else :value="-1">No scenes available. Please add one</option>
+                      <option v-else :value="-1">None available. Please add one</option>
                     </select>
                   </label>
                   <label style="--span: 8">Author<input placeholder="n/a" type="text" v-model="story.author" /></label>
