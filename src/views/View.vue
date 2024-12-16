@@ -2,7 +2,7 @@
 <template>
   <div class="s-container">
     <main ref="mainViewContainer" style="--span: 12" class="main_view_container" :style="{ visibility: (isShowable || !isPlayable) ? 'visible' : 'hidden' }">
-      <story-player v-if="alive && isPlayable" @ready="handlePlayerReady" @showable="handlePlayerShowable" :data="storyData" ref="player" :containerEl="mainViewContainer" />
+      <story-player :do-start="handleStart" :do-abort="handleReset" v-if="alive && isPlayable" @ready="handlePlayerReady" @showable="handlePlayerShowable" :data="storyData" ref="player" :containerEl="mainViewContainer" />
       <div class="unplayable_message" v-if="!isPlayable">Current project is not playable.<br>Please check for a valid start scene and video.</div>
     </main>
     <div class="buttons">

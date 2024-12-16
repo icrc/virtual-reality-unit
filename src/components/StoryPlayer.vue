@@ -3,7 +3,51 @@
 	<div :class="{ player_container: true, [superWide ? 'full_screen_superwide' : 'full_screen']: isFullscreen }">
 		<player @ready="onPlayerReady" :options="playerOptions" />
 		<div class="overlay">
-			<choices v-if="currentChoiceData" :timeLimit="currentChoiceData.timeLimit" :message="currentChoiceData.text" :buttons="currentChoiceData.buttons" @choice-made="choiceMadeHandler" />
+			<div id="pbb" :title="playbackActive ? 'Reset' : 'Start'" v-if="doStart && doAbort" :class="{ playback_button: true, playing: playbackActive }" @click="handlePlaybackButtonClick">
+				<svg
+					v-if="playbackActive"
+					height="100%"
+					width="100%"
+					version="1.1"
+					id="btn_abort"
+					xmlns="http://www.w3.org/2000/svg"
+					xmlns:xlink="http://www.w3.org/1999/xlink"
+					viewBox="0 0 60 60"
+					xml:space="preserve">
+					<g>
+						<path d="M16,44h28V16H16V44z M18,18h24v24H18V18z" />
+						<path
+							d="M30,0C13.458,0,0,13.458,0,30s13.458,30,30,30s30-13.458,30-30S46.542,0,30,0z M30,58C14.561,58,2,45.439,2,30
+		S14.561,2,30,2s28,12.561,28,28S45.439,58,30,58z" />
+					</g>
+				</svg>
+				<svg
+					v-else
+					height="100%"
+					width="100%"
+					version="1.1"
+					id="btn_start"
+					xmlns="http://www.w3.org/2000/svg"
+					xmlns:xlink="http://www.w3.org/1999/xlink"
+					viewBox="0 0 60 60"
+					xml:space="preserve">
+					<g>
+						<path
+							d="M45.563,29.174l-22-15c-0.307-0.208-0.703-0.231-1.031-0.058C22.205,14.289,22,14.629,22,15v30
+		c0,0.371,0.205,0.711,0.533,0.884C22.679,45.962,22.84,46,23,46c0.197,0,0.394-0.059,0.563-0.174l22-15
+		C45.836,30.64,46,30.331,46,30S45.836,29.36,45.563,29.174z M24,43.107V16.893L43.225,30L24,43.107z" />
+						<path
+							d="M30,0C13.458,0,0,13.458,0,30s13.458,30,30,30s30-13.458,30-30S46.542,0,30,0z M30,58C14.561,58,2,45.439,2,30
+		S14.561,2,30,2s28,12.561,28,28S45.439,58,30,58z" />
+					</g>
+				</svg>
+			</div>
+			<choices
+				v-if="currentChoiceData"
+				:timeLimit="currentChoiceData.timeLimit"
+				:message="currentChoiceData.text"
+				:buttons="currentChoiceData.buttons"
+				@choice-made="choiceMadeHandler" />
 		</div>
 		<div v-if="props?.data?.scenes?.length">
 			<video-service-provider v-for="(scene, index) in props.data.scenes" ref="serviceProviders" />
@@ -40,6 +84,16 @@ const props = defineProps({
 		type: Object,
 		default: null,
 	},
+	// start function
+	doStart: {
+		type: Function,
+		default: null,
+	},
+	// abort function
+	doAbort: {
+		type: Function,
+		default: null,
+	},
 })
 const emit = defineEmits(["ready", "error", "showable"])
 
@@ -73,6 +127,18 @@ onMounted(() => {
 		})
 	}
 })
+
+/**
+ * Handle our internal play/abort button (full screen)
+ */
+const handlePlaybackButtonClick = () => {
+	if (playbackActive.value) {
+		props.doAbort && props.doAbort()
+	} else {
+		props.doStart && props.doStart()
+	}
+	setTimeout(() => resizePlayerToContainerWidth({ width: window.innerWidth, height: window.innerHeight }), 250)
+}
 
 /**
  * Do some setup when video player ready.
@@ -126,9 +192,10 @@ let { stopWatching: stopWatchingWindowResize } = useWindowSize(resizePlayerToCon
 
 // go to full screen player
 const goFullscreen = () => {
-	document.querySelector("html").requestFullscreen().then(
-		setTimeout(() => resizePlayerToContainerWidth({ width: window.innerWidth, height: window.innerHeight }), 250)
-	)
+	document
+		.querySelector("html")
+		.requestFullscreen()
+		.then(setTimeout(() => resizePlayerToContainerWidth({ width: window.innerWidth, height: window.innerHeight }), 250))
 }
 
 // getting videos, scenes, source objects for videoJS
@@ -300,7 +367,6 @@ function playScene(scene, abortSignal = undefined) {
 
 			// return promise
 			return new Promise(resolve => {
-
 				inBlockChoice = true
 				choiceMadeHandler = choiceButton => {
 					let result
@@ -310,7 +376,7 @@ function playScene(scene, abortSignal = undefined) {
 						resolve()
 						return
 					}
-					if ((choiceData?.options?.frame !== undefined) || (choiceData?.options?.loop !== undefined)) videoJS.currentTime(initialTime)
+					if (choiceData?.options?.frame !== undefined || choiceData?.options?.loop !== undefined) videoJS.currentTime(initialTime)
 					if (initiallyPlaying) videoJS.play()
 					resolve()
 				}
@@ -327,10 +393,13 @@ function playScene(scene, abortSignal = undefined) {
 				clearChoices()
 			}
 			currentChoiceData.value = { ...choiceData, timeLimit: duration }
-			timerTimeoutId = setTimeout(() => {
-				if (choiceData?.options?.defaultAction) runActionCodeAndUpdateState(choiceData.options.defaultAction)
-				clearChoices()
-			}, 100 + duration * 1000)
+			timerTimeoutId = setTimeout(
+				() => {
+					if (choiceData?.options?.defaultAction) runActionCodeAndUpdateState(choiceData.options.defaultAction)
+					clearChoices()
+				},
+				100 + duration * 1000
+			)
 		}
 
 		function runActionCodeAndUpdateState(code) {
@@ -368,8 +437,6 @@ function playScene(scene, abortSignal = undefined) {
 					const realEndTime = endTime === -1 ? scene.endTime : endTime
 					if (time >= realEndTime) videoJS.currentTime(startTime)
 				}
-
-
 			},
 			async ended() {
 				videoJS.pause()
@@ -425,6 +492,41 @@ defineExpose({
 	position: absolute;
 	box-sizing: border-box;
 	inset: 0 0 0 0;
+}
+
+.playback_button {
+	position: absolute;
+	right: 2%;
+	top: 5%;
+	width: 5%;
+	aspect-ratio: 1;
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 0.3s ease-out;
+	visibility: hidden;
+	cursor: default;
+	& svg {
+		fill: #fc0;
+		filter: drop-shadow( 0 0 3px rgb(0, 0, 0));
+	}
+	&:hover svg {
+		fill: #fff;
+	}
+}
+
+.full_screen .playback_button,
+.full_screen_superwide .playback_button {
+	opacity: 1;
+	pointer-events: all;
+	visibility: visible;
+	cursor: pointer;
+	&.playing {
+		opacity: 0;
+		z-index: 100000;
+	}
+	&:hover {
+		opacity: 1;
+	}
 }
 
 .full_screen .overlay {
