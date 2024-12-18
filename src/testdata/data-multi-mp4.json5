@@ -4,6 +4,8 @@
 	"author": "Jon Randy",
 	"info": "A sample project for testing with multiple MP4 videos",
 	"locales": ["en"],
+  "defaultChoiceLayout": "basic",
+  "defaultChoiceLayoutSettings": {},
 	"videos": [
 		{
 			"id": 1,
@@ -124,20 +126,18 @@
 						"type": "block",
 						"options": { "loop": [1, 2] },
 						"layout": "",
+						"layoutSettings": {},
 						"buttons": [
 							{
 								"text": "Fireworks",
-								"options": {},
 								"action": "setNextScene:2"
 							},
 							{
 								"text": "Silent Movie (+)",
-								"options": {},
 								"action": "setNextScene:3"
 							},
 							{
 								"text": "Film Roll (+ more)",
-								"options": {},
 								"action": "setNextScene:4"
 							}
 						]
@@ -171,15 +171,14 @@
 						"type": "block",
 						"options": { "frame": 7 },
 						"layout": "",
+						"layoutSettings": {},
 						"buttons": [
 							{
 								"text": "Yes",
-								"options": {},
 								"action": "gotoScene:3"
 							},
 							{
 								"text": "No",
-								"options": {},
 								"action": ""
 							}
 						]
@@ -205,15 +204,14 @@
 						"type": "timed",
 						"options": {timeLimit:4},
 						"layout": "",
+						"layoutSettings": {},
 						"buttons": [
 							{
 								"text": "Yes",
-								"options": {},
 								"action": "gotoScene:5"
 							},
 							{
 								"text": "No",
-								"options": {},
 								"action": ""
 							}
 						]

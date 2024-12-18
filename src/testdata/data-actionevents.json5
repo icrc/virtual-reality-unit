@@ -4,6 +4,8 @@
   "author": "Jon Randy",
   "info": "For testing action events",
   "locales": ["en"],
+  "defaultChoiceLayout": "basic",
+  "defaultChoiceLayoutSettings": {},
   "videos": [
     {
       "id": 1,
@@ -82,7 +84,7 @@
       "id": 3
     }
   ],
-  "initialSceneId": 0,
+  "initialSceneId": 1,
   "initialState": {
     "info": "TODO - this is to do with recording and returning data"
   },

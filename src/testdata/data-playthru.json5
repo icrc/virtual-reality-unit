@@ -4,6 +4,8 @@
 	"author": "Jon Randy",
 	"info": "Should play through hacker, racing, sci-fi",
 	"locales": ["en"],
+  "defaultChoiceLayout": "basic",
+  "defaultChoiceLayoutSettings": {},
 	"videos": [
 		{
 			"id": 1,

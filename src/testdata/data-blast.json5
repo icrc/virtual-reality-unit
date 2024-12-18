@@ -4,6 +4,8 @@
 	"author": "Jon Randy",
 	"info": "A sample VideoPath project for testing",
 	"locales": ["en"],
+  "defaultChoiceLayout": "basic",
+  "defaultChoiceLayoutSettings": {},
 	"videos": [
 		{
 			"id": 1,
@@ -36,25 +38,22 @@
 							"defaultAction": "setStateValue:'skippedAssessments', @skippedAssessments + 1"
 						},
 						"layout": "",
+						"layoutSettings": {},
 						"buttons": [
 							{
 								"text": "Immediate",
-								"options": {},
 								"action": "setStateValue:'wrongAssessments', @wrongAssessments + 1"
 							},
 							{
 								"text": "Delayed",
-								"options": {},
 								"action": "setStateValue:'wrongAssessments', @wrongAssessments + 1"
 							},
 							{
 								"text": "Minor",
-								"options": {},
 								"action": "setStateValue:'correctAssessments', @correctAssessments + 1"
 							},
 							{
 								"text": "Dead",
-								"options": {},
 								"action": "setStateValue:'wrongAssessments', @wrongAssessments + 1"
 							}
 						]
@@ -72,25 +71,22 @@
 							"defaultAction": "setStateValue:'skippedAssessments', @skippedAssessments + 1"
 						},
 						"layout": "",
+						"layoutSettings": {},
 						"buttons": [
 							{
 								"text": "Immediate",
-								"options": {},
 								"action": "setStateValue:'wrongAssessments', @wrongAssessments + 1"
 							},
 							{
 								"text": "Delayed",
-								"options": {},
 								"action": "setStateValue:'wrongAssessments', @wrongAssessments + 1"
 							},
 							{
 								"text": "Minor",
-								"options": {},
 								"action": "setStateValue:'wrongAssessments', @wrongAssessments + 1"
 							},
 							{
 								"text": "Dead",
-								"options": {},
 								"action": "setStateValue:'correctAssessments', @correctAssessments + 1"
 							}
 						]
