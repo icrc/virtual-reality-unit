@@ -5,7 +5,7 @@
 	"info": "A sample project for testing with multiple MP4 videos",
 	"locales": ["en"],
   "defaultChoiceLayout": "basic",
-  "defaultChoiceLayoutSettings": {},
+  "defaultChoiceLayoutSettings": {colour_button2:'#800'},
 	"videos": [
 		{
 			"id": 1,
@@ -126,7 +126,7 @@
 						"type": "block",
 						"options": { "loop": [1, 2] },
 						"layout": "",
-						"layoutSettings": {},
+						"layoutSettings": {colour_button3:'#080'},
 						"buttons": [
 							{
 								"text": "Fireworks",
@@ -231,7 +231,6 @@
 	],
 	"initialSceneId": 1,
 	"initialState": {
-		"info": "TODO - this is to do with recording and returning data"
 	},
 	"translations": {}
 }
