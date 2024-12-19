@@ -1,6 +1,6 @@
 <!-- Choices Component -->
 <template>
-  <div class="choice_container">
+  <div :class="{ choice_container: true, [layout]: true }" :style="styleSettings">
     <div v-if="timeLimit" class="timer"><div :class="{ time_indicator: true, go: timerActive }">&nbsp;</div></div>
     <div class="message" v-if="message">{{ message }}</div>
     <div class="buttons">
@@ -18,7 +18,7 @@
 <script></script>
 
 <script setup>
-import { onMounted, nextTick, ref } from "vue"
+import { onMounted, ref, computed } from "vue"
 const props = defineProps({
   message: {
     type: String,
@@ -32,9 +32,23 @@ const props = defineProps({
     type: Number,
     default: 0,
   },
+  layout: {
+    type: String,
+    default: "",
+  },
+  layoutSettings: {
+    type: Object,
+    default() {
+      return {}
+    },
+  },
 })
 
 const timerActive = ref(false)
+
+const styleSettings = computed(() => {
+  return Object.fromEntries(Object.entries(props.layoutSettings).map(([key, value]) => [`--${key}`, value]))
+})
 
 onMounted(() => {
   if (props.timeLimit) {
@@ -51,17 +65,32 @@ const emit = defineEmits(["choiceMade"])
   color: white;
   font-size: calc(var(--unit) * 4.5);
   display: flex;
+  opacity: 1;
+  height: 100%;
+}
+
+/* Basic choice layout ---------------------------------------------------------------------------------- */
+.basic {
+  --colour_timer: #fff;
+  --colour_message: #fff;
+  --colour_background: transparent;
+
+  --colour_button1: #008;
+  --colour_button2: #008;
+  --colour_button3: #008;
+  --colour_button4: #008;
+
   flex-direction: column;
   justify-content: flex-end;
-  opacity: 0.9;
-  height: 100%;
+
   & .timer {
+    background-color: var(--colour_background);
     font-size: 0;
     display: flex;
     justify-content: center;
     padding-bottom: calc(var(--unit) * 2);
     & .time_indicator {
-      background: #fff;
+      background: var(--colour_timer);
       height: calc(var(--unit) * 4);
       transition-property: width;
       transition-timing-function: linear;
@@ -72,15 +101,19 @@ const emit = defineEmits(["choiceMade"])
       }
     }
   }
+
   & .message {
-    align-content: end;
-    padding: 0 calc(var(--unit) * 5);
+    background-color: var(--colour_background);
+    color: var(--colour_message);
+    padding: calc(var(--unit) * 3) calc(var(--unit) * 5) 0 calc(var(--unit) * 5);
     text-shadow:
       0 0 5px #000,
       0 0 2px #000,
       0 0 10px #000;
   }
+
   & .buttons {
+    background-color: var(--colour_background);
     font-size: calc(var(--unit) * 3.5);
     display: flex;
     flex-wrap: wrap;
@@ -89,13 +122,25 @@ const emit = defineEmits(["choiceMade"])
 
     & .button {
       width: 49%;
-      background: #008;
       border-radius: calc(var(--unit) * 2);
       padding: calc(var(--unit) * 2.5);
       cursor: pointer;
       &:hover {
-        background: #00b;
+        filter: brightness(1.25);
       }
+    }
+
+    & .button:nth-child(1) {
+      background: var(--colour_button1);
+    }
+    & .button:nth-child(2) {
+      background: var(--colour_button2);
+    }
+    & .button:nth-child(3) {
+      background: var(--colour_button3);
+    }
+    & .button:nth-child(4) {
+      background: var(--colour_button4);
     }
   }
 }

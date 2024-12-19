@@ -3,7 +3,11 @@
 	<div :class="{ player_container: true, [superWide ? 'full_screen_superwide' : 'full_screen']: isFullscreen }">
 		<player @ready="onPlayerReady" :options="playerOptions" />
 		<div class="overlay">
-			<div id="pbb" :title="playbackActive ? 'Reset' : 'Start'" v-if="doStart && doAbort" :class="{ playback_button: true, playing: playbackActive }" @click="handlePlaybackButtonClick">
+			<div
+				:title="playbackActive ? 'Reset' : 'Start'"
+				v-if="doStart && doAbort"
+				:class="{ playback_button: true, playing: playbackActive }"
+				@click="handlePlaybackButtonClick">
 				<svg
 					v-if="playbackActive"
 					height="100%"
@@ -26,7 +30,6 @@
 					height="100%"
 					width="100%"
 					version="1.1"
-					id="btn_start"
 					xmlns="http://www.w3.org/2000/svg"
 					xmlns:xlink="http://www.w3.org/1999/xlink"
 					viewBox="0 0 60 60"
@@ -47,6 +50,8 @@
 				:timeLimit="currentChoiceData.timeLimit"
 				:message="currentChoiceData.text"
 				:buttons="currentChoiceData.buttons"
+				:layout="computedLayoutName"
+				:layout-settings="computedLayoutSettings"
 				@choice-made="choiceMadeHandler" />
 		</div>
 		<div v-if="props?.data?.scenes?.length">
@@ -58,12 +63,13 @@
 <script>
 import { EVENT_TYPES, CHOICE_TYPES } from "@/stores/storyStore"
 import { runCode } from "@/libs/actionCode"
+import { DEFAULT_LAYOUT } from "@/layouts"
 
 const noop = () => {}
 </script>
 
 <script setup>
-import { ref, toRaw, onMounted, onUnmounted, useTemplateRef, nextTick } from "vue"
+import { ref, toRaw, onMounted, onUnmounted, useTemplateRef, nextTick, computed } from "vue"
 import Player from "@/components/Player.vue"
 import VideoServiceProvider from "@/components/VideoServiceProvider.vue"
 import Choices from "@/components/Choices.vue"
@@ -126,6 +132,20 @@ onMounted(() => {
 			})
 		})
 	}
+})
+
+// layout name
+const computedLayoutName = computed(() => {
+	if (!currentChoiceData.value) return undefined
+	return currentChoiceData.value.layout || props.data.defaultChoiceLayout || DEFAULT_LAYOUT
+})
+// layout settings
+const computedLayoutSettings = computed(() => {
+	if (!currentChoiceData) return {}
+	// if we are using the default layout, start with the default settings
+	const settings = !currentChoiceData.value.layout && props.data.defaultChoiceLayout ? props.data.defaultChoiceLayoutSettings : {}
+	// merge in the current choice's settings
+	return { ...settings, ...currentChoiceData.value.layoutSettings }
 })
 
 /**
@@ -507,7 +527,7 @@ defineExpose({
 	cursor: default;
 	& svg {
 		fill: #fc0;
-		filter: drop-shadow( 0 0 3px rgb(0, 0, 0));
+		filter: drop-shadow(0 0 3px rgb(0, 0, 0));
 	}
 	&:hover svg {
 		fill: #fff;
