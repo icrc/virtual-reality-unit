@@ -8,23 +8,23 @@ export const layouts = {
 		name: 'Basic',
 		thumbnail: '',
 		options: {
-			colour_button_1: {
+			colour_button1: {
 				name: "Button 1 colour",
 				type: "colour",
 			},
-			colour_button_2: {
+			colour_button2: {
 				name: "Button 2 colour",
 				type: "colour",
 			},
-			colour_button_3: {
+			colour_button3: {
 				name: "Button 3 colour",
 				type: "colour",
 			},
-			colour_button_4: {
+			colour_button4: {
 				name: "Button 4 colour",
 				type: "colour",
 			},
-			background_colour: {
+			colour_background: {
 				name: "Background colour",
 				type: "colour",
 			}
