@@ -64,7 +64,6 @@ const emit = defineEmits(["choiceMade"])
   --unit: calc(var(--playerfullheight) / 100);
   color: white;
   font-size: calc(var(--unit) * 4.5);
-  display: flex;
   opacity: 1;
   height: 100%;
 }
@@ -80,6 +79,7 @@ const emit = defineEmits(["choiceMade"])
   --colour_button3: #008;
   --colour_button4: #008;
 
+  display: flex;
   flex-direction: column;
   justify-content: flex-end;
 
