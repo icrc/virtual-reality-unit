@@ -4,8 +4,18 @@
 	"author": "Jon Randy",
 	"info": "A sample VideoPath project for testing",
 	"locales": ["en"],
-  "defaultChoiceLayout": "basic",
-  "defaultChoiceLayoutSettings": {},
+	"defaultChoiceLayout": "btn_4_horiz",
+	"defaultChoiceLayoutSettings": {
+		"colour_button1": "#fc0102",
+		"text_colour_button1": "#000",
+		"colour_button2": "#fcff00",
+		"text_colour_button2": "#000",
+		"colour_button3": "#0bff00",
+		"text_colour_button3": "#000",
+		"colour_button4": "#000",
+		"text_colour_button5": "#fff",
+		"button_align": "flex-end"
+	},
 	"videos": [
 		{
 			"id": 1,
@@ -99,7 +109,7 @@
 	"initialState": {
 		"skippedAssessments": 0,
 		"correctAssessments": 0,
-		"wrongAssessments": 0,
+		"wrongAssessments": 0
 	},
 	"translations": {}
 }

@@ -79,6 +79,11 @@ const emit = defineEmits(["choiceMade"])
   --colour_button3: #008;
   --colour_button4: #008;
 
+  --text_colour_button1: #fff;
+  --text_colour_button2: #fff;
+  --text_colour_button3: #fff;
+  --text_colour_button4: #fff;
+
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -132,16 +137,116 @@ const emit = defineEmits(["choiceMade"])
 
     & .button:nth-child(1) {
       background: var(--colour_button1);
+      color: var(--text_colour_button1);
     }
     & .button:nth-child(2) {
       background: var(--colour_button2);
+      color: var(--text_colour_button2);
     }
     & .button:nth-child(3) {
       background: var(--colour_button3);
+      color: var(--text_colour_button3);
     }
     & .button:nth-child(4) {
       background: var(--colour_button4);
+      color: var(--text_colour_button4);
     }
   }
 }
+
+
+/* 4 buttons horizontal layout ---------------------------------------------------------------------------------- */
+.btn_4_horiz {
+  --colour_timer: #fff;
+  --colour_message: #fff;
+  --colour_background: transparent;
+
+  --colour_button1: #008;
+  --colour_button2: #008;
+  --colour_button3: #008;
+  --colour_button4: #008;
+
+  --text_colour_button1: #fff;
+  --text_colour_button2: #fff;
+  --text_colour_button3: #fff;
+  --text_colour_button4: #fff;
+
+  --button_height: 30;
+  --button_align: center /* or felx-start, flex-end */;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+
+  & .timer {
+    background-color: var(--colour_background);
+    font-size: 0;
+    display: flex;
+    justify-content: center;
+    padding-bottom: calc(var(--unit) * 2);
+    & .time_indicator {
+      background: var(--colour_timer);
+      height: calc(var(--unit) * 4);
+      transition-property: width;
+      transition-timing-function: linear;
+      transition-duration: v-bind(timeLimit + "s");
+      width: 96%;
+      &.go {
+        width: 0 !important;
+      }
+    }
+  }
+
+  & .message {
+    background-color: var(--colour_background);
+    color: var(--colour_message);
+    padding: calc(var(--unit) * 3) calc(var(--unit) * 5) 0 calc(var(--unit) * 5);
+    text-shadow:
+      0 0 5px #000,
+      0 0 2px #000,
+      0 0 10px #000;
+  }
+
+  & .buttons {
+    background-color: var(--colour_background);
+    font-size: calc(var(--unit) * 3.5);
+    display: flex;
+    flex-wrap: wrap;
+    padding: calc(var(--unit) * 4) calc(var(--unit) * 4);
+    height: calc(var(--unit) * var(--button_height));
+    justify-content: space-evenly;
+
+    & .button {
+      width: 23%;
+      border-radius: calc(var(--unit) * 2);
+      padding: calc(var(--unit) * 2.5);
+      display:flex;
+      justify-content: center;
+      align-items: var(--button_align);
+      cursor: pointer;
+      &:hover {
+        filter: brightness(1.25);
+      }
+    }
+
+    & .button:nth-child(1) {
+      background: var(--colour_button1);
+      color: var(--text_colour_button1);
+    }
+    & .button:nth-child(2) {
+      background: var(--colour_button2);
+      color: var(--text_colour_button2);
+    }
+    & .button:nth-child(3) {
+      background: var(--colour_button3);
+      color: var(--text_colour_button3);
+    }
+    & .button:nth-child(4) {
+      background: var(--colour_button4);
+      color: var(--text_colour_button4);
+    }
+
+  }
+}
+
 </style>
