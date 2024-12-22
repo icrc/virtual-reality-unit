@@ -203,8 +203,8 @@
 						"text": "Go somewhere else?",
 						"type": "timed",
 						"options": {timeLimit:4},
-						"layout": "",
-						"layoutSettings": {},
+						"layout": "full",
+						"layoutSettings": {colour_background: '#000'},
 						"buttons": [
 							{
 								"text": "Yes",

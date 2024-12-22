@@ -154,7 +154,6 @@ const emit = defineEmits(["choiceMade"])
   }
 }
 
-
 /* 4 buttons horizontal layout ---------------------------------------------------------------------------------- */
 .btn_4_horiz {
   --colour_timer: #fff;
@@ -220,7 +219,7 @@ const emit = defineEmits(["choiceMade"])
       width: 23%;
       border-radius: calc(var(--unit) * 2);
       padding: calc(var(--unit) * 2.5);
-      display:flex;
+      display: flex;
       justify-content: center;
       align-items: var(--button_align);
       cursor: pointer;
@@ -245,8 +244,296 @@ const emit = defineEmits(["choiceMade"])
       background: var(--colour_button4);
       color: var(--text_colour_button4);
     }
-
   }
 }
 
+/* Full layout ---------------------------------------------------------------------------------- */
+.full {
+  --colour_timer: #fff;
+  --colour_message: #fff;
+  --colour_background: transparent;
+
+  --colour_button1: #008;
+  --colour_button2: #008;
+  --colour_button3: #008;
+  --colour_button4: #008;
+
+  --text_colour_button1: #fff;
+  --text_colour_button2: #fff;
+  --text_colour_button3: #fff;
+  --text_colour_button4: #fff;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+
+  & .timer {
+    background-color: var(--colour_background);
+    font-size: 0;
+    display: flex;
+    justify-content: center;
+    padding-bottom: calc(var(--unit) * 0);
+    padding-top: calc(var(--unit) * 4);
+    & .time_indicator {
+      background: var(--colour_timer);
+      height: calc(var(--unit) * 4);
+      transition-property: width;
+      transition-timing-function: linear;
+      transition-duration: v-bind(timeLimit + "s");
+      width: 96%;
+      &.go {
+        width: 0 !important;
+      }
+    }
+  }
+
+  & .message {
+    background-color: var(--colour_background);
+    color: var(--colour_message);
+    padding: calc(var(--unit) * 3) calc(var(--unit) * 5) 0 calc(var(--unit) * 5);
+    text-shadow:
+      0 0 5px #000,
+      0 0 2px #000,
+      0 0 10px #000;
+  }
+
+  & .buttons {
+    background-color: var(--colour_background);
+    font-size: calc(var(--unit) * 3.5);
+    display: flex;
+    flex-direction: column;
+    padding: calc(var(--unit) * 4) calc(var(--unit) * 4);
+    gap: calc(var(--unit) * 3.3);
+    justify-content: center;
+
+    & .button {
+      flex-grow: 1;
+      border-radius: calc(var(--unit) * 2);
+      padding: calc(var(--unit) * 2.5);
+      height: calc(var(--unit) * 17);
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      &:hover {
+        filter: brightness(1.25);
+      }
+    }
+
+    & .button:nth-child(1) {
+      background: var(--colour_button1);
+      color: var(--text_colour_button1);
+    }
+    & .button:nth-child(2) {
+      background: var(--colour_button2);
+      color: var(--text_colour_button2);
+    }
+    & .button:nth-child(3) {
+      background: var(--colour_button3);
+      color: var(--text_colour_button3);
+    }
+    & .button:nth-child(4) {
+      background: var(--colour_button4);
+      color: var(--text_colour_button4);
+    }
+  }
+}
+
+/* Column layout ---------------------------------------------------------------------------------- */
+.column {
+  --colour_timer: #fff;
+  --colour_message: #fff;
+  --colour_background: transparent;
+
+  --colour_button1: #008;
+  --colour_button2: #008;
+  --colour_button3: #008;
+  --colour_button4: #008;
+
+  --text_colour_button1: #fff;
+  --text_colour_button2: #fff;
+  --text_colour_button3: #fff;
+  --text_colour_button4: #fff;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+  margin-left: 20%;
+  padding-bottom: calc(var(--unit) * 6);
+
+  & .timer {
+    font-size: 0;
+    display: flex;
+    justify-content: flex-start;
+    padding-bottom: calc(var(--unit) * 0);
+    padding-top: calc(var(--unit) * 4);
+    & .time_indicator {
+      background: var(--colour_timer);
+      height: calc(var(--unit) * 4);
+      transition-property: width;
+      transition-timing-function: linear;
+      transition-duration: v-bind(timeLimit + "s");
+      width: 96%;
+      &.go {
+        width: 0 !important;
+      }
+    }
+  }
+
+  & .message {
+    align-content: flex-end;
+    color: var(--colour_message);
+    padding: calc(var(--unit) * 3) calc(var(--unit) * 5) 0 calc(var(--unit) * 2);
+    text-shadow:
+      0 0 5px #000,
+      0 0 2px #000,
+      0 0 10px #000;
+  }
+
+  & .buttons {
+    position: absolute;
+    inset: 0 80% 0 0;
+    background-color: var(--colour_background);
+    font-size: calc(var(--unit) * 3.5);
+    display: flex;
+    flex-direction: column;
+    padding: calc(var(--unit) * 4) calc(var(--unit) * 4);
+    gap: calc(var(--unit) * 3.3);
+    justify-content: center;
+
+    & .button {
+      flex-grow: 1;
+      border-radius: calc(var(--unit) * 2);
+      padding: calc(var(--unit) * 2.5);
+      height: calc(var(--unit) * 17);
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      max-height: calc(var(--unit) * 32);
+      &:hover {
+        filter: brightness(1.25);
+      }
+    }
+
+    & .button:nth-child(1) {
+      background: var(--colour_button1);
+      color: var(--text_colour_button1);
+    }
+    & .button:nth-child(2) {
+      background: var(--colour_button2);
+      color: var(--text_colour_button2);
+    }
+    & .button:nth-child(3) {
+      background: var(--colour_button3);
+      color: var(--text_colour_button3);
+    }
+    & .button:nth-child(4) {
+      background: var(--colour_button4);
+      color: var(--text_colour_button4);
+    }
+  }
+}
+
+/* Column right layout ---------------------------------------------------------------------------------- */
+.column_r {
+  --colour_timer: #fff;
+  --colour_message: #fff;
+  --colour_background: transparent;
+
+  --colour_button1: #008;
+  --colour_button2: #008;
+  --colour_button3: #008;
+  --colour_button4: #008;
+
+  --text_colour_button1: #fff;
+  --text_colour_button2: #fff;
+  --text_colour_button3: #fff;
+  --text_colour_button4: #fff;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+  margin-right: 20%;
+  padding-bottom: calc(var(--unit) * 6);
+
+  & .timer {
+    font-size: 0;
+    display: flex;
+    justify-content: flex-end;
+    padding-bottom: calc(var(--unit) * 0);
+    padding-top: calc(var(--unit) * 4);
+    & .time_indicator {
+      background: var(--colour_timer);
+      height: calc(var(--unit) * 4);
+      transition-property: width;
+      transition-timing-function: linear;
+      transition-duration: v-bind(timeLimit + "s");
+      width: 96%;
+      &.go {
+        width: 0 !important;
+      }
+    }
+  }
+
+  & .message {
+    align-content: flex-end;
+    text-align: right;
+    color: var(--colour_message);
+    padding: calc(var(--unit) * 3) calc(var(--unit) * 2) 0 calc(var(--unit) * 5);
+    text-shadow:
+      0 0 5px #000,
+      0 0 2px #000,
+      0 0 10px #000;
+  }
+
+  & .buttons {
+    position: absolute;
+    inset: 0 0 0 80%;
+    background-color: var(--colour_background);
+    font-size: calc(var(--unit) * 3.5);
+    display: flex;
+    flex-direction: column;
+    padding: calc(var(--unit) * 4) calc(var(--unit) * 4);
+    gap: calc(var(--unit) * 3.3);
+    justify-content: center;
+
+    & .button {
+      flex-grow: 1;
+      border-radius: calc(var(--unit) * 2);
+      padding: calc(var(--unit) * 2.5);
+      height: calc(var(--unit) * 17);
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      max-height: calc(var(--unit) * 32);
+      &:hover {
+        filter: brightness(1.25);
+      }
+    }
+
+    & .button:nth-child(1) {
+      background: var(--colour_button1);
+      color: var(--text_colour_button1);
+    }
+    & .button:nth-child(2) {
+      background: var(--colour_button2);
+      color: var(--text_colour_button2);
+    }
+    & .button:nth-child(3) {
+      background: var(--colour_button3);
+      color: var(--text_colour_button3);
+    }
+    & .button:nth-child(4) {
+      background: var(--colour_button4);
+      color: var(--text_colour_button4);
+    }
+  }
+}
 </style>
