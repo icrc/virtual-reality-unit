@@ -49,7 +49,16 @@
                       <option v-else :value="-1">None available. Please add one</option>
                     </select>
                   </label>
-                  <label style="--span: 8">Author<input placeholder="n/a" type="text" v-model="story.author" /></label>
+                  <label style="--span: 5">Author<input placeholder="n/a" type="text" v-model="story.author" /></label>
+                  <label style="--span: 3"
+                    >Default choice layout
+                    <select cv-model="">
+                      <option value="">None</option>
+                      <option v-for="layout in LAYOUT_NAMES" :key="layout.id" :value="layout.id">
+                        {{ layout.name }}
+                      </option>
+                    </select>
+                  </label>
                   <label style="--span: 8">Info<textarea v-model="story.info" rows="3"></textarea></label>
                 </div>
               </div>
@@ -105,6 +114,7 @@
 
 <script>
 import { confirm } from "@/libs/popups"
+import { LAYOUT_NAMES } from "@/layouts"
 </script>
 
 <script setup>

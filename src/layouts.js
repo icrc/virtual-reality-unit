@@ -2,7 +2,7 @@
 
 export const DEFAULT_LAYOUT = "basic"
 
-export const layouts = {
+export const LAYOUTS = {
 	// basic layout (default)
 	basic: {
 		name: "Basic",
@@ -56,7 +56,7 @@ export const layouts = {
 	},
 	// 4 buttons horizontal layout
 	btn_4_horiz: {
-		name: "4 button horizontal",
+		name: "Horizontal buttons",
 		thumbnail: "",
 		options: {
 			button_height: {
@@ -119,7 +119,7 @@ export const layouts = {
 	},
 	// 'full' layout
 	full: {
-		name: "'Full' layout - centred and full width",
+		name: "Full layout - centred and full width",
 		thumbnail: "",
 		options: {
 			colour_button1: {
@@ -170,7 +170,7 @@ export const layouts = {
 	},
 	// Column layout
 	column: {
-		name: "Column layout - buttons in a column on left",
+		name: "Column layout - buttons on left",
 		thumbnail: "",
 		options: {
 			colour_button1: {
@@ -221,7 +221,7 @@ export const layouts = {
 	},
 	// Column right layout
 	column_r: {
-		name: "Column right layout - buttons in a column on right",
+		name: "Column right layout - buttons on right",
 		thumbnail: "",
 		options: {
 			colour_button1: {
@@ -287,3 +287,5 @@ font - a simple choice between a few fonts? (Check with Ryan)
 	}
 
 */
+
+export const LAYOUT_NAMES = Object.entries(LAYOUTS).map(([id, { name }]) => ({id, name})).sort((a, b) => a.name.localeCompare(b.name))
