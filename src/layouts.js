@@ -170,7 +170,7 @@ export const LAYOUTS = {
 	},
 	// Column layout
 	column: {
-		name: "Column layout - buttons on left",
+		name: "Column left layout - buttons on left",
 		thumbnail: "",
 		options: {
 			colour_button1: {
