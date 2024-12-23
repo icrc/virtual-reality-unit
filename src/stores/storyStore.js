@@ -14,6 +14,9 @@ const EMPTY_STORY = {
   initialSceneId: -1,
   locales: ["en"],
 
+  defaultChoiceLayout: "",
+  defaultChoiceLayoutSettings: {},
+
   videos: [],
   scenes: [],
   initialState: {},
