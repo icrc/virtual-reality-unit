@@ -13,7 +13,7 @@
               >Next scene
               <select v-model="scene.nextSceneId">
                 <option :value="-1">(n/a)</option>
-                <option v-for="scene in story.scenes" idx="scene.id" :value="scene.id">{{ scene.id }} - {{ scene.title || "(No title)" }}</option>
+                <option v-for="scene in story.scenes" :key="scene.id" :value="scene.id">{{ scene.id }} - {{ scene.title || "(No title)" }}</option>
               </select>
             </label>
           </div>

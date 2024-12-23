@@ -43,7 +43,7 @@
                     >Initial scene
                     <select v-model="story.initialSceneId">
                       <option v-if="story.scenes.length" :value="-1">Please select a scene...</option>
-                      <option v-if="story.scenes.length" v-for="scene in story.scenes" idx="scene.id" :value="scene.id">
+                      <option v-if="story.scenes.length" v-for="scene in story.scenes" :key="scene.id" :value="scene.id">
                         {{ scene.id }} - {{ scene.title || "(No title)" }}
                       </option>
                       <option v-else :value="-1">None available. Please add one</option>
