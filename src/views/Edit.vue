@@ -52,7 +52,7 @@
                   <label style="--span: 5">Author<input placeholder="n/a" type="text" v-model="story.author" /></label>
                   <label style="--span: 3"
                     >Default choice layout
-                    <select cv-model="">
+                    <select v-model="story.defaultChoiceLayout">
                       <option value="">None</option>
                       <option v-for="layout in LAYOUT_NAMES" :key="layout.id" :value="layout.id">
                         {{ layout.name }}
