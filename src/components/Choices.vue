@@ -401,7 +401,7 @@ const emit = defineEmits(["choiceMade"])
     flex-direction: column;
     padding: calc(var(--unit) * 4) calc(var(--unit) * 4);
     gap: calc(var(--unit) * 3.3);
-    justify-content: center;
+    justify-content: flex-end;
 
     & .button {
       flex-grow: 1;
@@ -500,7 +500,7 @@ const emit = defineEmits(["choiceMade"])
     flex-direction: column;
     padding: calc(var(--unit) * 4) calc(var(--unit) * 4);
     gap: calc(var(--unit) * 3.3);
-    justify-content: center;
+    justify-content: flex-end;
 
     & .button {
       flex-grow: 1;
