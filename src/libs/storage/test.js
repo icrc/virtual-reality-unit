@@ -8,12 +8,14 @@ import blastVimeo from "@/testdata/data-blast.json5"
 import multiMP4 from "@/testdata/data-multi-mp4.json5"
 import playthru from "@/testdata/data-playthru.json5"
 import actionEvents from "@/testdata/data-actionevents.json5"
+import layoutTest from "@/testdata/data-layouttest.json5"
 
 const testData = {
 	blastVimeo,
 	multiMP4,
 	playthru,
-	actionEvents
+	actionEvents,
+	layoutTest
 }
 
 export const testStorage = {

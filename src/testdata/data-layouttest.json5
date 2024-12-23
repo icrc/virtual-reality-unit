@@ -1,0 +1,227 @@
+{
+	"version": "0.0.1",
+	"title": "Layout Tests",
+	"author": "Jon Randy",
+	"info": "Test project for testing layouts",
+	"initialSceneId": 1,
+	"locales": ["en"],
+	"defaultChoiceLayout": "column_r",
+	"defaultChoiceLayoutSettings": {},
+	"videos": [
+		{
+			"title": "Hourglass",
+			"sourceType": "mp4",
+			"url": "/videos/time.mp4",
+			"thumbnail": "",
+			"info": "",
+			"audiotracks": [],
+			"id": 1
+		}
+	],
+	"scenes": [
+		{
+			"videoId": 1,
+			"title": "Main scene",
+			"startTime": 0,
+			"endTime": -1,
+			"nextSceneId": -1,
+			"events": [
+				{
+					"id": 1,
+					"type": "choice",
+					"launchTime": 1,
+					"data": {
+						"text": "A blocking choice (4 options)",
+						"type": "block",
+						"options": {},
+						"layout": "",
+						"layoutSettings": {},
+						"buttons": [
+							{
+								"text": "Option 1",
+								"action": "setNextScene:1"
+							},
+							{
+								"text": "Option 2",
+								"action": "setNextScene:1"
+							},
+							{
+								"text": "Option 3",
+								"action": "setNextScene:1"
+							},
+							{
+								"text": "Option 4",
+								"action": "setNextScene:1"
+							}
+						]
+					}
+				},
+				{
+					"id": 2,
+					"type": "choice",
+					"launchTime": 3,
+					"data": {
+						"text": "A blocking choice (3 options)",
+						"type": "block",
+						"options": {},
+						"layout": "",
+						"layoutSettings": {},
+						"buttons": [
+							{
+								"text": "Option 1",
+								"action": "setNextScene:1"
+							},
+							{
+								"text": "Option 2",
+								"action": "setNextScene:1"
+							},
+							{
+								"text": "Option 3",
+								"action": "setNextScene:1"
+							}
+						]
+					}
+				},
+				{
+					"id": 3,
+					"type": "choice",
+					"launchTime": 5,
+					"data": {
+						"text": "A blocking choice (2 options)",
+						"type": "block",
+						"options": {},
+						"layout": "",
+						"layoutSettings": {},
+						"buttons": [
+							{
+								"text": "Option 1",
+								"action": "setNextScene:1"
+							},
+							{
+								"text": "Option 2",
+								"action": "setNextScene:1"
+							}
+						]
+					}
+				},
+				{
+					"id": 4,
+					"type": "choice",
+					"launchTime": 7,
+					"data": {
+						"text": "A blocking choice (1 option)",
+						"type": "block",
+						"options": {},
+						"layout": "",
+						"layoutSettings": {},
+						"buttons": [
+							{
+								"text": "Option 1",
+								"action": "setNextScene:1"
+							}
+						]
+					}
+				},
+				{
+					"id": 5,
+					"type": "choice",
+					"launchTime": 9,
+					"data": {
+						"text": "A timed choice (4 options)",
+						"type": "timed",
+						"options": {timeLimit:4},
+						"layout": "",
+						"layoutSettings": {},
+						"buttons": [
+							{
+								"text": "Option 1",
+								"action": "setNextScene:1"
+							},
+							{
+								"text": "Option 2",
+								"action": "setNextScene:1"
+							},
+							{
+								"text": "Option 3",
+								"action": "setNextScene:1"
+							},
+							{
+								"text": "Option 4",
+								"action": "setNextScene:1"
+							},
+						]
+					}
+				},
+				{
+					"id": 6,
+					"type": "choice",
+					"launchTime": 14,
+					"data": {
+						"text": "A timed choice (3 options)",
+						"type": "timed",
+						"options": {timeLimit:4},
+						"layout": "",
+						"layoutSettings": {},
+						"buttons": [
+							{
+								"text": "Option 1",
+								"action": "setNextScene:1"
+							},
+							{
+								"text": "Option 2",
+								"action": "setNextScene:1"
+							},
+							{
+								"text": "Option 3",
+								"action": "setNextScene:1"
+							},
+						]
+					}
+				},
+				{
+					"id": 7,
+					"type": "choice",
+					"launchTime": 19,
+					"data": {
+						"text": "A timed choice (2 options)",
+						"type": "timed",
+						"options": {timeLimit:4},
+						"layout": "",
+						"layoutSettings": {},
+						"buttons": [
+							{
+								"text": "Option 1",
+								"action": "setNextScene:1"
+							},
+							{
+								"text": "Option 2",
+								"action": "setNextScene:1"
+							}
+						]
+					}
+				},
+				{
+					"id": 8,
+					"type": "choice",
+					"launchTime": 24,
+					"data": {
+						"text": "A timed choice (1 option)",
+						"type": "timed",
+						"options": {timeLimit:4},
+						"layout": "",
+						"layoutSettings": {},
+						"buttons": [
+							{
+								"text": "Option 1",
+								"action": "setNextScene:1"
+							}
+						]
+					}
+				}
+			],
+			"id": 1
+		}
+	],
+	"initialState": {},
+	"translations": {}
+}
