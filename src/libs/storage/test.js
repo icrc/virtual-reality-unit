@@ -18,7 +18,7 @@ const testData = {
 	layoutTest
 }
 
-export const testStorage = {
+const testStorage = {
 	name: "Test Storage",
 	get ready() {
 		return ready
@@ -41,7 +41,7 @@ export const testStorage = {
 		testData[filename] = { ...data }
 		const msg = `Saved data from '${filename}':\n\n${JSON.stringify(data, null, 2)}`
 		await alert(msg)
-		return true
+		return filename
 	},
 	pick: async function pick() {
 		const fname = await prompt(`Which test data would you like to load?\n\n${Object.keys(testData).join("\n")}\n `)
@@ -51,3 +51,5 @@ export const testStorage = {
 		return await prompt("Enter a filename to save the data to:", suggestedFilename)
 	},
 }
+
+export default testStorage

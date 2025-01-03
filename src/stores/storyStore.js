@@ -33,6 +33,13 @@ export const CHOICE_TYPES = {
   timed: "timed",
 }
 
+export const isValidStory = story => {
+  return [ "version", "title", "author", "info", "locales", "defaultChoiceLayout" ].every(key => key in story)
+}
+
+const intVersion = versionStr => versionStr.split('.').reduce((total, part, index) => total + parseInt(part) * Math.pow(100, 2 - index), 0) 
+export const isOldVersion = version => intVersion(VERSION) > intVersion(version)
+
 export const useStoryStore = defineStore("story", () => {
   // In returned items:
   //  ref()s become state properties (can get actual refs by using pina.storeToRefs)
@@ -104,13 +111,13 @@ export const useStoryStore = defineStore("story", () => {
 
   // save the current story (optionally changing name)
   async function saveStory(newFilename = false) {
-    const saved = await storage.save(newFilename || currentFilename.value, toRaw(currentStory.value))
-    if (saved) {
-      if (newFilename) currentFilename.value = newFilename
+    const savedFilename = await storage.save(newFilename || currentFilename.value, toRaw(currentStory.value))
+    if (savedFilename) {
+      currentFilename.value = savedFilename
       mostRecentSavedJSON = JSON.stringify(currentStory.value)
       isSaved.value = true
     }
-    return saved
+    return savedFilename
   }
 
   // add a video to the current story
