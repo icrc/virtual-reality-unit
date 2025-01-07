@@ -1,5 +1,5 @@
 <template>
-  <header :class="{ main_nav: true, full_screen: isFullscreen }">
+  <header v-if="!showContentOnly" :class="{ main_nav: true, full_screen: isFullscreen }">
     <nav class="s-container">
       <div>ICRC VideoPath</div>
       <menu>
@@ -11,12 +11,21 @@
       </menu>
     </nav>
   </header>
-  <RouterView />
+  <div v-if="showContentOnly" class="content-only">
+    <RouterView />
+  </div>
+  <RouterView v-else />
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 import { useFullscreen } from "@/composables/fullscreen"
+
 const { isFullscreen } = useFullscreen()
+const route = useRoute()
+const showContentOnly = computed(() => route.name === 'play')
+
 </script>
 
 <style>
@@ -28,5 +37,9 @@ const { isFullscreen } = useFullscreen()
 
 .main_nav.full_screen {
   display: none;
+}
+
+.content-only {
+  padding-top: 1.5em;
 }
 </style>

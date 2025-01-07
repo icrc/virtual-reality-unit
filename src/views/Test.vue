@@ -38,7 +38,11 @@ import { useFullscreen } from "@/composables/fullscreen"
 
 import { runCode } from "@/libs/actionCode"
 
-// test preloading
+fetch('https://drive.google.com/uc?export=download&id=14golMd22uABE3Tzu_fb1WDJYazyW255Z').then(response => response.text()).then(text => console.log(text))
+fetch('https://www.dropbox.com/scl/fi/9dkjcbsp0uwxmm4ragx47/geoff.json?rlkey=bmpjnku0zwlbf8ccudbb89mss&st=0s6dn1na&dl=1').then(response => response.text()).then(text => console.log(text))
+// https://is.gd/CHi13a
+
+// video preloading
 const serviceProviderRefs = useTemplateRef("serviceProviders")
 onMounted(() => {
   nextTick(() => {

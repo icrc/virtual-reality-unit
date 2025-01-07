@@ -19,6 +19,12 @@ const routes = [
     component: views.View,
   },
   {
+    path: "/play/:url(.*)",
+    name: "play",
+    component: views.View,
+    props: true
+  },
+  {
     path: "/test",
     name: "test",
     component: views.Test,

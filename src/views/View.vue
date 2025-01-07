@@ -20,6 +20,7 @@ import { alert } from "@/libs/popups"
 
 <script setup>
 import { ref, nextTick, toRaw } from "vue"
+import { useRoute } from "vue-router"
 import StoryPlayer from "@/components/StoryPlayer.vue"
 
 import { useStoryStore } from "@/stores/storyStore"
@@ -36,6 +37,8 @@ const alive = ref(true)
 
 const handlePlayerReady = () => (isVideoReady.value = true)
 const handlePlayerShowable = () => (isShowable.value = true)
+
+console.log(useRoute().params)
 
 let abortController
 
