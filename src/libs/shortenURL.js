@@ -5,7 +5,7 @@ export const IS_GD = {
 	async shorten(url) {
 		let res
 		try {
-			res = await fetch(`https://is.gd/create.php?format=json&url=${url}`)
+			res = await fetch(`https://is.gd/create.php?format=json&url=${encodeURIComponent(url)}`)
 			if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`)
 			res = await res.json()
 			return res.errorcode ? [null, res.errormessage] : [res.shorturl]
