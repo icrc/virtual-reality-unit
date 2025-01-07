@@ -46,6 +46,8 @@ const alive = ref(true)
 const handlePlayerReady = () => (isVideoReady.value = true)
 const handlePlayerShowable = () => (isShowable.value = true)
 
+let uncompressStoryData = false
+
 let abortController
 
 const props = defineProps({
@@ -74,8 +76,9 @@ const handleStart = async () => {
  * @return     {Object}  The story data.
  */
 const getStoryData = () => {
-  if (useRoute().name == 'play') {
-    const story = store.uncompressStoryData(props.data)
+  if (uncompressStoryData || useRoute().name == 'play') {
+    const story = uncompressStoryData || store.uncompressStoryData(props.data)
+    uncompressStoryData = structuredClone(story)
     if (!story) {
       useRouter().replace({ name: "unknown" })
       return null
