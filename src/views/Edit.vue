@@ -118,6 +118,7 @@ import { LAYOUT_NAMES } from "@/layouts"
 
 <script setup>
 import { computed } from "vue"
+import { useRouter } from "vue-router"
 import { useStoryStore } from "@/stores/storyStore"
 
 import Videos from "@/components/Videos.vue"
@@ -128,7 +129,10 @@ const story = computed(() => store.currentStory)
 
 const unsavedMarker = computed(() => (store.isSaved ? "" : "*"))
 
-window.compressIt = () => console.log(store.compressStoryForURL())
+window.ss = store
+window.rr = useRouter()
+
+console.log(process.env.NODE_ENV)
 
 /**
  * Add a new story/project (checking if current saved first)

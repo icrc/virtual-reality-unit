@@ -1,5 +1,6 @@
 import { defineStore } from "pinia"
 import { ref, computed, watch, toRaw } from "vue"
+import LZString from "lz-string"
 
 import { VERSION, storage } from "@/config"
 
@@ -34,10 +35,10 @@ export const CHOICE_TYPES = {
 }
 
 export const isValidStory = story => {
-  return [ "version", "title", "author", "info", "locales", "defaultChoiceLayout" ].every(key => key in story)
+  return ["version", "title", "author", "info", "locales", "defaultChoiceLayout"].every(key => key in story)
 }
 
-const intVersion = versionStr => versionStr.split('.').reduce((total, part, index) => total + parseInt(part) * Math.pow(100, 2 - index), 0) 
+const intVersion = versionStr => versionStr.split(".").reduce((total, part, index) => total + parseInt(part) * Math.pow(100, 2 - index), 0)
 export const isOldVersion = version => intVersion(VERSION) > intVersion(version)
 
 export const useStoryStore = defineStore("story", () => {
@@ -78,7 +79,7 @@ export const useStoryStore = defineStore("story", () => {
   // replace the current story with a new, blank story
   function newStory(data = EMPTY_STORY) {
     currentStory.value = structuredClone(data)
-    mostRecentSavedJSON = data===EMPTY_STORY ? JSON.stringify(currentStory.value) : ''
+    mostRecentSavedJSON = data === EMPTY_STORY ? JSON.stringify(currentStory.value) : ""
     currentFilename.value = ""
     currentHighestVideoId = 0
     currentHighestSceneId = 0
@@ -118,6 +119,28 @@ export const useStoryStore = defineStore("story", () => {
       isSaved.value = true
     }
     return savedFilename
+  }
+
+  // compress the current story (for use in URL)
+  function compressedStoryForURL() {
+    const str = JSON.stringify(toRaw(currentStory.value))
+    return LZString.compressToEncodedURIComponent(str)
+  }
+
+  // uncompress compressed story data
+  function uncompressStoryData(data) {
+    try {
+      const str = LZString.decompressFromEncodedURIComponent(data)
+      return JSON.parse(str)
+    } catch (error) {
+      return null
+    }
+  }
+
+  // get sharing URL
+  function getSharingURL(router) {
+    const data = compressedStoryForURL()
+    return router ? window.location.origin + router.resolve({ name: "play", params: { data } }).href : ''
   }
 
   // add a video to the current story
@@ -197,7 +220,6 @@ export const useStoryStore = defineStore("story", () => {
   const getHighestEventIdForScene = scene => (scene.events.length ? Math.max(...scene.events.map(({ id }) => id)) : 0)
   const nextEventIdForScene = scene => getHighestEventIdForScene(scene) + 1
 
-
   const isCurrentStoryPlayable = computed(() => {
     // Initial scene set?
     const sceneId = currentStory.value.initialSceneId
@@ -209,12 +231,10 @@ export const useStoryStore = defineStore("story", () => {
     const video = getVideoById(scene.videoId)
     if (!video) return false
     // Video has sourceType and url
-    if (!video.sourceType ||!video.url) return false
+    if (!video.sourceType || !video.url) return false
     // probably playable (although we're not checking for valid URL)
     return true
   })
-
-
 
   setup()
 
@@ -230,6 +250,11 @@ export const useStoryStore = defineStore("story", () => {
     loadStory,
     saveStory,
     chooseStoryFilename,
+    get compressedStoryForURL() {
+      return compressedStoryForURL()
+    },
+    uncompressStoryData,
+    getSharingURL,
 
     addVideo,
     deleteVideo,
@@ -245,6 +270,6 @@ export const useStoryStore = defineStore("story", () => {
 
     getScenesByVideoId,
 
-    isCurrentStoryPlayable
+    isCurrentStoryPlayable,
   }
 })

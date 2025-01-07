@@ -38,6 +38,8 @@ import { useFullscreen } from "@/composables/fullscreen"
 
 import { runCode } from "@/libs/actionCode"
 
+import URLShortener from "@/libs/shortenURL"
+window.US = URLShortener
 
 // video preloading
 const serviceProviderRefs = useTemplateRef("serviceProviders")

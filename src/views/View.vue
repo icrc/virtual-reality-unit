@@ -1,9 +1,17 @@
 <!-- View Page -->
 <template>
   <div class="s-container">
-    <main ref="mainViewContainer" style="--span: 12" class="main_view_container" :style="{ visibility: (isShowable || !isPlayable) ? 'visible' : 'hidden' }">
-      <story-player :do-start="handleStart" :do-abort="handleReset" v-if="alive && isPlayable" @ready="handlePlayerReady" @showable="handlePlayerShowable" :data="storyData" ref="player" :containerEl="mainViewContainer" />
-      <div class="unplayable_message" v-if="!isPlayable">Current project is not playable.<br>Please check for a valid start scene and video.</div>
+    <main ref="mainViewContainer" style="--span: 12" class="main_view_container" :style="{ visibility: isShowable || !isPlayable ? 'visible' : 'hidden' }">
+      <story-player
+        :do-start="handleStart"
+        :do-abort="handleReset"
+        v-if="alive && isPlayable"
+        @ready="handlePlayerReady"
+        @showable="handlePlayerShowable"
+        :data="storyData"
+        ref="player"
+        :containerEl="mainViewContainer" />
+      <div class="unplayable_message" v-if="!isPlayable">Current project is not playable.<br />Please check for a valid start scene and video.</div>
     </main>
     <div class="buttons">
       <button :disabled="!isVideoReady" @click="() => (player?.playbackActive ? handleReset() : handleStart())">
@@ -19,8 +27,8 @@ import { alert } from "@/libs/popups"
 </script>
 
 <script setup>
-import { ref, nextTick, toRaw } from "vue"
-import { useRoute } from "vue-router"
+import { ref, nextTick, toRaw, onMounted } from "vue"
+import { useRouter, useRoute } from "vue-router"
 import StoryPlayer from "@/components/StoryPlayer.vue"
 
 import { useStoryStore } from "@/stores/storyStore"
@@ -38,9 +46,11 @@ const alive = ref(true)
 const handlePlayerReady = () => (isVideoReady.value = true)
 const handlePlayerShowable = () => (isShowable.value = true)
 
-console.log(useRoute().params)
-
 let abortController
+
+const props = defineProps({
+  data: String,
+})
 
 /**
  * Start the playback
@@ -61,9 +71,21 @@ const handleStart = async () => {
 /**
  * Gets the current story data.
  *
- * @return     {Object>}  The story data.
+ * @return     {Object}  The story data.
  */
-const getStoryData = () => structuredClone(toRaw(store.currentStory))
+const getStoryData = () => {
+  if (useRoute().name == 'play') {
+    const story = store.uncompressStoryData(props.data)
+    if (!story) {
+      useRouter().replace({ name: "unknown" })
+      return null
+    } else {
+      return story
+    }
+  } else {
+    return structuredClone(toRaw(store.currentStory))
+  }
+}
 
 /**
  * Handle resetting playback (teardown player, then reinstantiate on next tick)
@@ -75,8 +97,10 @@ const handleReset = () => {
   nextTick(() => (alive.value = true))
 }
 
-storyData.value = getStoryData()
-isPlayable.value = store.isCurrentStoryPlayable
+onMounted(() => {
+  storyData.value = getStoryData()
+  isPlayable.value = store.isCurrentStoryPlayable
+})
 </script>
 
 <style scoped>
