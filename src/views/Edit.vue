@@ -128,10 +128,12 @@ const story = computed(() => store.currentStory)
 
 const unsavedMarker = computed(() => (store.isSaved ? "" : "*"))
 
+window.compressIt = () => console.log(store.compressStoryForURL())
+
 /**
  * Add a new story/project (checking if current saved first)
  *
- * @return     {Any}  n/a
+ * @return     {Promise}  n/a
  */
 const newStory = async () => {
   if (!(await confirmUnsaved())) return
@@ -141,7 +143,7 @@ const newStory = async () => {
 /**
  * Picks and loads a story (checking saved status of current first).
  *
- * @return     {Any}  n/a
+ * @return     {Promise}  n/a
  */
 const loadStory = async () => {
   if (!(await confirmUnsaved())) return
@@ -160,7 +162,7 @@ const saveStory = async () => {
 /**
  * Confirm continue action if current project is unsaved
  *
- * @return     {Boolean}  yes/no
+ * @return     {Promise<Boolean>}  yes/no
  */
 const confirmUnsaved = async () => {
   return store.isSaved ? true : await confirm("Current story is unsaved. Continue?")
