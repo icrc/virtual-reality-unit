@@ -13,14 +13,13 @@
                 <a href="#" @click.prevent="loadStory">Load existing</a>
               </li>
               <li>
-                <a
-                  href="#"
-                  @click.prevent="saveStory"
-                  >Save current {{ unsavedMarker }}</a
-                >
+                <a href="#" @click.prevent="saveStory">Save current {{ unsavedMarker }}</a>
               </li>
               <li>
                 <RouterLink to="/view">View project</RouterLink>
+              </li>
+              <li>
+                <a href="#" @click.prevent="shareLink" title="Share a link for viewing this project">Share link</a>
               </li>
             </menu>
           </nav>
@@ -112,7 +111,7 @@
 </template>
 
 <script>
-import { confirm } from "@/libs/popups"
+import { alert, confirm } from "@/libs/popups"
 import { LAYOUT_NAMES } from "@/layouts"
 </script>
 
@@ -120,6 +119,7 @@ import { LAYOUT_NAMES } from "@/layouts"
 import { computed } from "vue"
 import { useRouter } from "vue-router"
 import { useStoryStore } from "@/stores/storyStore"
+import shortenLink from "@/libs/shortenURL"
 
 import Videos from "@/components/Videos.vue"
 import Scenes from "@/components/Scenes.vue"
@@ -129,8 +129,7 @@ const story = computed(() => store.currentStory)
 
 const unsavedMarker = computed(() => (store.isSaved ? "" : "*"))
 
-window.ss = store
-window.rr = useRouter()
+const router = useRouter()
 
 console.log(process.env.NODE_ENV)
 
@@ -161,6 +160,16 @@ const loadStory = async () => {
 const saveStory = async () => {
   const fname = await store.chooseStoryFilename()
   if (fname) await store.saveStory(fname.trim())
+}
+
+/**
+ * Share a link to view the current story (in its current state)
+ */
+const shareLink = async () => {
+  let link = store.getSharingURL(router)
+  if (process.env.NODE_ENV === "production") link = shortenLink(link)
+  await navigator.clipboard.writeText(link)
+  await alert("A link for viewing this project has been successfully copied to your clipboard!\n\n" + link)
 }
 
 /**
