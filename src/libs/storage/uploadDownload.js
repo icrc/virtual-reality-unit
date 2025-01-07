@@ -141,6 +141,4 @@ function downloadJSON(jsonObject, filename) {
 	dlAnchor.remove()
 }
 
-window.dj = downloadJSON
-
 export default ulDLStorage
