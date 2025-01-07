@@ -15,8 +15,7 @@
               <li>
                 <a
                   href="#"
-                  @click.prevent="async e => !e.target.attributes.disabled && (await saveStory())"
-                  v-bind="{ ...(store.isSaved && { disabled: true }) }"
+                  @click.prevent="saveStory"
                   >Save current {{ unsavedMarker }}</a
                 >
               </li>
