@@ -131,8 +131,6 @@ const unsavedMarker = computed(() => (store.isSaved ? "" : "*"))
 
 const router = useRouter()
 
-console.log(process.env.NODE_ENV)
-
 /**
  * Add a new story/project (checking if current saved first)
  *
@@ -167,7 +165,7 @@ const saveStory = async () => {
  */
 const shareLink = async () => {
   let link = store.getSharingURL(router)
-  if (process.env.NODE_ENV === "production") link = shortenLink(link)
+  if (process.env.NODE_ENV === "production") link = await shortenLink(link)
   await navigator.clipboard.writeText(link)
   await alert("A link for viewing this project has been successfully copied to your clipboard!\n\n" + link)
 }
