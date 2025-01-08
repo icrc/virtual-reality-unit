@@ -31,6 +31,34 @@
               </select>
             </label>
           </div>
+          <div>
+            <table>
+              <caption style="text-align: left;">
+                Events
+              </caption>
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>Description/Info</th>
+                  <th style="text-align: center;">Launch time (s)</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="event in scene.events" :key="event.id">
+                  <td>{{ EVENT_TYPE_NAMES[event.type] }}</td>
+                  <td>{{ event.type === EVENT_TYPES.choice ? event.data.text : event.data }}</td>
+                  <td style="text-align: center;">{{ event.launchTime }}</td>
+                  <td>Edit, Delete</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="4">Add new event</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
           <div style="justify-items: end">
             <button @click="deleteScene(scene.id)" style="width: fit-content">Delete</button>
           </div>
@@ -49,6 +77,14 @@ const NEW_SCENE_DEFAULTS = {
   endTime: -1,
   nextSceneId: -1,
   events: [],
+}
+const EVENT_TYPES = {
+  action: 'action',
+  choice: 'choice',
+}
+const EVENT_TYPE_NAMES = {
+  [EVENT_TYPES.action]: 'Action',
+  [EVENT_TYPES.choice]: 'Choice',
 }
 </script>
 
