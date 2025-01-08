@@ -91,7 +91,7 @@
                   <div style="--span: 4">
                     <label>Upload a file<input type="file" /></label>
                   </div>
-                  <div><input type="text" placeholder="Disabled" disabled="" /></div>
+                  <div><input type="text" placeholder="Disabled" disabled /></div>
                   <div>
                     <select aria-label="Select an animal">
                       <option value="1">Ape</option>
