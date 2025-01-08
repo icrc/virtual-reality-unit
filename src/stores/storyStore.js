@@ -5,6 +5,8 @@ import LZString from "lz-string"
 import { VERSION, storage } from "@/config"
 
 const STORAGE_KEY = "videopath_story"
+const LAST_SAVED_JSON_KEY = "videopath_last_saved_json"
+const CURRENT_FILENAME_KEY = "videopath_current_filename"
 
 // empty, blank story/project
 const EMPTY_STORY = {
@@ -68,6 +70,8 @@ export const useStoryStore = defineStore("story", () => {
   // set everything up
   function setup() {
     const persistedStory = JSON.parse(localStorage.getItem(STORAGE_KEY))
+    mostRecentSavedJSON = localStorage.getItem(LAST_SAVED_JSON_KEY) || ""
+    currentFilename.value = localStorage.getItem(CURRENT_FILENAME_KEY) || null
     newStory(persistedStory || undefined)
   }
 
@@ -76,11 +80,23 @@ export const useStoryStore = defineStore("story", () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(story))
   }
 
+  // persist most recently saved json
+  function persistMostRecentJSON(json) {
+    mostRecentSavedJSON = json
+    localStorage.setItem(LAST_SAVED_JSON_KEY, mostRecentSavedJSON)
+  }
+
+  // persist current filename
+  function persistCurrentFilename(filename) {
+    currentFilename.value = filename
+    localStorage.setItem(CURRENT_FILENAME_KEY, filename)
+  }
+
   // replace the current story with a new, blank story
   function newStory(data = EMPTY_STORY) {
     currentStory.value = structuredClone(data)
-    mostRecentSavedJSON = data === EMPTY_STORY ? JSON.stringify(currentStory.value) : ""
-    currentFilename.value = ""
+    persistMostRecentJSON(JSON.stringify(currentStory.value))
+    if (data === EMPTY_STORY) persistCurrentFilename("")
     currentHighestVideoId = 0
     currentHighestSceneId = 0
   }
@@ -96,8 +112,8 @@ export const useStoryStore = defineStore("story", () => {
     const story = await storage.load(filename)
     if (story) {
       currentStory.value = story
-      mostRecentSavedJSON = JSON.stringify(currentStory.value)
-      currentFilename.value = filename
+      persistMostRecentJSON(JSON.stringify(currentStory.value))
+      persistCurrentFilename(filename)
       currentHighestVideoId = getHighestVideoId(story) ?? 0
       currentHighestSceneId = getHighestSceneId(story) ?? 0
       return true
@@ -114,8 +130,8 @@ export const useStoryStore = defineStore("story", () => {
   async function saveStory(newFilename = false) {
     const savedFilename = await storage.save(newFilename || currentFilename.value, toRaw(currentStory.value))
     if (savedFilename) {
-      currentFilename.value = savedFilename
-      mostRecentSavedJSON = JSON.stringify(currentStory.value)
+      persistCurrentFilename(savedFilename)
+      persistMostRecentJSON(JSON.stringify(currentStory.value))
       isSaved.value = true
     }
     return savedFilename
@@ -241,9 +257,7 @@ export const useStoryStore = defineStore("story", () => {
   return {
     currentStory,
     isSaved,
-    get currentFilename() {
-      return currentFilename
-    },
+    currentFilename,
 
     newStory,
     pickStory,

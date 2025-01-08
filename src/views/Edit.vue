@@ -30,7 +30,7 @@
             <header>
               <h2>
                 <span :class="{ missing: !story.title }">{{ story.title || "No name" }}</span>
-                <span v-if="store.currentFilename"> ({{ store.currentFilename }})</span>
+                <span v-if="currentFilename"> ({{ currentFilename }})</span>
               </h2>
             </header>
             <form>
@@ -117,6 +117,7 @@ import { LAYOUT_NAMES } from "@/layouts"
 
 <script setup>
 import { computed } from "vue"
+import { storeToRefs } from "pinia"
 import { useRouter } from "vue-router"
 import { useStoryStore } from "@/stores/storyStore"
 import shortenLink from "@/libs/shortenURL"
@@ -126,6 +127,9 @@ import Scenes from "@/components/Scenes.vue"
 
 const store = useStoryStore()
 const story = computed(() => store.currentStory)
+
+const currentFilename = storeToRefs(store).currentFilename
+console.log(currentFilename.value)
 
 const unsavedMarker = computed(() => (store.isSaved ? "" : "*"))
 
