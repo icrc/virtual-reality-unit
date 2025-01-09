@@ -11,11 +11,13 @@
   },
   "dependencies": {
     "@vimeo/player": "^2.24.0",
+    "feather-icons": "^4.29.2",
     "json5": "^2.2.3",
     "lz-string": "^1.5.0",
     "pinia": "^2.2.4",
     "video.js": "^7.17.0",
     "vue": "^3.5.10",
+    "vue-feather": "^2.0.0",
     "vue-router": "^4.4.5"
   },
   "devDependencies": {
