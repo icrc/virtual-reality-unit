@@ -7,7 +7,7 @@
         <template v-for="(scene, idx) in story.scenes" :key="scene.id">
           <div :id="`scene_${scene.id}`">
             <label style="--span: 5"
-              ><strong>{{ scene.id }}</strong> - Title<input class="scene_title" placeholder="(No title)" type="text" v-model="scene.title"
+              ><strong>{{ scene.id }}</strong> - Title<input style="font-weight: bold;" class="scene_title" placeholder="(No title)" type="text" v-model="scene.title"
             /></label>
             <label style="--span: 3"
               >Next scene
@@ -31,34 +31,31 @@
               </select>
             </label>
           </div>
-          <div>
-            <table>
-              <caption style="text-align: left;">
-                Events
+          <div class="events_container">
+            <table :style="{ marginBottom: scene.events.length ? '0.5em' : '0' }">
+              <caption style="text-align: left">
+                <span>Events</span>
+                <button class="btn_addevent">Add new</button>
               </caption>
-              <thead>
+              <thead v-if="scene.events.length">
                 <tr>
                   <th>Type</th>
                   <th>Description/Info</th>
-                  <th style="text-align: center;">Launch time (s)</th>
-                  <th>Actions</th>
+                  <th style="text-align: center">Launch time (s)</th>
+                  <th style="text-align: center">Actions</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody v-if="scene.events.length">
                 <tr v-for="event in scene.events" :key="event.id">
                   <td>{{ EVENT_TYPE_NAMES[event.type] }}</td>
                   <td>{{ event.type === EVENT_TYPES.choice ? event.data.text : event.data }}</td>
-                  <td style="text-align: center;">{{ event.launchTime }}</td>
-                  <td>Edit, Delete</td>
+                  <td style="text-align: center">{{ event.launchTime }}</td>
+                  <td style="text-align: center"><icon type="edit" size="36" class="icon" title="Edit"/> <icon type="trash-2" size="36" class="icon" title="Delete"/></td>
                 </tr>
               </tbody>
-              <tfoot>
-                <tr>
-                  <td colspan="4">Add new event</td>
-                </tr>
-              </tfoot>
             </table>
           </div>
+
           <div style="justify-items: end">
             <button @click="deleteScene(scene.id)" style="width: fit-content">Delete</button>
           </div>
@@ -79,17 +76,18 @@ const NEW_SCENE_DEFAULTS = {
   events: [],
 }
 const EVENT_TYPES = {
-  action: 'action',
-  choice: 'choice',
+  action: "action",
+  choice: "choice",
 }
 const EVENT_TYPE_NAMES = {
-  [EVENT_TYPES.action]: 'Action',
-  [EVENT_TYPES.choice]: 'Choice',
+  [EVENT_TYPES.action]: "Action",
+  [EVENT_TYPES.choice]: "Choice",
 }
 </script>
 
 <script setup>
 import { ref, computed, nextTick } from "vue"
+import Icon from "vue-feather"
 
 const header = ref(null)
 
@@ -134,6 +132,32 @@ const addScene = () => {
   &:hover {
     background: #fff;
     color: var(--s-color-primary-80-fg);
+  }
+}
+
+.btn_addevent {
+  display: inline-block;
+  font-size: 80%;
+  width: fit-content;
+  height: auto;
+  padding: 0.5em 0.75em;
+  opacity: 0.8;
+  margin-left: 0.75em;
+}
+
+.events_container {
+  background-color: #eee;
+  margin: 1em 0;
+  padding: 0.5em 0.5em 0.5em 0.5em;
+}
+
+.icon {
+  cursor: pointer;
+  :deep(& svg) {
+    stroke: #555;
+  }
+  :deep(& svg):hover {
+    stroke: var(--s-color-primary);
   }
 }
 </style>
