@@ -153,7 +153,10 @@ const newStory = async () => {
 const loadStory = async () => {
   if (!(await confirmUnsaved())) return
   const filename = await store.pickStory()
-  filename && (await store.loadStory(filename))
+  if (filename) {
+    await store.loadStory(filename)
+    window.scrollTo(0, 0)
+  }
 }
 
 /**
