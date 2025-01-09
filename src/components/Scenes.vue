@@ -51,7 +51,7 @@
               </tr>
             </thead>
             <tbody v-if="scene.events.length">
-              <tr v-for="event in scene.events" :key="event.id">
+              <tr v-for="event in sortedEvents(scene.events)" :key="event.id">
                 <td>{{ EVENT_TYPE_NAMES[event.type] }}</td>
                 <td>{{ event.type === EVENT_TYPES.choice ? event.data.text : event.data }}</td>
                 <td style="text-align: center">{{ event.launchTime }}</td>
@@ -109,6 +109,8 @@ const props = defineProps({
 
 const story = computed(() => props.store.currentStory)
 const deleteScene = props.store.deleteScene
+
+const sortedEvents = (events) => events.sort((a, b) => a.launchTime - b.launchTime)
 
 /**
  * Adds a scene. Also makes sure first field on new scene is focused when it appears
