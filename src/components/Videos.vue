@@ -6,13 +6,15 @@
       <div style="--span: 4" class="s-grid videos-container">
         <template v-for="(video, idx) in story.videos" :key="idx">
           <div :id="`video_${video.id}`">
+            <label style="--span: 2"
+              ><strong>{{ video.id }}</strong> - Title<input class="video_name" placeholder="(Untitled video)" type="text" v-model="video.title"
+            /></label>
             <label style="--span: 1">
-              <strong>{{ video.id }}</strong> - Type
+              Type
               <select v-model="video.sourceType">
                 <option v-for="type in Object.values(VIDEO_SOURCE_TYPES)" :value="type.id" :key="type.id">{{ type.name }}</option>
               </select>
             </label>
-            <label style="--span: 2">Title<input class="video_name" placeholder="(Untitled video)" type="text" v-model="video.title" /></label>
             <label>URL<input type="text" v-model="video.url" /></label>
           </div>
           <div class="action_buttons">
@@ -31,11 +33,6 @@
       </div>
     </details>
   </article>
-
-  <!--   <div v-if="useUtilPlayer" class="util_player">
-    <player @ready="onPlayerReady" @error="onPlayerError" :options="playerOptions" />
-  </div>
- -->
 
   <video-service-provider ref="videoInfo" />
 </template>
