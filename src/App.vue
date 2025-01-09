@@ -18,14 +18,13 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { computed } from "vue"
+import { useRoute } from "vue-router"
 import { useFullscreen } from "@/composables/fullscreen"
 
 const { isFullscreen } = useFullscreen()
 const route = useRoute()
-const showContentOnly = computed(() => route.name === 'play')
-
+const showContentOnly = computed(() => route.name === "play")
 </script>
 
 <style>
@@ -41,5 +40,11 @@ const showContentOnly = computed(() => route.name === 'play')
 
 .content-only {
   padding-top: 1.5em;
+}
+
+.icon {
+  height: 1.25em;
+  aspect-ratio: 1;
+  vertical-align: text-top;
 }
 </style>
