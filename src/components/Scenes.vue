@@ -93,10 +93,10 @@ const EVENT_TYPE_NAMES = {
 </script>
 
 <script setup>
-import { ref, computed, nextTick } from "vue"
+import { ref, computed, nextTick, useTemplateRef } from "vue"
 import Icon from "vue-feather"
 
-const header = ref(null)
+const header = useTemplateRef('header')
 
 const props = defineProps({
   store: {

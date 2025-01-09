@@ -57,12 +57,12 @@ const NEW_SCENE_DEFAULTS = {
 </script>
 
 <script setup>
-import { ref, computed, nextTick } from "vue"
+import { ref, computed, nextTick, useTemplateRef } from "vue"
 
 import VideoServiceProvider from "@/components/VideoServiceProvider.vue"
 const videoInfo = ref(null)
 
-const header = ref(null)
+const header = useTemplateRef('header')
 
 const props = defineProps({
   store: {
