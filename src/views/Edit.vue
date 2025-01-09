@@ -129,7 +129,6 @@ const store = useStoryStore()
 const story = computed(() => store.currentStory)
 
 const currentFilename = storeToRefs(store).currentFilename
-console.log(currentFilename.value)
 
 const unsavedMarker = computed(() => (store.isSaved ? "" : "*"))
 
