@@ -56,7 +56,7 @@
                 <td>{{ event.type === EVENT_TYPES.choice ? event.data.text : event.data }}</td>
                 <td style="text-align: center">{{ event.launchTime }}</td>
                 <td style="text-align: center">
-                  <icon type="edit" size="36" class="icon" title="Edit" /> <icon type="trash-2" size="36" class="icon" title="Delete" />
+                  <icon type="edit" size="36" class="icon" title="Edit" @click="eventEditor.show()" />&nbsp;<icon type="trash-2" size="36" class="icon" title="Delete" />
                 </td>
               </tr>
             </tbody>
@@ -71,6 +71,8 @@
       </div>
     </details>
   </article>
+
+  <event-editor ref="eventEditor" />
 </template>
 
 <script>
@@ -96,7 +98,12 @@ const EVENT_TYPE_NAMES = {
 import { ref, computed, nextTick, useTemplateRef } from "vue"
 import Icon from "vue-feather"
 
-const header = useTemplateRef('header')
+import EventEditor from "@/components/EventEditor.vue"
+
+const header = useTemplateRef("header")
+
+// ** HERE ** temp code
+const eventEditor = useTemplateRef("eventEditor")
 
 const props = defineProps({
   store: {
@@ -110,7 +117,7 @@ const props = defineProps({
 const story = computed(() => props.store.currentStory)
 const deleteScene = props.store.deleteScene
 
-const sortedEvents = (events) => events.sort((a, b) => a.launchTime - b.launchTime)
+const sortedEvents = events => events.sort((a, b) => a.launchTime - b.launchTime)
 
 /**
  * Adds a scene. Also makes sure first field on new scene is focused when it appears
@@ -128,7 +135,7 @@ const addScene = () => {
   &:has(*:focus) {
     margin: -0.75em;
     background-color: #f3f3f3;
-    border:1px solid #888;
+    border: 1px solid #888;
     border-radius: 0.5em;
     & .events_container {
       background-color: #e3e3e3;
