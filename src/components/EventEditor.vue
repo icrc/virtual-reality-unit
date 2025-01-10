@@ -162,7 +162,6 @@ defineExpose({
 
 <style scoped>
 .dialog {
-  overflow: hidden;
   font-size: 80% !important;
 }
 
