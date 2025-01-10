@@ -1,13 +1,12 @@
 <!-- Event Editor Component - for editing event details -->
 <template>
-  <div v-if="visible" class="overlay">
-    <div class="s-container modified-s-container">
+    <dialog ref="dialog" class="s-container modified-s-container dialog" @click="handleModalClick">
       <div class="s-grid">
         <div>
           <main>
-            <article @click="show(false)">
+            <article>
               <header>
-                <h3>Event</h3>
+                <h3>Event<icon type="x" size="36" class="icon btn_close" title="Close (losing changes)" @click="show(false)" /></h3>
               </header>
               <form>
                 a <br>a <br>a <br>a <br>a <br>a <br>a <br>a <br>a <br>a <br>
@@ -16,16 +15,16 @@
           </main>
         </div>
       </div>
-    </div>
-  </div>
+  </dialog>
 </template>
 
 <script></script>
 
 <script setup>
-import { ref, computed } from "vue"
+import { ref, useTemplateRef } from "vue"
+import Icon from "vue-feather"
 
-const visible = ref(false)
+const dialog = useTemplateRef('dialog')
 
 const props = defineProps({
   // store: {
@@ -37,7 +36,19 @@ const props = defineProps({
 })
 
 const show = (state = true) => {
-  visible.value = state
+  if (state) {
+    dialog.value.showModal()
+    document.body.style.overflow = 'hidden'  
+  } else {
+    dialog.value.close()
+    document.body.style.overflow = 'auto'
+  }
+}
+
+const handleModalClick = (event) => {
+  if (event.target === dialog.value) {
+    show(false)
+  }
 }
 
 defineExpose({
@@ -46,14 +57,8 @@ defineExpose({
 </script>
 
 <style scoped>
-.overlay {
-  position: fixed;
-  inset: 0 0 0 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  background-color: #0008;
-  z-index: 10000;
+.dialog {
+  overflow: hidden;
 }
 
 .modified-s-container {
@@ -61,5 +66,9 @@ defineExpose({
   width: 80%;
   max-width: 750px;
   min-width: 350px;
+}
+
+.btn_close {
+  float: right;
 }
 </style>

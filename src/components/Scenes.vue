@@ -40,7 +40,7 @@
           <table :style="{ marginBottom: scene.events.length ? '0.5em' : '0' }">
             <caption style="text-align: left">
               <span>Events</span>
-              <button class="btn_addevent">Add new</button>
+              <button class="btn_addevent" @click="eventEditor.show()">Add new</button>
             </caption>
             <thead v-if="scene.events.length">
               <tr>
