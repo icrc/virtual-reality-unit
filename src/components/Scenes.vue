@@ -80,6 +80,7 @@
 </template>
 
 <script>
+import { EVENT_TYPES, EVENT_TYPE_NAMES } from "@/components/EventEditor.vue"
 const NEW_SCENE_DEFAULTS = {
   videoId: -1,
   title: "",
@@ -87,14 +88,6 @@ const NEW_SCENE_DEFAULTS = {
   endTime: -1,
   nextSceneId: -1,
   events: [],
-}
-const EVENT_TYPES = {
-  action: "action",
-  choice: "choice",
-}
-const EVENT_TYPE_NAMES = {
-  [EVENT_TYPES.action]: "Action",
-  [EVENT_TYPES.choice]: "Choice",
 }
 </script>
 
