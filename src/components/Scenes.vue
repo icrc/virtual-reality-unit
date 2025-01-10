@@ -56,7 +56,11 @@
                 <td>{{ event.type === EVENT_TYPES.choice ? event.data.text : event.data }}</td>
                 <td style="text-align: center">{{ event.launchTime }}</td>
                 <td style="text-align: center">
-                  <icon type="edit" size="36" class="icon" title="Edit" @click="eventEditor.show()" />&nbsp;<icon type="trash-2" size="36" class="icon" title="Delete" />
+                  <icon type="edit" size="36" class="icon" title="Edit" @click="eventEditor.show()" />&nbsp;<icon
+                    type="trash-2"
+                    size="36"
+                    class="icon"
+                    title="Delete" />
                 </td>
               </tr>
             </tbody>
@@ -117,7 +121,12 @@ const props = defineProps({
 const story = computed(() => props.store.currentStory)
 const deleteScene = props.store.deleteScene
 
-const sortedEvents = events => events.sort((a, b) => a.launchTime - b.launchTime)
+const sortedEvents = events =>
+  events.sort(({ launchTime: a }, { launchTime: b }) => {
+    if (a == -1) a = Infinity
+    if (b == -1) b = Infinity
+    return a - b
+  })
 
 /**
  * Adds a scene. Also makes sure first field on new scene is focused when it appears
