@@ -80,7 +80,7 @@
                     <tbody>
                       <tr v-for="choice in [1, 2, 3, 4]" :key="choice">
                         <td><input placeholder="Sample text" type="text" /></td>
-                        <td><input placeholder="Sample action" type="text" /></td>
+                        <td><input placeholder="Sample action" type="text" /><button>s</button></td>
                         <td style="position: relative">
                           <span class="choice_options">
                           <icon type="arrow-up" size="36" class="icon" title="Move up" />
@@ -190,9 +190,6 @@ defineExpose({
   padding: 0.5rem 0.5rem 0.5rem 0.5rem;
   & td {
     padding:0.5rem;
-  }
-  & input {
-    padding: 0.5rem;
   }
 }
 
