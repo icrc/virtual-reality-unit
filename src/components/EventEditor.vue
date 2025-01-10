@@ -12,7 +12,7 @@
               <div>
                 <label style="--span: 3">
                   Type
-                  <select v-model="eventType">
+                  <select v-model="eventType" @change="fixScroll">
                     <option :value="EVENT_TYPES.choice">{{ EVENT_TYPE_NAMES[EVENT_TYPES.choice] }}</option>
                     <option :value="EVENT_TYPES.action">{{ EVENT_TYPE_NAMES[EVENT_TYPES.action] }}</option>
                   </select>
@@ -113,7 +113,7 @@ export const EVENT_TYPE_NAMES = {
 </script>
 
 <script setup>
-import { ref, useTemplateRef } from "vue"
+import { ref, useTemplateRef, nextTick } from "vue"
 import Icon from "vue-feather"
 
 const dialog = useTemplateRef("dialog")
@@ -134,11 +134,19 @@ const eventType = ref(EVENT_TYPES.choice)
 const show = (state = true) => {
   if (state) {
     dialog.value.showModal()
-    document.body.style.overflow = "hidden"
+    setScrollAvailable(false)
   } else {
     dialog.value.close()
-    document.body.style.overflow = "auto"
+    setScrollAvailable(true)
   }
+}
+
+const fixScroll = () => {
+  nextTick(() => setScrollAvailable(false))
+}
+
+const setScrollAvailable = (state=true) => {
+  document.body.style.overflow = state? "auto" : "hidden";
 }
 
 const handleModalClick = event => {
