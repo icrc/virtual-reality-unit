@@ -199,6 +199,9 @@ defineExpose({
   position: absolute;
   inset: 0 0 0 0;
   justify-content: center;
+  :deep(& i) {
+    cursor: pointer;
+  }
 }
 
 </style>

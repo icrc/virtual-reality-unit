@@ -47,7 +47,7 @@
                 <th>Type</th>
                 <th>Description/Info</th>
                 <th style="text-align: center">Launch time (s)</th>
-                <th style="text-align: center">Actions</th>
+                <th style="text-align: center"></th>
               </tr>
             </thead>
             <tbody v-if="scene.events.length">
