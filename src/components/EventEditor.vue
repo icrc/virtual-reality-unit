@@ -6,13 +6,13 @@
         <main>
           <article>
             <header>
-              <h3>Event<icon type="x" size="36" class="icon btn_close" title="Close (lose changes)" @click="show(false)" /></h3>
+              <h3>{{ title }}<icon type="x" class="icon btn_close" title="Close (lose changes)" @click="show(false)" /></h3>
             </header>
             <form class="s-grid">
               <div>
                 <label style="--span: 3">
                   Type
-                  <select v-model="eventType" @change="fixScroll">
+                  <select autofocus v-model="eventType" @change="fixScroll">
                     <option :value="EVENT_TYPES.choice">{{ EVENT_TYPE_NAMES[EVENT_TYPES.choice] }}</option>
                     <option :value="EVENT_TYPES.action">{{ EVENT_TYPE_NAMES[EVENT_TYPES.action] }}</option>
                   </select>
@@ -33,12 +33,7 @@
                   <label style="--span: 2">Time limit (s)<input placeholder="1" type="number" min="1" /></label>
                   <label style="--span: 4">
                     Timeout action
-                    <span class="action_edit" style="padding-top: 0.25rem">
-                      <input placeholder="None" type="text" />
-                      <button>
-                        <icon type="edit" size="36" class="icon btn_close" title="Close (lose changes)" @click="show(false)" />
-                      </button>
-                    </span>
+                    <action-code-editor style="padding-top: 0.25rem" />
                   </label>
                 </div>
                 <div v-else>
@@ -80,12 +75,12 @@
                     <tbody>
                       <tr v-for="choice in [1, 2, 3, 4]" :key="choice">
                         <td><input placeholder="Sample text" type="text" /></td>
-                        <td><input placeholder="Sample action" type="text" /><button>s</button></td>
+                        <td><action-code-editor /></td>
                         <td style="position: relative">
                           <span class="choice_options">
-                          <icon type="arrow-up" size="36" class="icon" title="Move up" />
-                          <icon type="arrow-down" size="36" class="icon" title="Move down" />
-                          <icon type="trash-2" size="36" class="icon" title="Delete" />
+                            <icon type="arrow-up" class="icon" title="Move up" />
+                            <icon type="arrow-down" class="icon" title="Move down" />
+                            <icon type="trash-2" class="icon" title="Delete" />
                           </span>
                         </td>
                       </tr>
@@ -93,6 +88,21 @@
                   </table>
                 </div>
               </template>
+
+              <template v-if="eventType == EVENT_TYPES.action">
+                <div>
+                  <span><action-code-editor /></span>
+                </div>
+              </template>
+
+              <div><hr /></div>
+
+              <div>
+                <span class="edit_event_actions">
+                  <button class="s-outline" @click="show(false)">Cancel</button>
+                  <button @click="returnEvent">Accept</button>
+                </span>
+              </div>
             </form>
           </article>
         </main>
@@ -110,11 +120,14 @@ export const EVENT_TYPE_NAMES = {
   [EVENT_TYPES.action]: "Action",
   [EVENT_TYPES.choice]: "Choice",
 }
+const BLANK_NEW_EVENT = {}
 </script>
 
 <script setup>
-import { ref, useTemplateRef, nextTick } from "vue"
+import { ref, useTemplateRef, nextTick, toRaw, onMounted } from "vue"
 import Icon from "vue-feather"
+
+import ActionCodeEditor from "@/components/ActionCodeEditor.vue"
 
 const dialog = useTemplateRef("dialog")
 
@@ -131,13 +144,16 @@ const isTimedChoice = ref(false)
 const backgroundType = ref("block")
 const eventType = ref(EVENT_TYPES.choice)
 
+const title = ref("")
+
+let activePromiseControl = null
+
 const show = (state = true) => {
   if (state) {
     dialog.value.showModal()
     setScrollAvailable(false)
   } else {
     dialog.value.close()
-    setScrollAvailable(true)
   }
 }
 
@@ -145,18 +161,63 @@ const fixScroll = () => {
   nextTick(() => setScrollAvailable(false))
 }
 
-const setScrollAvailable = (state=true) => {
-  document.body.style.overflow = state? "auto" : "hidden";
+const setScrollAvailable = (state = true) => {
+  document.body.style.overflow = state ? "auto" : "hidden"
 }
 
 const handleModalClick = event => {
-  if (event.target === dialog.value) {
-    show(false)
+  if (event.target === dialog.value) show(false)
+}
+
+const exit = () => {
+  setScrollAvailable(true)
+  activePromiseControl?.resolve(null)
+}
+
+const returnEvent = () => {
+  show(false)
+  activePromiseControl.resolve(makeEventObject())
+}
+
+const editEvent = (event, windowTitle) => {
+  setupUI(event)
+  title.value = windowTitle
+  const promise = new Promise((resolve, reject) => {
+    activePromiseControl = {
+      resolve,
+      reject,
+    }
+  })
+  show()
+  return promise
+}
+
+const makeEventObject = () => {
+  return {
+    event: "Yes!",
   }
 }
 
+const createNew = async () => {
+  const event = structuredClone(BLANK_NEW_EVENT)
+  return await editEvent(event, "Add Event")
+}
+
+const edit = async event => {
+  const eventToEdit = structuredClone(toRaw(event))
+  console.log("Editing event: ", eventToEdit)
+  return await editEvent(eventToEdit, "Edit Event")
+}
+
+const setupUI = event => {}
+
+onMounted(() => {
+  dialog.value.addEventListener("close", exit)
+})
+
 defineExpose({
-  show,
+  createNew,
+  edit,
 })
 </script>
 
@@ -189,7 +250,7 @@ defineExpose({
   border-radius: 0.5rem;
   padding: 0.5rem 0.5rem 0.5rem 0.5rem;
   & td {
-    padding:0.5rem;
+    padding: 0.5rem;
   }
 }
 
@@ -204,4 +265,13 @@ defineExpose({
   }
 }
 
+.edit_event_actions {
+  flex-direction: row;
+  display: flex;
+  gap: 0.25rem;
+  justify-content: end;
+  & button {
+    width: fit-content;
+  }
+}
 </style>

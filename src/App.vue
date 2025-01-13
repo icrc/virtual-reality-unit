@@ -47,4 +47,7 @@ const showContentOnly = computed(() => route.name === "play")
   aspect-ratio: 1;
   vertical-align: text-top;
 }
+button .button-icon svg {
+  stroke: #fff !important;
+}
 </style>

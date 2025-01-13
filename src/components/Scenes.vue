@@ -4,7 +4,6 @@
     <details ref="header" class="scenes_header">
       <summary role="button">Scenes ({{ story.scenes.length }})<button title="Add scene" @click="addScene" class="add_button">+</button></summary>
       <div style="--span: 4" class="s-grid scenes-container" v-for="(scene, idx) in story.scenes" :key="scene.id">
-        <!-- <template v-for="(scene, idx) in story.scenes" :key="scene.id"> -->
         <div :id="`scene_${scene.id}`">
           <label style="--span: 5"
             ><strong>{{ scene.id }}</strong> - Title<input
@@ -40,7 +39,7 @@
           <table :style="{ marginBottom: scene.events.length ? '0.5em' : '0' }">
             <caption style="text-align: left">
               <span>Events</span>
-              <button class="btn_addevent" @click="eventEditor.show()">Add new</button>
+              <button class="btn_addevent" @click="addEventToScene(scene)">Add new</button>
             </caption>
             <thead v-if="scene.events.length">
               <tr>
@@ -56,11 +55,7 @@
                 <td>{{ event.type === EVENT_TYPES.choice ? event.data.text : event.data }}</td>
                 <td style="text-align: center">{{ event.launchTime }}</td>
                 <td style="text-align: center">
-                  <icon type="edit" size="36" class="icon" title="Edit" @click="eventEditor.show()" />&nbsp;<icon
-                    type="trash-2"
-                    size="36"
-                    class="icon"
-                    title="Delete" />
+                  <icon type="edit" class="icon" title="Edit" @click="editEventForScene(scene, event)" />&nbsp;<icon type="trash-2" class="icon" title="Delete" />
                 </td>
               </tr>
             </tbody>
@@ -71,7 +66,6 @@
           <button @click="deleteScene(scene.id)" style="width: fit-content">Delete</button>
         </div>
         <hr v-if="idx < story.scenes.length - 1" />
-        <!-- </template> -->
       </div>
     </details>
   </article>
@@ -129,6 +123,17 @@ const addScene = () => {
   header.value.open = true
   nextTick(() => document.querySelector(`#scene_${id} .scene_title`).focus())
 }
+
+const addEventToScene = async scene => {
+  const newEvent = await eventEditor.value.createNew()
+  console.log('New event:', newEvent)
+}
+
+const editEventForScene = async (scene, event) => {
+  const editedEvent = await eventEditor.value.edit(event)
+  console.log('Edited event:', editedEvent)
+}
+
 </script>
 
 <style scoped>
