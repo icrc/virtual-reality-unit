@@ -30,7 +30,7 @@
             <header>
               <h2>
                 <span :class="{ missing: !story.title }">{{ story.title || "No name" }}</span>
-                <span v-if="currentFilename"> ({{ currentFilename }})</span>
+                <span v-if="currentFilename" class="current_filename"> ({{ currentFilename }})</span>
               </h2>
             </header>
             <form>
@@ -194,5 +194,10 @@ const confirmUnsaved = async () => {
 
 h2 > .missing {
   opacity: 0.3;
+}
+
+.current_filename {
+  font-weight:normal;
+  color: #888;
 }
 </style>
