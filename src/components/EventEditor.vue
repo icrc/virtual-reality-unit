@@ -76,8 +76,8 @@
                         <td><action-code-editor style="height: 2.6rem" v-model="choice.action" /></td>
                         <td style="position: relative">
                           <span class="choice_options">
-                            <icon type="arrow-up" class="icon" title="Move up" />
-                            <icon type="arrow-down" class="icon" title="Move down" />
+                            <icon :class="{disabled_icon: index==0}" type="arrow-up" class="icon" title="Move up" />
+                            <icon :class="{disabled_icon: index==3}" type="arrow-down" class="icon" title="Move down" />
                             <icon type="trash-2" class="icon" title="Delete" />
                           </span>
                         </td>
@@ -361,20 +361,13 @@ defineExpose({
   padding-bottom: 0.75rem;
 }
 
-/*:has(> input.show_end_time[data-val="-1"]) {
-  position: relative;
+.disabled_icon {
+  :deep(& svg) {
+    stroke: #ccc !important;
+  }
 }
-:has(> input.show_end_time[data-val="-1"])::before {
-  content: 'END';
-  position: absolute;
-  left: 0;
-  height: 0.5rem;
-  line-height: 0.5em;
-  right: 0;
-  text-align: center;
-  font-size: 0.75rem;
-  bottom: 0;
-  margin-bottom: -0.75rem;
-  color: blue;
-}*/
+:deep(.disabled_icon) {
+  cursor: default !important;
+  pointer-events: none;
+}
 </style>
