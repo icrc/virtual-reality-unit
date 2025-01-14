@@ -23,7 +23,7 @@
         </div>
         <div>
           <label style="--span: 1">Start time (s)<input placeholder="n/a" type="number" min="-1" v-model="scene.startTime" /></label>
-          <label style="--span: 1">End time (-1: end)<input placeholder="n/a" type="number" min="-1" v-model="scene.endTime" /></label>
+          <label style="--span: 1">End time (-1: end)<input class="show_end_time" :data-val="scene.endTime" placeholder="n/a" type="number" min="-1" v-model="scene.endTime" /></label>
           <label style="--span: 3"
             >Video
             <select v-model="scene.videoId">
@@ -51,10 +51,10 @@
             </thead>
             <tbody v-if="scene.events.length">
               <tr v-for="event in sortedEvents(scene.events)" :key="event.id">
-                <td>{{ EVENT_TYPE_NAMES[event.type] }}</td>
+                <td>{{ eventTypeLabel(event) }}</td>
                 <td>{{ event.type === EVENT_TYPES.choice ? event.data.text : event.data }}</td>
                 <td style="text-align: center">{{ event.launchTime }}</td>
-                <td style="text-align: center">
+                <td style="text-align: center; white-space: nowrap;">
                   <icon type="edit" class="icon" title="Edit" @click="editEventForScene(scene, event)" />&nbsp;<icon type="trash-2" class="icon" title="Delete" />
                 </td>
               </tr>
@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import { EVENT_TYPES, EVENT_TYPE_NAMES } from "@/components/EventEditor.vue"
+import { EVENT_TYPES, EVENT_TYPE_NAMES, CHOICE_TYPES } from "@/components/EventEditor.vue"
 const NEW_SCENE_DEFAULTS = {
   videoId: -1,
   title: "",
@@ -132,6 +132,14 @@ const addEventToScene = async scene => {
 const editEventForScene = async (scene, event) => {
   const editedEvent = await eventEditor.value.edit(event)
   console.log('Edited event:', editedEvent)
+}
+
+const eventTypeLabel = event => {
+  let label = EVENT_TYPE_NAMES[event.type]
+  if (event?.data?.type == CHOICE_TYPES.timed) {
+    label += ` (${event.data.options.timeLimit}s)`
+  }
+  return label
 }
 
 </script>
