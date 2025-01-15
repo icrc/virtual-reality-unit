@@ -3,6 +3,7 @@ import { ref, computed, watch, toRaw } from "vue"
 import LZString from "lz-string"
 
 import { VERSION, storage } from "@/config"
+import { DEFAULT_LAYOUT } from "@/layouts"
 
 const STORAGE_KEY = "videopath_story"
 const LAST_SAVED_JSON_KEY = "videopath_last_saved_json"
@@ -17,7 +18,7 @@ const EMPTY_STORY = {
   initialSceneId: -1,
   locales: ["en"],
 
-  defaultChoiceLayout: "",
+  defaultChoiceLayout: DEFAULT_LAYOUT,
   defaultChoiceLayoutSettings: {},
 
   videos: [],
