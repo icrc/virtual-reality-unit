@@ -37,8 +37,7 @@
               <div style="--span: 4" class="s-grid">
                 <div>
                   <label style="--span: 5">Project name<input placeholder="(No name)" type="text" v-model="story.title" /></label>
-                  <label style="--span: 3"
-                    >Initial scene
+                  <label style="--span: 3">Initial scene
                     <select v-model="story.initialSceneId">
                       <option v-if="story.scenes.length" :value="-1">Please select a scene...</option>
                       <option v-if="story.scenes.length" v-for="scene in story.scenes" :key="scene.id" :value="scene.id">
@@ -48,10 +47,8 @@
                     </select>
                   </label>
                   <label style="--span: 5">Author<input placeholder="n/a" type="text" v-model="story.author" /></label>
-                  <label style="--span: 3"
-                    >Default choice layout
+                  <label style="--span: 3">Default choice layout
                     <select v-model="story.defaultChoiceLayout">
-                      <option value="">None</option>
                       <option v-for="layout in LAYOUT_NAMES" :key="layout.id" :value="layout.id">
                         {{ layout.name }}
                       </option>
