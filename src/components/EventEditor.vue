@@ -10,13 +10,25 @@
             </header>
             <form class="s-grid">
               <div>
-                <label style="--span: 3">
+                <label style="--span: 2">
                   Type
                   <select autofocus v-model="eventType" @change="fixScroll">
                     <option v-for="ctype in EVENT_TYPES" :value="ctype">{{ EVENT_TYPE_NAMES[ctype] }}</option>
                   </select>
                 </label>
-                <label style="--span: 3">Launch time (s) - Use -1 for end<input class="show_end_time" :data-val="launchTime" placeholder="n/a" type="number" min="-1" v-model="launchTime" /></label>
+                <label style="--span: 2"
+                  >Launch time (s) - Use -1 for end
+                  <input class="show_end_time" :data-val="launchTime" placeholder="n/a" type="number" min="-1" v-model="launchTime"
+                /></label>
+                <label style="--span: 2" v-if="eventType == EVENT_TYPES.choice">
+                  Choice layout
+                  <select>
+                    <option value="">Project default ({{ LAYOUTS[store.currentStory.defaultChoiceLayout].name }})</option>
+                    <option v-for="layout in LAYOUT_NAMES" :key="layout.id" :value="layout.id">
+                      {{ layout.name }}
+                    </option>
+                  </select>
+                </label>
               </div>
               <div><hr /></div>
               <template v-if="eventType == EVENT_TYPES.choice">
@@ -51,8 +63,8 @@
                   <span style="--span: 3" v-if="backgroundType === 'blockLoop'">
                     Range (s) - Use -1 for end of scene
                     <span style="display: flex; gap: 0.5rem; padding-top: 0.25rem">
-                      <input style="width: 7rem;" type="number" min="0" v-model="loopStartTime" /><span style="padding-top: 0.75rem">to</span>
-                      <span><input style="width: 7rem;" class="show_end_time" :data-val="loopEndTime" type="number" min="-1" v-model="loopEndTime" /></span>
+                      <input style="width: 7rem" type="number" min="0" v-model="loopStartTime" /><span style="padding-top: 0.75rem">to</span>
+                      <span><input style="width: 7rem" class="show_end_time" :data-val="loopEndTime" type="number" min="-1" v-model="loopEndTime" /></span>
                     </span>
                   </span>
                 </div>
@@ -76,8 +88,8 @@
                         <td><action-code-editor style="height: 2.6rem" v-model="choice.action" /></td>
                         <td style="position: relative">
                           <span class="choice_options">
-                            <icon :class="{disabled_icon: index==0}" type="arrow-up" class="icon" title="Move up" />
-                            <icon :class="{disabled_icon: index==3}" type="arrow-down" class="icon" title="Move down" />
+                            <icon :class="{ disabled_icon: index == 0 }" type="arrow-up" class="icon" title="Move up" />
+                            <icon :class="{ disabled_icon: index == 3 }" type="arrow-down" class="icon" title="Move down" />
                             <icon type="trash-2" class="icon" title="Delete" />
                           </span>
                         </td>
@@ -110,6 +122,8 @@
 </template>
 
 <script>
+import { LAYOUTS, LAYOUT_NAMES } from "@/layouts"
+
 export const EVENT_TYPES = {
   action: "action",
   choice: "choice",
@@ -155,7 +169,11 @@ const BLANK_NEW_EVENT = {
 import { ref, useTemplateRef, nextTick, toRaw, onMounted } from "vue"
 import Icon from "vue-feather"
 
+import { useStoryStore } from "@/stores/storyStore"
+
 import ActionCodeEditor from "@/components/ActionCodeEditor.vue"
+
+const store = useStoryStore()
 
 const dialog = useTemplateRef("dialog")
 
@@ -171,6 +189,7 @@ const props = defineProps({
 const isTimedChoice = ref(false)
 const backgroundType = ref(BACKGROUND_TYPES.blockPause)
 const eventType = ref(EVENT_TYPES.choice)
+const layout = ref("")
 const launchTime = ref(-1)
 const eventActionCode = ref("")
 const mainChoiceText = ref("")
@@ -257,9 +276,11 @@ const setupUIForChoice = event => {
   backgroundType.value = BACKGROUND_TYPES.blockPause
   isTimedChoice.value = event.data.type == CHOICE_TYPES.timed
   mainChoiceText.value = event.data.text
+  layout.value = event.data.layout
   loopStartTime.value = 0
   loopEndTime.value = -1
   blockFrameTime.value = 0
+  layout.value=""
   if (!isTimedChoice.value) {
     if (event.data.options.hasOwnProperty("frame")) {
       backgroundType.value = BACKGROUND_TYPES.blockFrame
@@ -274,8 +295,8 @@ const setupUIForChoice = event => {
     timeLimit.value = event.data.options.timeLimit
     timeoutActionCode.value = event.data.options.defaultAction
   }
-  let btnArr = (Array.isArray(event.data.buttons) ? event.data.buttons : []).map(btn => (btn.text || btn.action) ? btn : undefined).filter(x=>x)
-  if (btnArr.length < 4) btnArr = [...btnArr, ...(Array.from({length: 4-btnArr.length}, () => ({ text: "", action: "" }) ))]
+  let btnArr = (Array.isArray(event.data.buttons) ? event.data.buttons : []).map(btn => (btn.text || btn.action ? btn : undefined)).filter(x => x)
+  if (btnArr.length < 4) btnArr = [...btnArr, ...Array.from({ length: 4 - btnArr.length }, () => ({ text: "", action: "" }))]
   buttons.value = btnArr
 }
 
