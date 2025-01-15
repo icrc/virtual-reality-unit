@@ -76,7 +76,8 @@ const handleStart = async () => {
  * @return     {Object}  The story data.
  */
 const getStoryData = () => {
-  if (uncompressStoryData || useRoute().name == 'play') {
+  const route = useRoute()
+  if (uncompressStoryData || route?.name == 'play') {
     const story = uncompressStoryData || store.uncompressStoryData(props.data)
     uncompressStoryData = structuredClone(story)
     if (!story) {
