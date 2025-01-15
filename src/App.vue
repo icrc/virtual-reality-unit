@@ -1,7 +1,7 @@
 <template>
   <header v-if="!showContentOnly" :class="{ main_nav: true, full_screen: isFullscreen }">
     <nav class="s-container">
-      <div>ICRC VideoPath</div>
+      <div><icon type="video" class="icon heading_icon"/> ICRC VideoPath</div>
       <menu>
         <li><RouterLink to="/">Home</RouterLink></li>
         <li><RouterLink to="/view">View</RouterLink></li>
@@ -18,6 +18,8 @@
 </template>
 
 <script setup>
+import Icon from "vue-feather"
+
 import { computed } from "vue"
 import { useRoute } from "vue-router"
 import { useFullscreen } from "@/composables/fullscreen"
@@ -50,11 +52,13 @@ const showContentOnly = computed(() => route.name === "play")
 button .button-icon svg {
   stroke: #fff !important;
 }
-label:has(> input.show_end_time[data-val="-1"]), span:has(> input.show_end_time[data-val="-1"])  {
+label:has(> input.show_end_time[data-val="-1"]),
+span:has(> input.show_end_time[data-val="-1"]) {
   position: relative;
 }
-label:has(> input.show_end_time[data-val="-1"])::before, span:has(> input.show_end_time[data-val="-1"])::before {
-  content: 'END';
+label:has(> input.show_end_time[data-val="-1"])::before,
+span:has(> input.show_end_time[data-val="-1"])::before {
+  content: "END";
   position: absolute;
   left: 0;
   height: 0.5rem;
@@ -65,5 +69,12 @@ label:has(> input.show_end_time[data-val="-1"])::before, span:has(> input.show_e
   bottom: 0;
   margin-bottom: -0.75rem;
   color: blue;
+}
+
+.heading_icon {
+  height: 2em;
+  vertical-align: middle;
+  margin-right: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 </style>
