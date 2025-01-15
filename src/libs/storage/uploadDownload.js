@@ -51,8 +51,8 @@ const ulDLStorage = {
 		inputElement = createInputElement()
 		let [file, err] = await pickFile()
 		err && console.log("Error picking file:", err)
-		const fname = new String(file.name)
-		fname.fileObj = file
+		const fname = file ? new String(file.name) : null 
+		if (fname) fname.fileObj = file
 		return fname
 	},
 	chooseSaveFilename: async function chooseSaveFilename(suggestedFilename = "") {
