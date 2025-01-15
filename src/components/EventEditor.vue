@@ -22,7 +22,7 @@
                 /></label>
                 <label style="--span: 2" v-if="eventType == EVENT_TYPES.choice">
                   Choice layout
-                  <select>
+                  <select v-model="layout">
                     <option value="">Project default ({{ LAYOUTS[store.currentStory.defaultChoiceLayout].name }})</option>
                     <option v-for="layout in LAYOUT_NAMES" :key="layout.id" :value="layout.id">
                       {{ layout.name }}
@@ -52,7 +52,7 @@
                   <label style="--span: 3">
                     Background
                     <select v-model="backgroundType">
-                      <option :value="bType" v-for="(bTypeName, bType) in BACKGROUND_TYPE_NAMES">{{ bTypeName }}</option>
+                      <option :value="bgType" v-for="(bgTypeName, bgType) in BACKGROUND_TYPE_NAMES">{{ bgTypeName }}</option>
                     </select>
                   </label>
                   <label style="--span: 3" v-if="backgroundType === 'block'"> </label>
@@ -88,9 +88,9 @@
                         <td><action-code-editor style="height: 2.6rem" v-model="choice.action" /></td>
                         <td style="position: relative">
                           <span class="choice_options">
-                            <icon :class="{ disabled_icon: index == 0 }" type="arrow-up" class="icon" title="Move up" />
-                            <icon :class="{ disabled_icon: index == 3 }" type="arrow-down" class="icon" title="Move down" />
-                            <icon type="trash-2" class="icon" title="Delete" />
+                            <icon :class="{ disabled_icon: index == 0, icon: true }" type="arrow-up" title="Move up" @click="moveChoiceUp(index)" />
+                            <icon :class="{ disabled_icon: index == 3, icon: true }" type="arrow-down" title="Move down" @click="moveChoiceDown(index)" />
+                            <icon type="trash-2" class="icon" title="Delete" @click="clearChoice(index)" />
                           </span>
                         </td>
                       </tr>
@@ -177,15 +177,6 @@ const store = useStoryStore()
 
 const dialog = useTemplateRef("dialog")
 
-const props = defineProps({
-  // store: {
-  //   type: Object,
-  //   default() {
-  //     return {}
-  //   },
-  // },
-})
-
 const isTimedChoice = ref(false)
 const backgroundType = ref(BACKGROUND_TYPES.blockPause)
 const eventType = ref(EVENT_TYPES.choice)
@@ -213,6 +204,20 @@ const show = (state = true) => {
   }
 }
 
+const clearChoice = index => {
+  buttons.value[index] = { text: "", action: "" }
+}
+
+const moveChoiceDown = index => {
+  const arr = buttons.value
+  ;[arr[index + 1], arr[index]] = [arr[index], arr[index + 1]]
+}
+
+const moveChoiceUp = index => {
+  const arr = buttons.value
+  ;[arr[index - 1], arr[index]] = [arr[index], arr[index - 1]]
+}
+
 const fixScroll = () => {
   nextTick(() => setScrollAvailable(false))
 }
@@ -231,6 +236,7 @@ const exit = () => {
 }
 
 const returnEvent = () => {
+  // ** TODO ** validate event here
   show(false)
   activePromiseControl.resolve(makeEventObject())
 }
@@ -249,9 +255,49 @@ const useEditor = (event, windowTitle) => {
 }
 
 const makeEventObject = () => {
-  return {
-    event: "Yes!",
+  if (eventType.value === EVENT_TYPES.choice) {
+    return makeChoiceEventObject()
+  } else if (eventType.value === EVENT_TYPES.action) {
+    return makeActionEventObject()
   }
+}
+
+const makeActionEventObject = () => {
+  return {
+    type: EVENT_TYPES.action,
+    launchTime: launchTime.value,
+    data: eventActionCode.value,
+  }
+}
+
+const makeChoiceEventObject = () => {
+  let opts
+  if (isTimedChoice.value) {
+    opts = { timeLimit: timeLimit.value, defaultAction: timeoutActionCode.value }
+  } else {
+    opts = {
+      [BACKGROUND_TYPES.blockPause]: {},
+      [BACKGROUND_TYPES.blockFrame]: { frame: blockFrameTime.value },
+      [BACKGROUND_TYPES.blockLoop]: { loop: [loopStartTime.value, loopEndTime.value] },
+    }[backgroundType.value]
+  }
+  return {
+    type: EVENT_TYPES.choice,
+    launchTime: launchTime.value,
+    data: {
+      text: mainChoiceText.value,
+      type: isTimedChoice.value ? CHOICE_TYPES.timed : CHOICE_TYPES.block,
+      options: opts,
+      layout: layout.value,
+      layoutSettings: {}, // ** TODO **
+      buttons: sanitisedButtons(),
+    },
+  }
+}
+
+const sanitisedButtons = () => {
+  const btns = buttons.value.map(({ text, action }) => ({ text: text.trim(), action: action.trim() }))
+  return btns.filter(btn => btn.text && btn.action)
 }
 
 const createNew = async () => {
@@ -280,7 +326,7 @@ const setupUIForChoice = event => {
   loopStartTime.value = 0
   loopEndTime.value = -1
   blockFrameTime.value = 0
-  layout.value=""
+  layout.value = ""
   if (!isTimedChoice.value) {
     if (event.data.options.hasOwnProperty("frame")) {
       backgroundType.value = BACKGROUND_TYPES.blockFrame

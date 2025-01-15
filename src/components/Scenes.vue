@@ -55,7 +55,7 @@
                 <td>{{ event.type === EVENT_TYPES.choice ? event.data.text : event.data }}</td>
                 <td style="text-align: center">{{ event.launchTime }}</td>
                 <td style="text-align: center; white-space: nowrap;">
-                  <icon type="edit" class="icon" title="Edit" @click="editEventForScene(scene, event)" />&nbsp;<icon type="trash-2" class="icon" title="Delete" />
+                  <icon type="edit" class="icon" title="Edit" @click="editEventForScene(scene, event)" />&nbsp;<icon type="trash-2" class="icon" title="Delete" @click="deleteEventFromScene(scene, event)" />
                 </td>
               </tr>
             </tbody>
@@ -132,6 +132,10 @@ const addEventToScene = async scene => {
 const editEventForScene = async (scene, event) => {
   const editedEvent = await eventEditor.value.edit(event)
   console.log('Edited event:', editedEvent)
+}
+
+const deleteEventFromScene = (scene, event) => {
+  props.store.deleteEvent(scene.id, event.id)
 }
 
 const eventTypeLabel = event => {
