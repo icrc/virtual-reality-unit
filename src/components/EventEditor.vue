@@ -189,7 +189,7 @@ const timeoutActionCode = ref("")
 const loopStartTime = ref(0)
 const loopEndTime = ref(-1)
 const blockFrameTime = ref(0)
-const buttons = ref([])
+const buttons = ref(Array.from({ length: 4 }, () => ({ text: "", action: "" })))
 
 const title = ref("")
 
@@ -297,7 +297,7 @@ const makeChoiceEventObject = () => {
 
 const sanitisedButtons = () => {
   const btns = buttons.value.map(({ text, action }) => ({ text: text.trim(), action: action.trim() }))
-  return btns.filter(btn => btn.text && btn.action)
+  return btns.filter(btn => btn.text || btn.action)
 }
 
 const createNew = async () => {
@@ -307,7 +307,6 @@ const createNew = async () => {
 
 const edit = async event => {
   const eventToEdit = structuredClone(toRaw(event))
-  console.log("Editing event: ", eventToEdit)
   return await useEditor(eventToEdit, "Edit Event")
 }
 
@@ -326,6 +325,7 @@ const setupUIForChoice = event => {
   loopStartTime.value = 0
   loopEndTime.value = -1
   blockFrameTime.value = 0
+  eventActionCode.value = ""
   layout.value = ""
   if (!isTimedChoice.value) {
     if (event.data.options.hasOwnProperty("frame")) {
