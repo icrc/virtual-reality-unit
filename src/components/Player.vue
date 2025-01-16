@@ -45,7 +45,7 @@ const emit = defineEmits(["ready", "error"])
 /**
  * Gets the dimensions of the video.
  *
- * @return     {{width: number, height:number}}  The dimensions
+ * @return     {Promise<{width: number, height:number}>}  The dimensions
  */
 const getDimensions = async () => {
   if (videoJS.tech().getDimensions) {

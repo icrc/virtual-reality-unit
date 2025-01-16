@@ -61,7 +61,7 @@ export function* parser(code, state) {
  *
  * @param      {String}  expression  The expression to evaluate
  * @param      {Object}  state       The current state (so we can retrieve values)
- * @return     {Any}     The argument value
+ * @return     {any}     The argument value
  */
 function getArgValue(expression, state) {
   window[TEMP_VAR_NAME] = structuredClone(state)

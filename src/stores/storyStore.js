@@ -9,7 +9,7 @@ const STORAGE_KEY = "videopath_story"
 const LAST_SAVED_JSON_KEY = "videopath_last_saved_json"
 const CURRENT_FILENAME_KEY = "videopath_current_filename"
 
-// empty, blank story/project
+/** empty, blank story/project */
 const EMPTY_STORY = {
   version: VERSION,
   title: "New Project",
@@ -18,7 +18,7 @@ const EMPTY_STORY = {
   initialSceneId: -1,
   locales: ["en"],
 
-  defaultChoiceLayout: DEFAULT_LAYOUT,
+  defaultChoiceLayout: "",
   defaultChoiceLayoutSettings: {},
 
   videos: [],
@@ -37,11 +37,30 @@ export const CHOICE_TYPES = {
   timed: "timed",
 }
 
+/**
+ * Determines whether the specified story is valid story.
+ *
+ * @param      {Object}   story   The story
+ * @return     {Boolean}  True if the specified story is valid story, False otherwise.
+ */
 export const isValidStory = story => {
   return ["version", "title", "author", "info", "locales", "defaultChoiceLayout"].every(key => key in story)
 }
 
+/**
+ * Converts a semver version string to an integer for easier checking
+ *
+ * @param      {String}  versionStr  The version string
+ * @return     {Number}  { description_of_the_return_value }
+ */
 const intVersion = versionStr => versionStr.split(".").reduce((total, part, index) => total + parseInt(part) * Math.pow(100, 2 - index), 0)
+
+/**
+ * Determines whether the specified version is an old version.
+ *
+ * @param      {String}   version  The version (semver)
+ * @return     {boolean}  True if the specified version is an old version, False otherwise.
+ */
 export const isOldVersion = version => intVersion(VERSION) > intVersion(version)
 
 export const useStoryStore = defineStore("story", () => {
@@ -68,7 +87,9 @@ export const useStoryStore = defineStore("story", () => {
     }
   )
 
-  // set everything up
+  /**
+   * set everything up
+   */
   function setup() {
     const persistedStory = JSON.parse(localStorage.getItem(STORAGE_KEY))
     mostRecentSavedJSON = localStorage.getItem(LAST_SAVED_JSON_KEY) || ""
@@ -76,24 +97,44 @@ export const useStoryStore = defineStore("story", () => {
     newStory(persistedStory || undefined)
   }
 
-  // persist the story
+  
+  /**
+   * persist the story to local storage
+   *
+   * @param      {Object}  story   The story
+   */
   function persistStory(story) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(story))
   }
 
-  // persist most recently saved json
+  
+  /**
+   * persist most recently saved json to local storage
+   *
+   * @param      {String}  json    The json
+   */
   function persistMostRecentJSON(json) {
     mostRecentSavedJSON = json
     localStorage.setItem(LAST_SAVED_JSON_KEY, mostRecentSavedJSON)
   }
 
-  // persist current filename
+  
+  /**
+   * persist current filename to local storage
+   *
+   * @param      {String}  filename  The filename
+   */
   function persistCurrentFilename(filename) {
     currentFilename.value = filename
     localStorage.setItem(CURRENT_FILENAME_KEY, filename)
   }
 
-  // replace the current story with a new, blank story
+  
+  /**
+   * replace the current story with a new story
+   *
+   * @param      {Object}  [data=EMPTY_STORY]  The story data
+   */
   function newStory(data = EMPTY_STORY) {
     currentStory.value = structuredClone(data)
     persistMostRecentJSON(JSON.stringify(currentStory.value))
@@ -102,13 +143,24 @@ export const useStoryStore = defineStore("story", () => {
     currentHighestSceneId = 0
   }
 
-  // pick a filename to load
+  
+  /**
+   * pick a filename to load
+   *
+   * @return     {Promise}  { description_of_the_return_value }
+   */
   async function pickStory() {
     const filename = await storage.pick()
     return filename
   }
 
-  // load a previously saved story
+  
+  /**
+   * load a previously saved story
+   *
+   * @param      {String}   filename  The filename
+   * @return     {Promise}  { description_of_the_return_value }
+   */
   async function loadStory(filename) {
     const story = await storage.load(filename)
     if (story) {
@@ -122,12 +174,23 @@ export const useStoryStore = defineStore("story", () => {
     return false
   }
 
-  // choose save filename
+  
+  /**
+   * Choose a save filename
+   *
+   * @return     {Promise<String>}  Filename
+   */
   async function chooseStoryFilename() {
     return await storage.chooseSaveFilename(currentFilename.value)
   }
 
-  // save the current story (optionally changing name)
+  
+  /**
+   * save the current story (optionally changing name)
+   *
+   * @param      {String|Boolean}   [newFilename=false]  The new filename
+   * @return     {Promise<String>}  Filename the story was saved as
+   */
   async function saveStory(newFilename = false) {
     const savedFilename = await storage.save(newFilename || currentFilename.value, toRaw(currentStory.value))
     if (savedFilename) {
@@ -138,13 +201,24 @@ export const useStoryStore = defineStore("story", () => {
     return savedFilename
   }
 
-  // compress the current story (for use in URL)
+  
+  /**
+   * compress the current story (for use in URL)
+   *
+   * @return     {String}  Compressed story
+   */
   function compressedStoryForURL() {
     const str = JSON.stringify(toRaw(currentStory.value))
     return LZString.compressToEncodedURIComponent(str)
   }
 
-  // uncompress compressed story data
+  
+  /**
+   * uncompress compressed story data
+   *
+   * @param      {String}       data    The data
+   * @return     {Object|null}  Story object or null if error
+   */
   function uncompressStoryData(data) {
     try {
       const str = LZString.decompressFromEncodedURIComponent(data)
@@ -154,50 +228,98 @@ export const useStoryStore = defineStore("story", () => {
     }
   }
 
-  // get sharing URL
+  
+  /**
+   * Gets a sharing url for the current story
+   *
+   * @param      {Object}  router  The router
+   * @return     {String}  The sharing url.
+   */
   function getSharingURL(router) {
     const data = compressedStoryForURL()
     return router ? window.location.origin + router.resolve({ name: "play", params: { data } }).href : ''
   }
 
-  // add a video to the current story
+  
+  /**
+   * add a video to the current story
+   *
+   * @param      {Object}  data    The video data
+   * @return     {Number}  ID of the added video
+   */
   function addVideo(data) {
     const video = { ...data, id: nextVideoId() }
     currentStory.value.videos.push(video)
     return video.id
   }
 
-  // delete a video from the current story
+  
+  /**
+   * delete a video from the current story
+   *
+   * @param      {Number}   id                            The video id
+   * @param      {boolean}  [includeRelatedScenes=false]  Also include related scenes in deletion?
+   */
   function deleteVideo(id, includeRelatedScenes = false) {
     if (includeRelatedScenes) getScenesByVideoId(id).forEach(scene => deleteScene(scene.id))
     currentStory.value.videos = currentStory.value.videos.filter(video => video.id !== id).map(video => toRaw(video))
     currentHighestVideoId = getHighestVideoId(currentStory.value) ?? 0
   }
 
-  // update a video in the current story
+  
+  /**
+   * update a video in the current story
+   *
+   * @param      {Number}  id      The video id
+   * @param      {Object}  data    The new video data
+   */
   function updateVideo(id, data) {
     currentStory.value.videos = currentStory.value.videos.map(video => (video.id === id ? { ...video, ...data } : video))
   }
 
-  // add a scene to the current story
+  
+  /**
+   * add a scene to the current story
+   *
+   * @param      {Object}  data    The scene data
+   * @return     {Number}  ID of the new scene
+   */
   function addScene(data) {
     const scene = { ...data, id: nextSceneId() }
     currentStory.value.scenes.push(scene)
     return scene.id
   }
 
-  // delete a scene from the current story
+  
+  /**
+   * delete a scene from the current story
+   *
+   * @param      {Number}  id      The scene id
+   */
   function deleteScene(id) {
     currentStory.value.scenes = currentStory.value.scenes.filter(scene => scene.id !== id).map(scene => toRaw(scene))
     currentHighestSceneId = getHighestSceneId(currentStory.value) ?? 0
   }
 
-  // update a scene in the current story
+  
+  /**
+   * update a scene in the current story
+   *
+   * @param      {Number}  id      The scene id
+   * @param      {Object}  data    The scene data
+   */
   function updateScene(id, data) {
     currentStory.value.scenes = currentStory.value.scenes.map(scene => (scene, id === id ? { ...scene, ...data } : scene))
   }
 
-  // add an event to a scene in the current story
+  
+  /**
+   * add an event to a scene in the current story
+   *
+   * @param      {Number}        sceneId  The scene id
+   * @param      {Object}        data     The event data
+   * @return     {Number|false}  ID of the added event or false if no scene data
+   */
   function addEvent(sceneId, data) {
     const scene = getSceneById(sceneId)
     if (!scene) return false
@@ -206,21 +328,42 @@ export const useStoryStore = defineStore("story", () => {
     return event.id
   }
 
-  // delete an event from a scene in the current story
+  
+  /**
+   * delete an event from a scene in the current story
+   *
+   * @param      {Number}        sceneId  The scene id
+   * @param      {Number}        eventId  The event id
+   * @return     {boolean|void}  False if scene with id not found
+   */
   function deleteEvent(sceneId, eventId) {
     const scene = getSceneById(sceneId)
     if (!scene) return false
     scene.events = scene.events.filter(({ id }) => id !== eventId)
   }
 
-  // update an event in a scene in the current story
+  
+  /**
+   * update an event in a scene in the current story
+   *
+   * @param      {Number}        sceneId  The scene id
+   * @param      {Number}        eventId  The event id
+   * @param      {Object}        data     The new event data
+   * @return     {boolean|void}  False if scene with id not found
+   */
   function updateEvent(sceneId, eventId, data) {
     const scene = getSceneById(sceneId)
     if (!scene) return false
     scene.events = scene.events.map(event => (event.id === eventId ? { ...event, ...data } : event))
   }
 
-  // check if we have scenes with given video
+  
+  /**
+   * Gets the scenes by video id.
+   *
+   * @param      {Number}  videoId  The video identifier
+   * @return     {Array<Object>}  The scenes by video identifier.
+   */
   function getScenesByVideoId(videoId) {
     return currentStory.value.scenes.filter(scene => scene.videoId === videoId)
   }

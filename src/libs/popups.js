@@ -7,8 +7,8 @@
 /**
  * Show an alert message
  *
- * @param      {String}              [message=undefined]  Message to show
- * @return     {Promise<undefined>}  Returns nothing
+ * @param      {String}         [message=undefined]  Message to show
+ * @return     {Promise<void>}  Returns nothing
  */
 export const alert = async (message = undefined) => {
 	return window.alert(message)

@@ -11,12 +11,18 @@ export function useWindowSize(resizeHandler = undefined) {
   const width = ref(window.innerWidth)
   const height = ref(window.innerHeight)
 
+  /**
+   * Handler for window resize
+   */
   function update() {
     width.value = window.innerWidth
     height.value = window.innerHeight
     resizeHandler && resizeHandler({ width: width.value, height: height.value })
   }
 
+  /**
+   * Stops watching resize event.
+   */
   function stopWatching() {
     window.removeEventListener("resize", update)
   }

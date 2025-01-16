@@ -195,6 +195,11 @@ const title = ref("")
 
 let activePromiseControl = null
 
+/**
+ * Show/hide the editor
+ *
+ * @param      {boolean}  [state=true]  The 'visible' state
+ */
 const show = (state = true) => {
   if (state) {
     dialog.value.showModal()
@@ -204,43 +209,84 @@ const show = (state = true) => {
   }
 }
 
+/**
+ * 'Empty' the content of a choice button (text and action)
+ *
+ * @param      {number}  index   The index in the button array
+ */
 const clearChoice = index => {
   buttons.value[index] = { text: "", action: "" }
 }
 
+/**
+ * Move the choice button with the given index down one spot (exchange with the one below)
+ *
+ * @param      {number}  index   The index in the button array
+ */
 const moveChoiceDown = index => {
   const arr = buttons.value
   ;[arr[index + 1], arr[index]] = [arr[index], arr[index + 1]]
 }
 
+/**
+ * Move the choice button with the given index up one spot (exchange with the one above)
+ *
+ * @param      {number}  index   The index
+ */
 const moveChoiceUp = index => {
   const arr = buttons.value
   ;[arr[index - 1], arr[index]] = [arr[index], arr[index - 1]]
 }
 
+/**
+ * Fix the scrolling issue that happens on some browsers
+ */
 const fixScroll = () => {
   nextTick(() => setScrollAvailable(false))
 }
 
+/**
+ * Makes scrolling available (or not) on the document
+ *
+ * @param      {boolean}  [state=true]  The state
+ */
 const setScrollAvailable = (state = true) => {
   document.body.style.overflow = state ? "auto" : "hidden"
 }
 
+/**
+ * Handle clicking outside (off of) the modal dialog (for closing)
+ *
+ * @param      {Event}  event   The event
+ */
 const handleModalClick = event => {
   if (event.target === dialog.value) show(false)
 }
 
+/**
+ * Exit the editor without changing anything
+ */
 const exit = () => {
   setScrollAvailable(true)
   activePromiseControl?.resolve(null)
 }
 
+/**
+ * Close editor and return the edited event object
+ */
 const returnEvent = () => {
   // ** TODO ** validate event here
   show(false)
   activePromiseControl.resolve(makeEventObject())
 }
 
+/**
+ * Set up and display the editor
+ *
+ * @param      {object}                  event        The event we are editing
+ * @param      {string}                  windowTitle  The window title
+ * @return     {Promise<(null|object)>}  Promise resolving to the edited object or null if we exited
+ */
 const useEditor = (event, windowTitle) => {
   setupUI(event)
   title.value = windowTitle
@@ -254,6 +300,11 @@ const useEditor = (event, windowTitle) => {
   return promise
 }
 
+/**
+ * Makes an event object from our internal values.
+ *
+ * @return     {object}  Event object built from the form values
+ */
 const makeEventObject = () => {
   if (eventType.value === EVENT_TYPES.choice) {
     return makeChoiceEventObject()
@@ -262,6 +313,11 @@ const makeEventObject = () => {
   }
 }
 
+/**
+ * Makes an action event object.
+ *
+ * @return     {Object}  The 'action' event object
+ */
 const makeActionEventObject = () => {
   return {
     type: EVENT_TYPES.action,
@@ -270,6 +326,11 @@ const makeActionEventObject = () => {
   }
 }
 
+/**
+ * Makes a choice event object.
+ *
+ * @return     {Object}  The 'choice' event object
+ */
 const makeChoiceEventObject = () => {
   let opts
   if (isTimedChoice.value) {
@@ -295,28 +356,56 @@ const makeChoiceEventObject = () => {
   }
 }
 
+/**
+ * Sanitise the button array for addition to the final object (remove blanks, trim strings)
+ *
+ * @return     {Array<{text:string, action:string}  >}  Sanitised array of button objects
+ */
 const sanitisedButtons = () => {
   const btns = buttons.value.map(({ text, action }) => ({ text: text.trim(), action: action.trim() }))
   return btns.filter(btn => btn.text || btn.action)
 }
 
+/**
+ * Use editor to creates a new event.
+ *
+ * @return     {promise}  Promise resolving to the new object (or null if cancelled)
+ */
 const createNew = async () => {
   const event = structuredClone(BLANK_NEW_EVENT)
   return await useEditor(event, "Add Event")
 }
 
+/**
+ * Use editor to edit an existing event.
+ *
+ * @param      {object}   event   The event object to edit
+ * @return     {promise}  Promise resolving to the edited object (or null if cancelled)
+ */
 const edit = async event => {
   const eventToEdit = structuredClone(toRaw(event))
   return await useEditor(eventToEdit, "Edit Event")
 }
 
+/**
+ * Set up the UI for the passed event object
+ *
+ * @param      {object}  event   The event
+ */
 const setupUI = event => {
+  // general set up for all event types
   eventType.value = event.type
   launchTime.value = event.launchTime
+  // specifics
   if (event.type === EVENT_TYPES.choice) setupUIForChoice(event)
   if (event.type === EVENT_TYPES.action) setupUIForAction(event)
 }
 
+/**
+ * Set up the UI for a 'Choice' event
+ *
+ * @param      {object}  event   The event
+ */
 const setupUIForChoice = event => {
   backgroundType.value = BACKGROUND_TYPES.blockPause
   isTimedChoice.value = event.data.type == CHOICE_TYPES.timed
@@ -346,6 +435,11 @@ const setupUIForChoice = event => {
   buttons.value = btnArr
 }
 
+/**
+ * Set up the UI for an 'Action' event
+ *
+ * @param      {object}  event   The event
+ */
 const setupUIForAction = event => {
   eventActionCode.value = event.data
 }

@@ -114,7 +114,7 @@ const story = computed(() => props.store.currentStory)
  * Delete video with given id (with confirmation)
  *
  * @param      {Number}  videoId  The video identifier
- * @return     {Any}     n/a
+ * @return     {Promise}     n/a
  */
 const deleteVideo = async videoId => {
   const relatedScenes = props.store.getScenesByVideoId(videoId)

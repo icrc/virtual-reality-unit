@@ -1,4 +1,4 @@
-<!-- Choices Component -->
+<!-- Choices Component - for displaying choices during playback -->
 <template>
   <div :class="{ choice_container: true, [layout]: true }" :style="styleSettings">
     <div v-if="timeLimit" class="timer"><div :class="{ time_indicator: true, go: timerActive }">&nbsp;</div></div>
@@ -18,6 +18,7 @@
 <script></script>
 
 <script setup>
+
 import { onMounted, ref, computed } from "vue"
 const props = defineProps({
   message: {

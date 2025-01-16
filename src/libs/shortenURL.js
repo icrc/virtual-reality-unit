@@ -1,5 +1,10 @@
 // simple library for using URL compression sites
 
+/**
+ * API for the is.gd url shortener
+ *
+ * @type       {Object}
+ */
 export const IS_GD = {
 	name: "is.gd",
 	async shorten(url) {
@@ -15,6 +20,12 @@ export const IS_GD = {
 	},
 }
 
+/**
+ * Create a URL shortener function
+ *
+ * @param      {Object}    helper  The helper API
+ * @return     {Function}  { description_of_the_return_value }
+ */
 export const urlShortener = helper => async url => {
 	const [shortenedURL, error] = await helper.shorten(url)
 	if (!shortenedURL) console.log(`Error whilst shortening URL with '${helper.name}':`, error)

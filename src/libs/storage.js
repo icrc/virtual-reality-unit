@@ -3,8 +3,8 @@
 /**
  * Set up and return a storage provider
  *
- * @param      {Object}  provider  The provider
- * @return     {Object}  The provider, ready to be used
+ * @param      {Object}           provider  The provider
+ * @return     {Promise<Object>}  The provider, ready to be used
  */
 export const useStorage = async provider => {
 	if (!provider.ready) await provider.setup()

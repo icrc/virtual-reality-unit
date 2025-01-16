@@ -92,8 +92,6 @@ import Icon from "vue-feather"
 import EventEditor from "@/components/EventEditor.vue"
 
 const header = useTemplateRef("header")
-
-// ** HERE ** temp code
 const eventEditor = useTemplateRef("eventEditor")
 
 const props = defineProps({
@@ -108,8 +106,15 @@ const props = defineProps({
 const story = computed(() => props.store.currentStory)
 const deleteScene = props.store.deleteScene
 
+/**
+ * Sort an array of event objects (by launch time)
+ *
+ * @param      {Array<object>}  events  The events
+ * @return     {Array<object>}  Sorted array of events
+ */
 const sortedEvents = events =>
   events.sort(({ launchTime: a }, { launchTime: b }) => {
+    // -1 is end of video
     if (a == -1) a = Infinity
     if (b == -1) b = Infinity
     return a - b
@@ -124,22 +129,46 @@ const addScene = () => {
   nextTick(() => document.querySelector(`#scene_${id} .scene_title`).focus())
 }
 
+/**
+ * Adds an event to scene with popup editor.
+ *
+ * @param      {object}  scene   The scene
+ */
 const addEventToScene = async scene => {
   const newEvent = await eventEditor.value.createNew()
   if (newEvent) props.store.addEvent(scene.id, newEvent)
 }
 
+/**
+ * Edit an existing event in scene with popup editor.
+ *
+ * @param      {object}  scene   The scene
+ * @param      {object}  event   The event to edit
+ */
 const editEventForScene = async (scene, event) => {
   const editedEvent = await eventEditor.value.edit(event)
   if (editedEvent) props.store.updateEvent(scene.id, event.id, editedEvent)
 }
 
+/**
+ * Delete an event from a scene.
+ *
+ * @param      {object}  scene   The scene
+ * @param      {object}  event   The event
+ */
 const deleteEventFromScene = (scene, event) => {
   props.store.deleteEvent(scene.id, event.id)
 }
 
+/**
+ * Make a label for the type of the passed event.
+ *
+ * @param      {object}  event   The event
+ * @return     {string}  { description_of_the_return_value }
+ */
 const eventTypeLabel = event => {
   let label = EVENT_TYPE_NAMES[event.type]
+  // add the time limit if it is a timed choice
   if (event?.data?.type == CHOICE_TYPES.timed) {
     label += ` (${event.data.options.timeLimit}s)`
   }

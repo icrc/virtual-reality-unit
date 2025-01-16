@@ -117,6 +117,7 @@ let currentState
 
 const currentChoiceData = ref()
 let inBlockChoice
+/** @type {any} */
 let activeLoop = false
 let choiceMadeHandler = noop
 let timerTimeoutId = 0
@@ -201,7 +202,13 @@ const resizePlayer = ({ width = undefined, height = undefined }) => {
 	else if (height !== undefined) videoJS.dimensions("height", height)
 }
 
-// make sure player sizes appropriately with window resizes
+/**
+ * Make sure player sizes appropriately with window resizes
+ *
+ * @param      {Object}        [arg1={}]    The argument 1
+ * @param      {number}   arg1.width   The width
+ * @param      {number}  arg1.height  The height
+ */
 const resizePlayerToContainerWidth = ({ width: screenWidth, height: screenHeight } = {}) => {
 	resizePlayer({ width: props.containerEl.clientWidth })
 	// check if we're on a screen with a wider aspect than the player
@@ -210,7 +217,10 @@ const resizePlayerToContainerWidth = ({ width: screenWidth, height: screenHeight
 }
 let { stopWatching: stopWatchingWindowResize } = useWindowSize(resizePlayerToContainerWidth) // make sure player gets sized appropriately on window resize
 
-// go to full screen player
+
+/**
+ * Go to full screen player
+ */
 const goFullscreen = () => {
 	document
 		.querySelector("html")
@@ -281,6 +291,11 @@ function playScene(scene, abortSignal = undefined) {
 	return new Promise(resolve => {
 		const completedEventIds = []
 
+		/**
+		 * 'Library' of functions available in ActionCode
+		 *
+		 * @type       {Object}
+		 */
 		const CMD_LIBRARY = {
 			gotoScene(id) {
 				announceDone({ nextSceneId: id })
@@ -296,8 +311,16 @@ function playScene(scene, abortSignal = undefined) {
 			},
 		}
 
+		/**
+		 * Handler for the 'abort' event on the abortSignal (an outside request to stop)
+		 *
+		 * @return     {void}  
+		 */
 		const abortHandler = () => announceDone({ aborted: true, error: "Playback aborted" })
 
+		/**
+		 * Set up the story player for playback
+		 */
 		function setup() {
 			activateHandlers()
 			clearChoices()
@@ -307,6 +330,9 @@ function playScene(scene, abortSignal = undefined) {
 			else videoJS.currentTime(scene.startTime)
 		}
 
+		/**
+		 * Clear out the current choice data (making the interface invisible)
+		 */
 		function clearChoices() {
 			currentChoiceData.value = null
 			timerTimeoutId && clearTimeout(timerTimeoutId)
@@ -316,26 +342,45 @@ function playScene(scene, abortSignal = undefined) {
 			activeLoop = false
 		}
 
+		/**
+		 * Clean up on exit/done
+		 */
 		function teardown() {
 			clearChoices()
 			activateHandlers(false)
 		}
 
+		/**
+		 * Activate/deactivate our VideoJS event handlers
+		 *
+		 * @param      {boolean}  [state=true]  The state (on/off)
+		 */
 		const activateHandlers = (state = true) => {
 			Object.entries(handlers).forEach(([event, handler]) => videoJS[state ? "on" : "off"](event, handler))
 			abortSignal?.[state ? "addEventListener" : "removeEventListener"]("abort", abortHandler)
 		}
 
+		/**
+		 * Announce we're finished and return a result
+		 *
+		 * @param      {any}  result  The result
+		 */
 		function announceDone(result) {
 			teardown()
 			resolve(result)
 		}
 
+		/**
+		 * Handle reaching the end of a scene
+		 *
+		 * @return     {Promise}  
+		 */
 		async function handleSceneEnd() {
 			// check for 'end of scene' events
 			for (const event of scene.events) {
 				if (event.launchTime == -1 && !completedEventIds.includes(event.id)) {
 					if (event.type == EVENT_TYPES.choice) {
+						// wait for a choice
 						await handleEvent(event)
 					} else {
 						handleEvent(event)
@@ -352,6 +397,12 @@ function playScene(scene, abortSignal = undefined) {
 			}
 		}
 
+		/**
+		 * Handle/run an event (action/choice)
+		 *
+		 * @param      {Object}   event   The event
+		 * @return     {Promise}  
+		 */
 		async function handleEvent(event) {
 			completedEventIds.push(event.id)
 			if (event.type == EVENT_TYPES.action) {
@@ -361,6 +412,12 @@ function playScene(scene, abortSignal = undefined) {
 			}
 		}
 
+		/**
+		 * Handle a choice event
+		 *
+		 * @param      {Object}   choiceData  The choice data
+		 * @return     {Promise}  { description_of_the_return_value }
+		 */
 		async function handleChoice(choiceData) {
 			if (choiceData.type == CHOICE_TYPES.block) {
 				await handleBlockChoice(choiceData)
@@ -369,6 +426,12 @@ function playScene(scene, abortSignal = undefined) {
 			}
 		}
 
+		/**
+		 * Handle a 'block' choice event - a choice that stops the video
+		 *
+		 * @param      {Object}   choiceData  The choice data
+		 * @return     {Promise}  Will resolve when the choice is made/done
+		 */
 		function handleBlockChoice(choiceData) {
 			const initiallyPlaying = !videoJS.paused()
 			videoJS.pause()
@@ -403,6 +466,12 @@ function playScene(scene, abortSignal = undefined) {
 			})
 		}
 
+		/**
+		 * Handle a timed choice
+		 *
+		 * @param      {Object}  choiceData  The choice data
+		 * @return     {void}  { description_of_the_return_value }
+		 */
 		function handleTimedChoice(choiceData) {
 			const duration = choiceData?.options?.timeLimit
 			if (!duration) return
@@ -421,16 +490,33 @@ function playScene(scene, abortSignal = undefined) {
 			)
 		}
 
+		/**
+		 * Run some action code and update the current state after
+		 *
+		 * @param      {String}  code    The code
+		 * @return     {Object}  State after running the action code, with possible bailed out flag
+		 */
 		function runActionCodeAndUpdateState(code) {
 			const res = runActionCode(code)
 			currentState = structuredClone(toRaw(res.newState))
 			return res
 		}
 
+		/**
+		 * Run the action code on the current state
+		 *
+		 * @param      {String}  code    The code
+		 * @return     {Object}  State after running the action code, with possible bailed out flag 
+		 */
 		function runActionCode(code) {
 			return runCode(code, currentState, CMD_LIBRARY)
 		}
 
+		/**
+		 * Our VideoJS handlers
+		 *
+		 * @type       {Object}
+		 */
 		const handlers = {
 			timeupdate() {
 				const time = videoJS.currentTime()
@@ -475,10 +561,10 @@ function playScene(scene, abortSignal = undefined) {
 /**
  * Clean up and tear down when unmounted
  */
-function teardown() {
+function teardownComponent() {
 	stopWatchingWindowResize()
 }
-onUnmounted(teardown)
+onUnmounted(teardownComponent)
 
 defineExpose({
 	goFullscreen,

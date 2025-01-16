@@ -22,6 +22,11 @@ let inputElement
 
 import { alert, prompt } from "@/libs/popups"
 
+/**
+ * Upload/Download Storage API
+ *
+ * @type       {Object}
+ */
 const ulDLStorage = {
 	name: "Local Upload/Download Storage",
 	get ready() {
@@ -57,7 +62,13 @@ const ulDLStorage = {
 	},
 }
 
+/**
+ * Creates an invisible input[file] element.
+ *
+ * @return     {HTMLInputElement}  { description_of_the_return_value }
+ */
 const createInputElement = () => {
+	/** @type HTMLInputElement */
 	let el = document.querySelector(`#${INPUT_ELEMENT_ID}`)
 	if (!el) {
 		el = document.createElement("input")
@@ -69,6 +80,11 @@ const createInputElement = () => {
 	return el
 }
 
+/**
+ * Pick a file using the input[file] element
+ *
+ * @return     {Promise}  
+ */
 const pickFile = () => {
 	return new Promise((resolve, reject) => {
 		const i = inputElement
@@ -93,13 +109,29 @@ const pickFile = () => {
 	})
 }
 
+/**
+ * Adds input event listeners.
+ *
+ * @param      {Object}  listeners  The listeners
+ */
 const addInputEventListeners = listeners => {
 	Object.entries(listeners).forEach(([type, handler]) => inputElement.addEventListener(type, handler))
 }
+/**
+ * Removes input event listeners.
+ *
+ * @param      {Object}  listeners  The listeners
+ */
 const removeInputEventListeners = listeners => {
 	Object.entries(listeners).forEach(([type, handler]) => inputElement.removeEventListener(type, handler))
 }
 
+/**
+ * Loads story object from file.
+ *
+ * @param      {File}            file    The file
+ * @return     {Promise<Array>}  resolving to array [storyObj|null, error desc if null story]
+ */
 const loadFileContent = async file => {
 	let fileText, storyObject
 	try {
@@ -117,6 +149,12 @@ const loadFileContent = async file => {
 	return [storyObject]
 }
 
+/**
+ * Reads text content from a file.
+ *
+ * @param      {File}     file    The file
+ * @return     {Promise}  resolving to file content
+ */
 function readFileContent(file) {
 	const reader = new FileReader()
 	return new Promise((resolve, reject) => {
@@ -126,8 +164,14 @@ function readFileContent(file) {
 	})
 }
 
-function downloadJSON(jsonObject, filename) {
-	const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(jsonObject))
+/**
+ * Downloads a json object as given filename.
+ *
+ * @param      {Object}  obj       The object to stringify and download
+ * @param      {String}  filename  The filename
+ */
+function downloadJSON(obj, filename) {
+	const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(obj))
 	const dlAnchor = document.createElement("a")
 	dlAnchor.setAttribute("href", dataStr)
 	dlAnchor.setAttribute("download", filename)
