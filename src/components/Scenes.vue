@@ -53,7 +53,7 @@
               <tr v-for="event in sortedEvents(scene.events)" :key="event.id">
                 <td>{{ eventTypeLabel(event) }}</td>
                 <td>{{ event.type === EVENT_TYPES.choice ? event.data.text : event.data }}</td>
-                <td style="text-align: center">{{ event.launchTime }}</td>
+                <td style="text-align: center">{{ event.launchTime==-1 ? 'END' : event.launchTime }}</td>
                 <td style="text-align: center; white-space: nowrap;">
                   <icon type="edit" class="icon" title="Edit" @click="editEventForScene(scene, event)" />&nbsp;<icon type="trash-2" class="icon" title="Delete" @click="deleteEventFromScene(scene, event)" />
                 </td>
