@@ -63,44 +63,7 @@
           <videos :store="store" />
 
           <scenes :store="store" />
-
-          <!-- Sample crap from sugar website - for reference -->
-          <article style="display: none">
-            <form>
-              <div style="--span: 4" class="s-grid">
-                <div style="align-items: end">
-                  <label><input type="radio" name="color" value="blue" /> Blue</label>
-                  <div>
-                    <label><input type="checkbox" />Checkbox</label>
-                  </div>
-                  <div>
-                    <label>Select value <input type="range" min="0" max="100" /></label>
-                  </div>
-                  <div><progress value=".7" max="1">70 %</progress></div>
-                  <div><progress></progress></div>
-                  <label
-                    >With tooltip <input aria-describedby="username-tooltip" type="text" />
-                    <div role="tooltip" id="username-tooltip">Username cannot be an email</div></label
-                  >
-                  <search style="--span: 4"><input type="search" name="" aria-label="Search" /><button type="submit">Search</button></search>
-                  <label>Email <input type="email" placeholder="Email" aria-invalid="true" /></label>
-                  <label>Valid <input type="text" placeholder="Email" aria-invalid="false" /></label>
-                  <div style="--span: 4">
-                    <label>Upload a file<input type="file" /></label>
-                  </div>
-                  <div><input type="text" placeholder="Disabled" disabled /></div>
-                  <div>
-                    <select aria-label="Select an animal">
-                      <option value="1">Ape</option>
-                      <option value="2">Elephant</option>
-                      <option value="3">Jaguar</option>
-                    </select>
-                  </div>
-                  <div><button aria-busy="true">Submit</button></div>
-                </div>
-              </div>
-            </form>
-          </article>
+          
         </main>
       </div>
     </div>

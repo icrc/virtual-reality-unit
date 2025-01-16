@@ -336,7 +336,6 @@ function playScene(scene, abortSignal = undefined) {
 			for (const event of scene.events) {
 				if (event.launchTime == -1 && !completedEventIds.includes(event.id)) {
 					if (event.type == EVENT_TYPES.choice) {
-						console.log("awiting choice")
 						await handleEvent(event)
 					} else {
 						handleEvent(event)
@@ -425,7 +424,6 @@ function playScene(scene, abortSignal = undefined) {
 		function runActionCodeAndUpdateState(code) {
 			const res = runActionCode(code)
 			currentState = structuredClone(toRaw(res.newState))
-			console.log(currentState)
 			return res
 		}
 
@@ -435,7 +433,6 @@ function playScene(scene, abortSignal = undefined) {
 
 		const handlers = {
 			timeupdate() {
-				// console.log('time updated:' + videoJS.currentTime())
 				const time = videoJS.currentTime()
 
 				if (!inBlockChoice) {

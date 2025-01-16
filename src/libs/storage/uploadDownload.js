@@ -28,22 +28,18 @@ const ulDLStorage = {
 		return ready
 	},
 	setup: async function setup() {
-		console.log("Setting up local upload/download storage provider...")
 		inputElement = createInputElement()
 		ready = true
 		return true
 	},
 	load: async function load(filename) {
 		const fname = filename.trim()
-		console.log(`Loading data: ${fname}`)
 		let [story, err] = await loadFileContent(filename.fileObj)
 		if (err) await alert(err)
 		return err ? null : structuredClone(story)
 	},
 	save: async function save(filename, data) {
 		if (filename && !filename.endsWith(".json")) filename += ".json"
-		console.log("Saving data", filename)
-		console.log(data)
 		downloadJSON(data, filename)
 		return filename
 	},

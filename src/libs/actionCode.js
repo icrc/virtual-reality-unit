@@ -26,7 +26,6 @@ export const runCode = (actionCode, initialState, commandLibrary = {}) => {
   const commands = { ...getBaseCommands(state), ...commandLibrary }
   let bailed = false
   for (const { command, args } of parser(actionCode, state)) {
-    console.log(command, args)
     if (!commands[command]) throw new Error(`Unknown actionCode command: ${command}`)
     const result = commands[command](...args)
     if (result === null) {

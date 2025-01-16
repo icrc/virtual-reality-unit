@@ -41,17 +41,4 @@ const router = createRouter({
   routes,
 })
 
-// // report state
-// router.afterEach((to, from) => {
-//   // console.log(`Router from:${from.path} to:${to.path}`)
-//   // console.log(to.matched[0].name)
-//   reportState(to.path, true, from.path)
-// })
-
-// // deal with any 'meta' settings
-// router.afterEach(to => {
-//   if (!to.meta) return
-//   if (to.meta.something) handleSomething(to.meta.something)
-// })
-
 export default router
