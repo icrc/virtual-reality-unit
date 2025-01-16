@@ -126,12 +126,12 @@ const addScene = () => {
 
 const addEventToScene = async scene => {
   const newEvent = await eventEditor.value.createNew()
-  console.log('New event:', newEvent)
+  if (newEvent) props.store.addEvent(scene.id, newEvent)
 }
 
 const editEventForScene = async (scene, event) => {
   const editedEvent = await eventEditor.value.edit(event)
-  console.log('Edited event:', editedEvent)
+  if (editedEvent) props.store.updateEvent(scene.id, event.id, editedEvent)
 }
 
 const deleteEventFromScene = (scene, event) => {
