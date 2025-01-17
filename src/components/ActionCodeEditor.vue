@@ -2,7 +2,7 @@
 <template>
   <span>
     <textarea placeholder="No action" v-model="actionCode"></textarea>
-    <button><icon type="edit-3" class="icon button-icon" title="Edit action code" /></button>
+    <button><icon type="edit-3" class="icon button-icon" title="Edit action" /></button>
   </span>
 </template>
 

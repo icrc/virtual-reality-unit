@@ -12,13 +12,13 @@ const CURRENT_FILENAME_KEY = "videopath_current_filename"
 /** empty, blank story/project */
 const EMPTY_STORY = {
   version: VERSION,
-  title: "New Project",
+  title: "",
   author: "",
   info: "",
   initialSceneId: -1,
   locales: ["en"],
 
-  defaultChoiceLayout: "",
+  defaultChoiceLayout: DEFAULT_LAYOUT,
   defaultChoiceLayoutSettings: {},
 
   videos: [],

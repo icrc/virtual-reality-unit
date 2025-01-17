@@ -21,9 +21,9 @@
                   <input class="show_end_time" :data-val="launchTime" placeholder="n/a" type="number" min="-1" v-model="launchTime"
                 /></label>
                 <label style="--span: 2" v-if="eventType == EVENT_TYPES.choice">
-                  Choice layout
+                  <span>Choice layout<icon style="float:right" type="settings" class="icon" title="Layout settings" /></span>
                   <select v-model="layout">
-                    <option value="">Project default ({{ LAYOUTS[store.currentStory.defaultChoiceLayout].name }})</option>
+                    <option value="">Project default ({{ LAYOUTS[store.currentStory.defaultChoiceLayout]?.name }})</option>
                     <option v-for="layout in LAYOUT_NAMES" :key="layout.id" :value="layout.id">
                       {{ layout.name }}
                     </option>

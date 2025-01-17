@@ -36,7 +36,7 @@
             <form>
               <div style="--span: 4" class="s-grid">
                 <div>
-                  <label style="--span: 5">Project name<input placeholder="(No name)" type="text" v-model="story.title" /></label>
+                  <label style="--span: 5">Project name<input ref="storyTitle" placeholder="(No name)" type="text" v-model="story.title" /></label>
                   <label style="--span: 3">Initial scene
                     <select v-model="story.initialSceneId">
                       <option v-if="story.scenes.length" :value="-1">Please select a scene...</option>
@@ -76,11 +76,13 @@ import { LAYOUT_NAMES } from "@/layouts"
 </script>
 
 <script setup>
-import { computed } from "vue"
+import { computed, useTemplateRef, nextTick } from "vue"
 import { storeToRefs } from "pinia"
 import { useRouter } from "vue-router"
 import { useStoryStore } from "@/stores/storyStore"
 import shortenLink from "@/libs/shortenURL"
+
+import Icon from "vue-feather"
 
 import Videos from "@/components/Videos.vue"
 import Scenes from "@/components/Scenes.vue"
@@ -94,6 +96,9 @@ const unsavedMarker = computed(() => (store.isSaved ? "" : "*"))
 
 const router = useRouter()
 
+
+const storyTitle = useTemplateRef("storyTitle")
+
 /**
  * Add a new story/project (checking if current saved first)
  *
@@ -102,6 +107,7 @@ const router = useRouter()
 const newStory = async () => {
   if (!(await confirmUnsaved())) return
   store.newStory()
+  nextTick(() => storyTitle.value.focus())
 }
 
 /**
