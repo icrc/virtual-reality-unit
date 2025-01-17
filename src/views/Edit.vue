@@ -47,7 +47,7 @@
                     </select>
                   </label>
                   <label style="--span: 5">Author<input placeholder="n/a" type="text" v-model="story.author" /></label>
-                  <label style="--span: 3">Default choice layout
+                  <label style="--span: 3"><span>Default choice layout<icon style="float:right" type="settings" class="icon" title="Layout settings" /></span>
                     <select v-model="story.defaultChoiceLayout">
                       <option v-for="layout in LAYOUT_NAMES" :key="layout.id" :value="layout.id">
                         {{ layout.name }}
