@@ -3,7 +3,7 @@
   <article>
     <details ref="header" class="videos_header">
       <summary role="button">Video Sources ({{ story.videos.length }})<button title="Add video" @click="addVideo" class="add_button">+</button></summary>
-      <div style="--span: 4" class="s-grid videos-container">
+      <div style="--span: 4" class="s-grid videos-container" v-if="story.videos.length">
         <template v-for="(video, idx) in story.videos" :key="idx">
           <div :id="`video_${video.id}`">
             <label style="--span: 2"
