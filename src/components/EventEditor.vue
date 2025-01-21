@@ -1,124 +1,111 @@
 <!-- Event Editor Component - for editing event details -->
 <template>
-  <dialog ref="dialog" class="s-container modified-s-container dialog" @click="handleModalClick">
+  <popup-dialog ref="dialog" v-slot="popupControl" :header="title" class="event-editor-s-container">
     <div>
-      <div>
-        <main>
-          <article>
-            <header>
-              <h3>{{ title }}<icon type="x" class="icon btn_close" title="Close (lose changes)" @click="show(false)" /></h3>
-            </header>
-            <form class="s-grid">
-              <div>
-                <label style="--span: 2">
-                  Type
-                  <select autofocus v-model="eventType" @change="fixScroll">
-                    <option v-for="ctype in EVENT_TYPES" :value="ctype">{{ EVENT_TYPE_NAMES[ctype] }}</option>
-                  </select>
-                </label>
-                <label style="--span: 2"
-                  >Launch time (s) - Use -1 for end
-                  <input class="show_end_time" :data-val="launchTime" placeholder="n/a" type="number" min="-1" v-model="launchTime"
-                /></label>
-                <label style="--span: 2" v-if="eventType == EVENT_TYPES.choice">
-                  <span>Choice layout<icon style="float:right" type="settings" class="icon" title="Layout settings" /></span>
-                  <select v-model="layout">
-                    <option value="">Project default ({{ LAYOUTS[store.currentStory.defaultChoiceLayout]?.name }})</option>
-                    <option v-for="layout in LAYOUT_NAMES" :key="layout.id" :value="layout.id">
-                      {{ layout.name }}
-                    </option>
-                  </select>
-                </label>
-              </div>
-              <div><hr /></div>
-              <template v-if="eventType == EVENT_TYPES.choice">
-                <div>
-                  <label style="--span: 4.5">Main text<input placeholder="n/a" type="text" v-model="mainChoiceText" /></label>
-                  <span style="--span: 1.5" class="timed_switch">
-                    <label>
-                      <input type="checkbox" role="switch" v-model="isTimedChoice" />
-                      Timed choice?
-                    </label>
-                  </span>
-                </div>
-                <div v-if="isTimedChoice">
-                  <label style="--span: 2">Time limit (s)<input placeholder="1" type="number" min="1" v-model="timeLimit" /></label>
-                  <label style="--span: 4">
-                    Timeout action
-                    <action-code-editor style="padding-top: 0.25rem; height: 2.9rem" v-model="timeoutActionCode" />
-                  </label>
-                </div>
-                <div v-else>
-                  <label style="--span: 3">
-                    Background
-                    <select v-model="backgroundType">
-                      <option :value="bgType" v-for="(bgTypeName, bgType) in BACKGROUND_TYPE_NAMES">{{ bgTypeName }}</option>
-                    </select>
-                  </label>
-                  <label style="--span: 3" v-if="backgroundType === 'block'"> </label>
-                  <label style="--span: 3" v-if="backgroundType === 'blockFrame'">
-                    Frame time (s)
-                    <input placeholder="0" type="number" min="0" v-model="blockFrameTime" />
-                  </label>
-                  <span style="--span: 3" v-if="backgroundType === 'blockLoop'">
-                    Range (s) - Use -1 for end of scene
-                    <span style="display: flex; gap: 0.5rem; padding-top: 0.25rem">
-                      <input style="width: 7rem" type="number" min="0" v-model="loopStartTime" /><span style="padding-top: 0.75rem">to</span>
-                      <span><input style="width: 7rem" class="show_end_time" :data-val="loopEndTime" type="number" min="-1" v-model="loopEndTime" /></span>
-                    </span>
-                  </span>
-                </div>
-                <div><hr /></div>
-
-                <div class="choices_container">
-                  <table style="margin-bottom: 0.5em">
-                    <caption style="text-align: left">
-                      <span>Choices</span>
-                    </caption>
-                    <thead>
-                      <tr>
-                        <th>Text</th>
-                        <th>Action</th>
-                        <th style="text-align: center">&nbsp;</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="(choice, index) in buttons" :key="index">
-                        <td><input placeholder="n/a" type="text" v-model="choice.text" /></td>
-                        <td><action-code-editor style="height: 2.6rem" v-model="choice.action" /></td>
-                        <td style="position: relative">
-                          <span class="choice_options">
-                            <icon :class="{ disabled_icon: index == 0, icon: true }" type="arrow-up" title="Move up" @click="moveChoiceUp(index)" />
-                            <icon :class="{ disabled_icon: index == 3, icon: true }" type="arrow-down" title="Move down" @click="moveChoiceDown(index)" />
-                            <icon type="trash-2" class="icon" title="Delete" @click="clearChoice(index)" />
-                          </span>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </template>
-
-              <template v-if="eventType == EVENT_TYPES.action">
-                <div>
-                  <span><action-code-editor class="action_event_editor" resize="vertical" v-model="eventActionCode" /></span>
-                </div>
-              </template>
-
-              <div><hr /></div>
-
-              <div>
-                <span class="edit_event_actions">
-                  <button class="s-outline" @click="show(false)">Cancel</button>
-                  <button @click="returnEvent">Accept</button>
-                </span>
-              </div>
-            </form>
-          </article>
-        </main>
-      </div>
+      <label style="--span: 2">
+        Type
+        <select autofocus v-model="eventType" @change="popupControl.fixScroll">
+          <option v-for="ctype in EVENT_TYPES" :value="ctype">{{ EVENT_TYPE_NAMES[ctype] }}</option>
+        </select>
+      </label>
+      <label style="--span: 2"
+        >Launch time (s) - Use -1 for end <input class="show_end_time" :data-val="launchTime" placeholder="n/a" type="number" min="-1" v-model="launchTime"
+      /></label>
+      <label style="--span: 2" v-if="eventType == EVENT_TYPES.choice">
+        <span>Choice layout<icon style="float: right" type="settings" class="icon" title="Layout settings" /></span>
+        <select v-model="layout" @change="popupControl.fixScroll">
+          <option value="">Project default ({{ LAYOUTS[store.currentStory.defaultChoiceLayout]?.name }})</option>
+          <option v-for="layout in LAYOUT_NAMES" :key="layout.id" :value="layout.id">
+            {{ layout.name }}
+          </option>
+        </select>
+      </label>
     </div>
-  </dialog>
+    <div><hr /></div>
+    <template v-if="eventType == EVENT_TYPES.choice">
+      <div>
+        <label style="--span: 4.5">Main text<input placeholder="n/a" type="text" v-model="mainChoiceText" /></label>
+        <span style="--span: 1.5" class="timed_switch">
+          <label>
+            <input type="checkbox" role="switch" v-model="isTimedChoice" />
+            Timed choice?
+          </label>
+        </span>
+      </div>
+      <div v-if="isTimedChoice">
+        <label style="--span: 2">Time limit (s)<input placeholder="1" type="number" min="1" v-model="timeLimit" /></label>
+        <label style="--span: 4">
+          Timeout action
+          <action-code-editor style="padding-top: 0.25rem; height: 2.9rem" v-model="timeoutActionCode" />
+        </label>
+      </div>
+      <div v-else>
+        <label style="--span: 3">
+          Background
+          <select v-model="backgroundType" @change="popupControl.fixScroll">
+            <option :value="bgType" v-for="(bgTypeName, bgType) in BACKGROUND_TYPE_NAMES">{{ bgTypeName }}</option>
+          </select>
+        </label>
+        <label style="--span: 3" v-if="backgroundType === 'block'"> </label>
+        <label style="--span: 3" v-if="backgroundType === 'blockFrame'">
+          Frame time (s)
+          <input placeholder="0" type="number" min="0" v-model="blockFrameTime" />
+        </label>
+        <span style="--span: 3" v-if="backgroundType === 'blockLoop'">
+          Range (s) - Use -1 for end of scene
+          <span style="display: flex; gap: 0.5rem; padding-top: 0.25rem">
+            <input style="width: 7rem" type="number" min="0" v-model="loopStartTime" /><span style="padding-top: 0.75rem">to</span>
+            <span><input style="width: 7rem" class="show_end_time" :data-val="loopEndTime" type="number" min="-1" v-model="loopEndTime" /></span>
+          </span>
+        </span>
+      </div>
+      <div><hr /></div>
+
+      <div class="choices_container">
+        <table style="margin-bottom: 0.5em">
+          <caption style="text-align: left">
+            <span>Choices</span>
+          </caption>
+          <thead>
+            <tr>
+              <th>Text</th>
+              <th>Action</th>
+              <th style="text-align: center">&nbsp;</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(choice, index) in buttons" :key="index">
+              <td><input placeholder="n/a" type="text" v-model="choice.text" /></td>
+              <td><action-code-editor style="height: 2.6rem" v-model="choice.action" /></td>
+              <td style="position: relative">
+                <span class="choice_options">
+                  <icon :class="{ disabled_icon: index == 0, icon: true }" type="arrow-up" title="Move up" @click="moveChoiceUp(index)" />
+                  <icon :class="{ disabled_icon: index == 3, icon: true }" type="arrow-down" title="Move down" @click="moveChoiceDown(index)" />
+                  <icon type="trash-2" class="icon" title="Delete" @click="clearChoice(index)" />
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </template>
+
+    <template v-if="eventType == EVENT_TYPES.action">
+      <div>
+        <span><action-code-editor class="action_event_editor" resize="vertical" v-model="eventActionCode" /></span>
+      </div>
+    </template>
+
+    <div><hr /></div>
+
+    <div>
+      <span class="edit_event_actions">
+        <button class="s-outline" @click="popupControl.setVisible(false)">Cancel</button>
+        <button @click="() => popupControl.returnResult(makeEventObject())">Accept</button>
+      </span>
+    </div>
+
+  </popup-dialog>
 </template>
 
 <script>
@@ -171,6 +158,7 @@ import Icon from "vue-feather"
 
 import { useStoryStore } from "@/stores/storyStore"
 
+import PopupDialog from "@/components/PopupDialog.vue"
 import ActionCodeEditor from "@/components/ActionCodeEditor.vue"
 
 const store = useStoryStore()
@@ -192,22 +180,6 @@ const blockFrameTime = ref(0)
 const buttons = ref(Array.from({ length: 4 }, () => ({ text: "", action: "" })))
 
 const title = ref("")
-
-let activePromiseControl = null
-
-/**
- * Show/hide the editor
- *
- * @param      {boolean}  [state=true]  The 'visible' state
- */
-const show = (state = true) => {
-  if (state) {
-    dialog.value.showModal()
-    setScrollAvailable(false)
-  } else {
-    dialog.value.close()
-  }
-}
 
 /**
  * 'Empty' the content of a choice button (text and action)
@@ -238,47 +210,6 @@ const moveChoiceUp = index => {
   ;[arr[index - 1], arr[index]] = [arr[index], arr[index - 1]]
 }
 
-/**
- * Fix the scrolling issue that happens on some browsers
- */
-const fixScroll = () => {
-  nextTick(() => setScrollAvailable(false))
-}
-
-/**
- * Makes scrolling available (or not) on the document
- *
- * @param      {boolean}  [state=true]  The state
- */
-const setScrollAvailable = (state = true) => {
-  document.body.style.overflow = state ? "auto" : "hidden"
-}
-
-/**
- * Handle clicking outside (off of) the modal dialog (for closing)
- *
- * @param      {Event}  event   The event
- */
-const handleModalClick = event => {
-  if (event.target === dialog.value) show(false)
-}
-
-/**
- * Exit the editor without changing anything
- */
-const exit = () => {
-  setScrollAvailable(true)
-  activePromiseControl?.resolve(null)
-}
-
-/**
- * Close editor and return the edited event object
- */
-const returnEvent = () => {
-  // ** TODO ** validate event here
-  show(false)
-  activePromiseControl.resolve(makeEventObject())
-}
 
 /**
  * Set up and display the editor
@@ -290,13 +221,7 @@ const returnEvent = () => {
 const useEditor = (event, windowTitle) => {
   setupUI(event)
   title.value = windowTitle
-  const promise = new Promise((resolve, reject) => {
-    activePromiseControl = {
-      resolve,
-      reject,
-    }
-  })
-  show()
+  const promise = dialog.value.launchPopup()
   return promise
 }
 
@@ -444,10 +369,6 @@ const setupUIForAction = event => {
   eventActionCode.value = event.data
 }
 
-onMounted(() => {
-  dialog.value.addEventListener("close", exit)
-})
-
 defineExpose({
   createNew,
   edit,
@@ -455,19 +376,11 @@ defineExpose({
 </script>
 
 <style scoped>
-.dialog {
-  font-size: 80% !important;
-}
 
-.modified-s-container {
-  margin-inline: auto;
+.event-editor-s-container {
   width: 80%;
   max-width: 750px;
   min-width: 350px;
-}
-
-.btn_close {
-  float: right;
 }
 
 .action_edit {
@@ -485,6 +398,10 @@ defineExpose({
   & td {
     padding: 0.5rem;
   }
+}
+
+.icon {
+  cursor: pointer;
 }
 
 .choice_options {
