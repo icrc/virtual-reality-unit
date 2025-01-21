@@ -166,4 +166,14 @@ h2 > .missing {
   font-weight:normal;
   color: #888;
 }
+
+.icon {
+  cursor: pointer;
+  :deep(& svg) {
+    stroke: #555;
+  }
+  :deep(& svg):hover {
+    stroke: var(--s-color-primary);
+  }
+}
 </style>
