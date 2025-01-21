@@ -86,7 +86,7 @@ const NEW_SCENE_DEFAULTS = {
 </script>
 
 <script setup>
-import { ref, computed, nextTick, useTemplateRef } from "vue"
+import { computed, nextTick, useTemplateRef, toRaw } from "vue"
 import Icon from "vue-feather"
 
 import EventEditor from "@/components/EventEditor.vue"
@@ -146,7 +146,8 @@ const addEventToScene = async scene => {
  * @param      {object}  event   The event to edit
  */
 const editEventForScene = async (scene, event) => {
-  const editedEvent = await eventEditor.value.edit(event)
+  const toEdit = toRaw(event)
+  const editedEvent = await eventEditor.value.edit(toEdit)
   if (editedEvent) props.store.updateEvent(scene.id, event.id, editedEvent)
 }
 

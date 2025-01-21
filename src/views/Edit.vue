@@ -47,7 +47,7 @@
                     </select>
                   </label>
                   <label style="--span: 5">Author<input placeholder="n/a" type="text" v-model="story.author" /></label>
-                  <label style="--span: 3"><span>Default choice layout<icon style="float:right" type="settings" class="icon" title="Layout settings" /></span>
+                  <label style="--span: 3"><span>Default choice layout<icon style="float:right" type="settings" class="icon" title="Layout settings" @click="editDefaultLayoutSettings" /></span>
                     <select v-model="story.defaultChoiceLayout">
                       <option v-for="layout in LAYOUT_NAMES" :key="layout.id" :value="layout.id">
                         {{ layout.name }}
@@ -63,7 +63,9 @@
           <videos :store="store" />
 
           <scenes :store="store" />
-          
+
+          <layout-settings-editor ref="layoutSettingsEditor" />
+
         </main>
       </div>
     </div>
@@ -76,7 +78,7 @@ import { LAYOUT_NAMES } from "@/layouts"
 </script>
 
 <script setup>
-import { computed, useTemplateRef, nextTick } from "vue"
+import { computed, useTemplateRef, nextTick, onMounted, provide } from "vue"
 import { storeToRefs } from "pinia"
 import { useRouter } from "vue-router"
 import { useStoryStore } from "@/stores/storyStore"
@@ -86,6 +88,7 @@ import Icon from "vue-feather"
 
 import Videos from "@/components/Videos.vue"
 import Scenes from "@/components/Scenes.vue"
+import LayoutSettingsEditor from "@/components/LayoutSettingsEditor.vue"
 
 const store = useStoryStore()
 const story = computed(() => store.currentStory)
@@ -98,6 +101,8 @@ const router = useRouter()
 
 
 const storyTitle = useTemplateRef("storyTitle")
+const layoutSettingsEditor = useTemplateRef("layoutSettingsEditor")
+provide('layoutSettingsEditor', layoutSettingsEditor)
 
 /**
  * Add a new story/project (checking if current saved first)
@@ -108,6 +113,16 @@ const newStory = async () => {
   if (!(await confirmUnsaved())) return
   store.newStory()
   nextTick(() => storyTitle.value.focus())
+}
+
+/**
+ * Edit the default layout settings
+ *
+ * @param      {Function}  launchEditFunc  The function to launch the editor
+ */
+const editDefaultLayoutSettings = async () => {
+  const newSettings = await layoutSettingsEditor.value.edit(story.value.defaultChoiceLayoutSettings, 'Edit Settings for Default Layout')
+  // ** TODO ** - if (newSettings) story.value.defaultChoiceLayoutSettings = newSettings
 }
 
 /**
@@ -150,6 +165,9 @@ const shareLink = async () => {
 const confirmUnsaved = async () => {
   return store.isSaved ? true : await confirm("Current story is unsaved. Continue?")
 }
+
+
+
 </script>
 
 <style scoped>

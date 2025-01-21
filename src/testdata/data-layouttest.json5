@@ -6,7 +6,7 @@
 	"initialSceneId": 1,
 	"locales": ["en"],
 	"defaultChoiceLayout": "column_r",
-	"defaultChoiceLayoutSettings": {},
+	"defaultChoiceLayoutSettings": {jon:1},
 	"videos": [
 		{
 			"title": "Hourglass",
@@ -35,7 +35,7 @@
 						"type": "block",
 						"options": {},
 						"layout": "",
-						"layoutSettings": {},
+						"layoutSettings": {jonChoice1LayourSettings:42},
 						"buttons": [
 							{
 								"text": "Option 1",

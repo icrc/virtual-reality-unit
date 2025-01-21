@@ -4,8 +4,8 @@
       <div>
         <main>
           <article>
-            <header v-if="header">
-              <h3>{{ header }}<icon type="x" class="icon btn_close" title="Close" @click="show(false)" /></h3>
+            <header v-if="heading">
+              <h3>{{ heading }}<icon type="x" class="icon btn_close" title="Close" @click="show(false)" /></h3>
             </header>
             <form class="s-grid">
               <slot :setVisible="show" :fixScroll="fixScroll" :exit="exit" :returnResult="returnResult"></slot>
@@ -24,7 +24,7 @@ import { useTemplateRef, nextTick, onMounted } from "vue"
 import Icon from "vue-feather"
 
 const props = defineProps({
-  header: String,
+  heading: String,
 })
 
 const dialog = useTemplateRef("dialog")

@@ -1,6 +1,6 @@
 <!-- Event Editor Component - for editing event details -->
 <template>
-  <popup-dialog ref="dialog" v-slot="popupControl" :header="title" class="event-editor-s-container">
+  <popup-dialog ref="dialog" v-slot="popupControl" :heading="title" class="event-editor-s-container">
     <div>
       <label style="--span: 2">
         Type
@@ -12,7 +12,7 @@
         >Launch time (s) - Use -1 for end <input class="show_end_time" :data-val="launchTime" placeholder="n/a" type="number" min="-1" v-model="launchTime"
       /></label>
       <label style="--span: 2" v-if="eventType == EVENT_TYPES.choice">
-        <span>Choice layout<icon style="float: right" type="settings" class="icon" title="Layout settings" /></span>
+        <span>Choice layout<icon style="float: right" type="settings" class="icon" title="Layout settings" @click="editLayoutSettings"/></span>
         <select v-model="layout" @change="popupControl.fixScroll">
           <option value="">Project default ({{ LAYOUTS[store.currentStory.defaultChoiceLayout]?.name }})</option>
           <option v-for="layout in LAYOUT_NAMES" :key="layout.id" :value="layout.id">
@@ -153,7 +153,7 @@ const BLANK_NEW_EVENT = {
 </script>
 
 <script setup>
-import { ref, useTemplateRef, nextTick, toRaw, onMounted } from "vue"
+import { ref, useTemplateRef, toRaw, inject } from "vue"
 import Icon from "vue-feather"
 
 import { useStoryStore } from "@/stores/storyStore"
@@ -169,6 +169,7 @@ const isTimedChoice = ref(false)
 const backgroundType = ref(BACKGROUND_TYPES.blockPause)
 const eventType = ref(EVENT_TYPES.choice)
 const layout = ref("")
+const layoutSettings = ref({})
 const launchTime = ref(-1)
 const eventActionCode = ref("")
 const mainChoiceText = ref("")
@@ -180,6 +181,20 @@ const blockFrameTime = ref(0)
 const buttons = ref(Array.from({ length: 4 }, () => ({ text: "", action: "" })))
 
 const title = ref("")
+
+
+const layoutSettingsEditor = inject("layoutSettingsEditor")
+
+/**
+ * Edit the default layout settings
+ *
+ * @param      {Function}  launchEditFunc  The function to launch the editor
+ */
+const editLayoutSettings = async (launchEditFunc) => {
+  const newSettings = await layoutSettingsEditor.value.edit(layoutSettings.value)
+  // ** TODO ** if (newSettings) layoutSettings.value = newSettings
+}
+
 
 /**
  * 'Empty' the content of a choice button (text and action)
@@ -275,7 +290,7 @@ const makeChoiceEventObject = () => {
       type: isTimedChoice.value ? CHOICE_TYPES.timed : CHOICE_TYPES.block,
       options: opts,
       layout: layout.value,
-      layoutSettings: {}, // ** TODO **
+      layoutSettings: layoutSettings.value, 
       buttons: sanitisedButtons(),
     },
   }
@@ -308,8 +323,9 @@ const createNew = async () => {
  * @return     {promise}  Promise resolving to the edited object (or null if cancelled)
  */
 const edit = async event => {
-  const eventToEdit = structuredClone(toRaw(event))
-  return await useEditor(eventToEdit, "Edit Event")
+  const eventToEdit = toRaw(event)
+  const edited = await useEditor(eventToEdit, "Edit Event")
+  return edited
 }
 
 /**
@@ -336,11 +352,11 @@ const setupUIForChoice = event => {
   isTimedChoice.value = event.data.type == CHOICE_TYPES.timed
   mainChoiceText.value = event.data.text
   layout.value = event.data.layout
+  layoutSettings.value = event.data.layoutSettings
   loopStartTime.value = 0
   loopEndTime.value = -1
   blockFrameTime.value = 0
   eventActionCode.value = ""
-  layout.value = ""
   if (!isTimedChoice.value) {
     if (event.data.options.hasOwnProperty("frame")) {
       backgroundType.value = BACKGROUND_TYPES.blockFrame
@@ -381,15 +397,6 @@ defineExpose({
   width: 80%;
   max-width: 750px;
   min-width: 350px;
-}
-
-.action_edit {
-  :deep(& svg) {
-    stroke: #fff !important;
-  }
-  :deep(& svg):hover {
-    stroke: #fff !important;
-  }
 }
 
 .choices_container {
