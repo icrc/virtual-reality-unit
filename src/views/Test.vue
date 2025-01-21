@@ -22,8 +22,6 @@
 
     <!-- Video service providers for doing preloads -->
     <video-service-provider v-for="n in 10" ref="serviceProviders" />
-
-    <popup-dialog><popup-inner /></popup-dialog>
   </div>
 </template>
 
@@ -35,9 +33,6 @@ import { VIDEO_SOURCE_TYPES } from "@/config"
 import { ref, useTemplateRef, onMounted, nextTick } from "vue"
 import Player from "@/components/Player.vue"
 import VideoServiceProvider from "@/components/VideoServiceProvider.vue"
-
-import PopupDialog from "@/components/PopupDialog.vue"
-import PopupInner from "@/components/PopupInner.vue"
 
 import { useFullscreen } from "@/composables/fullscreen"
 
