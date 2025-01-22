@@ -1,4 +1,4 @@
-<!-- Layout Settings Editor Component - for editing layout settings -->
+<!-- Layout Settings Editor Popup - for editing layout settings -->
 <template>
   <popup-dialog ref="dialog" v-slot="popupControl" :heading="title" class="layout-settings-s-container">
     <div>
@@ -37,12 +37,12 @@ const title = ref('')
 /**
  * Set up and display the editor
  *
- * @param      {object}                  layoutSettings  The layout settings
+ * @param      {object}                  layoutSettings                    The layout settings
+ * @param      {string}                  [heading="Edit Layout Settings"]  The heading
  * @return     {Promise<(null|object)>}  Promise resolving to the edited object or null if we exited
  */
 const edit = (layoutSettings, heading = "Edit Layout Settings") => {
   const settingsToEdit = toRaw(layoutSettings)
-  console.log("Edit Layout Settings", settingsToEdit)
   title.value = heading
   setupUI(settingsToEdit)
   const promise = dialog.value.launchPopup()

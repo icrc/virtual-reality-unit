@@ -36,7 +36,7 @@
         <label style="--span: 2">Time limit (s)<input placeholder="1" type="number" min="1" v-model="timeLimit" /></label>
         <label style="--span: 4">
           Timeout action
-          <action-code-editor style="padding-top: 0.25rem; height: 2.9rem" v-model="timeoutActionCode" />
+          <action-code-input style="padding-top: 0.25rem; height: 2.9rem" v-model="timeoutActionCode" />
         </label>
       </div>
       <div v-else>
@@ -76,7 +76,7 @@
           <tbody>
             <tr v-for="(choice, index) in buttons" :key="index">
               <td><input placeholder="n/a" type="text" v-model="choice.text" /></td>
-              <td><action-code-editor style="height: 2.6rem" v-model="choice.action" /></td>
+              <td><action-code-input style="height: 2.6rem" v-model="choice.action" /></td>
               <td style="position: relative">
                 <span class="choice_options">
                   <icon :class="{ disabled_icon: index == 0, icon: true }" type="arrow-up" title="Move up" @click="moveChoiceUp(index)" />
@@ -92,7 +92,7 @@
 
     <template v-if="eventType == EVENT_TYPES.action">
       <div>
-        <span><action-code-editor class="action_event_editor" resize="vertical" v-model="eventActionCode" /></span>
+        <span><action-code-input class="action_event_editor" resize="vertical" v-model="eventActionCode" /></span>
       </div>
     </template>
 
@@ -159,7 +159,7 @@ import Icon from "vue-feather"
 import { useStoryStore } from "@/stores/storyStore"
 
 import PopupDialog from "@/components/PopupDialog.vue"
-import ActionCodeEditor from "@/components/ActionCodeEditor.vue"
+import ActionCodeInput from "@/components/ActionCodeInput.vue"
 
 const store = useStoryStore()
 

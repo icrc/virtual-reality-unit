@@ -47,7 +47,7 @@
                     </select>
                   </label>
                   <label style="--span: 5">Author<input placeholder="n/a" type="text" v-model="story.author" /></label>
-                  <label style="--span: 3"><span>Default choice layout<icon style="float:right" type="settings" class="icon" title="Layout settings" @click="editDefaultLayoutSettings" /></span>
+                  <label style="--span: 3"><span>Default choice layout<icon style="float:right" type="settings" class="icon" aria-describedby="settings-tooltip" title="Layout settings" @click="editDefaultLayoutSettings" /></span>
                     <select v-model="story.defaultChoiceLayout">
                       <option v-for="layout in LAYOUT_NAMES" :key="layout.id" :value="layout.id">
                         {{ layout.name }}
@@ -65,6 +65,7 @@
           <scenes :store="store" />
 
           <layout-settings-editor ref="layoutSettingsEditor" />
+          <action-code-editor ref="actionCodeEditor" />
 
         </main>
       </div>
@@ -89,6 +90,7 @@ import Icon from "vue-feather"
 import Videos from "@/components/Videos.vue"
 import Scenes from "@/components/Scenes.vue"
 import LayoutSettingsEditor from "@/components/LayoutSettingsEditor.vue"
+import ActionCodeEditor from "@/components/ActionCodeEditor.vue"
 
 const store = useStoryStore()
 const story = computed(() => store.currentStory)
@@ -101,8 +103,12 @@ const router = useRouter()
 
 
 const storyTitle = useTemplateRef("storyTitle")
+
 const layoutSettingsEditor = useTemplateRef("layoutSettingsEditor")
 provide('layoutSettingsEditor', layoutSettingsEditor)
+
+const actionCodeEditor = useTemplateRef("actionCodeEditor")
+provide('actionCodeEditor', actionCodeEditor)
 
 /**
  * Add a new story/project (checking if current saved first)
