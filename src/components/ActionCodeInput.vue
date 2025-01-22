@@ -27,7 +27,6 @@ const props = defineProps({
  * Invoke the popup editor for action code, and return the result
  */
 const getCodeFromEditor = async () => {
-  console.log("Getting action code from editor...")
   const newCode = await editor.value.edit(actionCode.value)
   if (newCode !== null) actionCode.value = newCode
 }
