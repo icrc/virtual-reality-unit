@@ -16,24 +16,20 @@
         <button @click="() => popupControl.returnResult(getEditedActionCode())">Accept</button>
       </span>
     </div>
-
   </popup-dialog>
 </template>
 
-<script>
-
-</script>
+<script></script>
 
 <script setup>
 import { useTemplateRef, toRaw, ref } from "vue"
-
 
 import PopupDialog from "@/components/PopupDialog.vue"
 
 const dialog = useTemplateRef("dialog")
 
-const title = ref('')
-const actionCode = ref('')
+const title = ref("")
+const actionCode = ref("")
 
 /**
  * Set up and display the editor
@@ -61,7 +57,7 @@ const setupUI = actionCodeToEdit => {
 /**
  * Gets the edited action code.
  */
-const getEditedActionCode =  () => {
+const getEditedActionCode = () => {
   return actionCode.value
 }
 
@@ -71,7 +67,6 @@ defineExpose({
 </script>
 
 <style scoped>
-
 .action-code-s-container {
   width: 38%;
   max-width: 680px;

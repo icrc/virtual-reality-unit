@@ -37,7 +37,8 @@
               <div style="--span: 4" class="s-grid">
                 <div>
                   <label style="--span: 5">Project name<input ref="storyTitle" placeholder="(No name)" type="text" v-model="story.title" /></label>
-                  <label style="--span: 3">Initial scene
+                  <label style="--span: 3"
+                    >Initial scene
                     <select v-model="story.initialSceneId">
                       <option v-if="story.scenes.length" :value="-1">Please select a scene...</option>
                       <option v-if="story.scenes.length" v-for="scene in story.scenes" :key="scene.id" :value="scene.id">
@@ -47,7 +48,16 @@
                     </select>
                   </label>
                   <label style="--span: 5">Author<input placeholder="n/a" type="text" v-model="story.author" /></label>
-                  <label style="--span: 3"><span>Default choice layout<icon style="float:right" type="settings" class="icon" aria-describedby="settings-tooltip" title="Layout settings" @click="editDefaultLayoutSettings" /></span>
+                  <label style="--span: 3"
+                    ><span
+                      >Default choice layout<icon
+                        style="float: right"
+                        type="settings"
+                        class="icon"
+                        aria-describedby="settings-tooltip"
+                        title="Layout settings"
+                        @click="editDefaultLayoutSettings"
+                    /></span>
                     <select v-model="story.defaultChoiceLayout">
                       <option v-for="layout in LAYOUT_NAMES" :key="layout.id" :value="layout.id">
                         {{ layout.name }}
@@ -66,7 +76,6 @@
 
           <layout-settings-editor ref="layoutSettingsEditor" />
           <action-code-editor ref="actionCodeEditor" />
-
         </main>
       </div>
     </div>
@@ -101,14 +110,13 @@ const unsavedMarker = computed(() => (store.isSaved ? "" : "*"))
 
 const router = useRouter()
 
-
 const storyTitle = useTemplateRef("storyTitle")
 
 const layoutSettingsEditor = useTemplateRef("layoutSettingsEditor")
-provide('layoutSettingsEditor', layoutSettingsEditor)
+provide("layoutSettingsEditor", layoutSettingsEditor)
 
 const actionCodeEditor = useTemplateRef("actionCodeEditor")
-provide('actionCodeEditor', actionCodeEditor)
+provide("actionCodeEditor", actionCodeEditor)
 
 /**
  * Add a new story/project (checking if current saved first)
@@ -127,7 +135,7 @@ const newStory = async () => {
  * @param      {Function}  launchEditFunc  The function to launch the editor
  */
 const editDefaultLayoutSettings = async () => {
-  const newSettings = await layoutSettingsEditor.value.edit(story.value.defaultChoiceLayoutSettings, 'Edit Settings for Default Layout')
+  const newSettings = await layoutSettingsEditor.value.edit(story.value.defaultChoiceLayoutSettings, "Edit Settings for Default Layout")
   // ** TODO ** - if (newSettings) story.value.defaultChoiceLayoutSettings = newSettings
 }
 
@@ -171,9 +179,6 @@ const shareLink = async () => {
 const confirmUnsaved = async () => {
   return store.isSaved ? true : await confirm("Current story is unsaved. Continue?")
 }
-
-
-
 </script>
 
 <style scoped>
@@ -187,7 +192,7 @@ h2 > .missing {
 }
 
 .current_filename {
-  font-weight:normal;
+  font-weight: normal;
   color: #888;
 }
 

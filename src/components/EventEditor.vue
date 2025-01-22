@@ -12,7 +12,7 @@
         >Launch time (s) - Use -1 for end <input class="show_end_time" :data-val="launchTime" placeholder="n/a" type="number" min="-1" v-model="launchTime"
       /></label>
       <label style="--span: 2" v-if="eventType == EVENT_TYPES.choice">
-        <span>Choice layout<icon style="float: right" type="settings" class="icon" title="Layout settings" @click="editLayoutSettings"/></span>
+        <span>Choice layout<icon style="float: right" type="settings" class="icon" title="Layout settings" @click="editLayoutSettings" /></span>
         <select v-model="layout" @change="popupControl.fixScroll">
           <option value="">Project default ({{ LAYOUTS[store.currentStory.defaultChoiceLayout]?.name }})</option>
           <option v-for="layout in LAYOUT_NAMES" :key="layout.id" :value="layout.id">
@@ -104,7 +104,6 @@
         <button @click="() => popupControl.returnResult(makeEventObject())">Accept</button>
       </span>
     </div>
-
   </popup-dialog>
 </template>
 
@@ -182,7 +181,6 @@ const buttons = ref(Array.from({ length: 4 }, () => ({ text: "", action: "" })))
 
 const title = ref("")
 
-
 const layoutSettingsEditor = inject("layoutSettingsEditor")
 
 /**
@@ -190,11 +188,10 @@ const layoutSettingsEditor = inject("layoutSettingsEditor")
  *
  * @param      {Function}  launchEditFunc  The function to launch the editor
  */
-const editLayoutSettings = async (launchEditFunc) => {
+const editLayoutSettings = async launchEditFunc => {
   const newSettings = await layoutSettingsEditor.value.edit(layoutSettings.value)
   // ** TODO ** if (newSettings) layoutSettings.value = newSettings
 }
-
 
 /**
  * 'Empty' the content of a choice button (text and action)
@@ -224,7 +221,6 @@ const moveChoiceUp = index => {
   const arr = buttons.value
   ;[arr[index - 1], arr[index]] = [arr[index], arr[index - 1]]
 }
-
 
 /**
  * Set up and display the editor
@@ -290,7 +286,7 @@ const makeChoiceEventObject = () => {
       type: isTimedChoice.value ? CHOICE_TYPES.timed : CHOICE_TYPES.block,
       options: opts,
       layout: layout.value,
-      layoutSettings: layoutSettings.value, 
+      layoutSettings: layoutSettings.value,
       buttons: sanitisedButtons(),
     },
   }
@@ -392,7 +388,6 @@ defineExpose({
 </script>
 
 <style scoped>
-
 .event-editor-s-container {
   width: 80%;
   max-width: 750px;

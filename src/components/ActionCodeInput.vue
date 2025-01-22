@@ -20,9 +20,8 @@ const editor = inject("actionCodeEditor")
 const actionCode = defineModel()
 
 const props = defineProps({
-  resize: String
+  resize: String,
 })
-
 
 /**
  * Invoke the popup editor for action code, and return the result
@@ -32,14 +31,13 @@ const getCodeFromEditor = async () => {
   const newCode = await editor.value.edit(actionCode.value)
   if (newCode !== null) actionCode.value = newCode
 }
-
 </script>
 
 <style scoped>
 span {
   display: flex;
   gap: 0.25rem;
-  height:fit-content;
+  height: fit-content;
 }
 
 button {
@@ -51,6 +49,6 @@ textarea {
   padding: 0.5rem;
   height: 100%;
   min-height: 2.6rem;
-  resize: v-bind(props.resize || 'none');
+  resize: v-bind(props.resize || "none");
 }
 </style>

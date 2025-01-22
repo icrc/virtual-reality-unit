@@ -16,23 +16,19 @@
         <button @click="() => popupControl.returnResult(getEditedSettings())">Accept</button>
       </span>
     </div>
-
   </popup-dialog>
 </template>
 
-<script>
-
-</script>
+<script></script>
 
 <script setup>
 import { useTemplateRef, toRaw, ref } from "vue"
-
 
 import PopupDialog from "@/components/PopupDialog.vue"
 
 const dialog = useTemplateRef("dialog")
 
-const title = ref('')
+const title = ref("")
 
 /**
  * Set up and display the editor
@@ -54,16 +50,12 @@ const edit = (layoutSettings, heading = "Edit Layout Settings") => {
  *
  * @param      {object}  layoutSettings  The layout settings
  */
-const setupUI = layoutSettings => {
-
-}
+const setupUI = layoutSettings => {}
 
 /**
  * Gets the edited settings.
  */
-const getEditedSettings =  () => ({
-
-})
+const getEditedSettings = () => ({})
 
 defineExpose({
   edit,
@@ -71,7 +63,6 @@ defineExpose({
 </script>
 
 <style scoped>
-
 .layout-settings-s-container {
   width: 32%;
   max-width: 750px;
