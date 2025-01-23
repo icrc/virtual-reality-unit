@@ -7,9 +7,9 @@
             <header v-if="heading">
               <h3>{{ heading }}<icon type="x" class="icon btn_close" title="Close" @click="show(false)" /></h3>
             </header>
-            <form class="s-grid">
+            <div class="s-grid">
               <slot :setVisible="show" :fixScroll="fixScroll" :exit="exit" :returnResult="returnResult"></slot>
-            </form>
+            </div>
           </article>
         </main>
       </div>
