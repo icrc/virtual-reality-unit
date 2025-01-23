@@ -44,7 +44,7 @@ export const runCode = (actionCode, initialState, commandLibrary = {}) => {
  * @return     {Object}  Yields objects: { command: 'commandName', args: [] }
  */
 export function* parser(code, state) {
-  const c = code.trim()
+  const c = typeof code=="string" ? code.trim() : ''
   if (!c) return
 
   const lines = c.split("\n").map(line => line.trim())

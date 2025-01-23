@@ -4,7 +4,7 @@
 
     <div>
       <label style="--span: 6" :title="!isCurrentCodeSimple && 'This code cannot be edited in simple mode'"><input type="checkbox" v-model="isAdvanced" :disabled="!isCurrentCodeSimple" />Advanced editor? </label>
-      <label style="--span: 6">{{ isAdvanced ? "Advanced" : "Simple" }} Editor<textarea rows="12" placeholder="n/a" type="text" v-model="actionCodeAdv"></textarea></label>
+      <label style="--span: 6">{{ isAdvanced ? "Advanced" : "Simple" }} Editor<textarea rows="12" placeholder="No action" type="text" v-model="actionCodeAdv"></textarea></label>
     </div>
 
     <div><hr /></div>
@@ -29,7 +29,6 @@ const SIMPLE_COMMANDS = {
 
 const isSimpleCode = actionCode => {
   const commands = [...parser(actionCode, {})]
-  console.log(commands)
   if (commands.length > 1) return false
   if (!commands.length) return true
   const command = commands[0].command
