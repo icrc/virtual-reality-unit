@@ -1,11 +1,10 @@
 <!-- Action Editor Popup - for editing action code -->
 <template>
   <popup-dialog ref="dialog" v-slot="popupControl" :heading="title" class="action-code-s-container">
+
     <div>
-      <label style="--span: 2">
-        Test
-        <input placeholder="Testing" type="text" v-model="actionCode" />
-      </label>
+      <label style="--span: 6" :title="!isCurrentCodeSimple && 'This code cannot be edited in simple mode'"><input type="checkbox" v-model="isAdvanced" :disabled="!isCurrentCodeSimple" />Advanced editor? </label>
+      <label style="--span: 6">{{ isAdvanced ? "Advanced" : "Simple" }} Editor<textarea rows="12" placeholder="n/a" type="text" v-model="actionCodeAdv"></textarea></label>
     </div>
 
     <div><hr /></div>
@@ -19,17 +18,43 @@
   </popup-dialog>
 </template>
 
-<script></script>
+<script>
+import { parser } from "@/libs/actionCode"
+
+const SIMPLE_COMMANDS = {
+  gotoScene: { requiresScene: true },
+  setNextScene: { requiresScene: true },
+  gotoNextScene: {},
+}
+
+const isSimpleCode = actionCode => {
+  const commands = [...parser(actionCode, {})]
+  console.log(commands)
+  if (commands.length > 1) return false
+  if (!commands.length) return true
+  const command = commands[0].command
+  const arg = commands[0].args[0]
+  const isSimpleCommand = command in SIMPLE_COMMANDS
+  if (!isSimpleCommand) return false
+  if (isSimpleCommand && SIMPLE_COMMANDS[command].requiresScene && typeof arg !=="number") return false
+  return true
+}
+</script>
 
 <script setup>
-import { useTemplateRef, toRaw, ref } from "vue"
+import { useTemplateRef, toRaw, ref, computed } from "vue"
 
 import PopupDialog from "@/components/PopupDialog.vue"
 
 const dialog = useTemplateRef("dialog")
 
 const title = ref("")
-const actionCode = ref("")
+const actionCodeAdv = ref("")
+const isAdvanced = ref(false)
+
+const isCurrentCodeSimple = computed(() => {
+  return isSimpleCode(getEditedActionCode())
+})
 
 /**
  * Set up and display the editor
@@ -51,14 +76,16 @@ const edit = (actionCodeToEdit, heading = "Edit Action(s)") => {
  * @param      {object}  actionCodeToEdit  The code to edit
  */
 const setupUI = actionCodeToEdit => {
-  actionCode.value = toRaw(actionCodeToEdit)
+  const code = toRaw(actionCodeToEdit)
+  actionCodeAdv.value = code
+  isAdvanced.value = !isSimpleCode(code)
 }
 
 /**
  * Gets the edited action code.
  */
 const getEditedActionCode = () => {
-  return actionCode.value
+  return actionCodeAdv.value
 }
 
 defineExpose({
