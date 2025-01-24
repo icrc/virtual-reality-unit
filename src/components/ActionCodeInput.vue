@@ -1,7 +1,7 @@
 <!-- Action Code Editor Component -->
 <template>
   <span>
-    <textarea placeholder="No action" v-model="actionCode"></textarea>
+    <textarea autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="No action" v-model="actionCode"></textarea>
     <button @click="getCodeFromEditor" title="Use Action Code Editor"><icon type="edit-3" class="icon button-icon" /></button>
   </span>
 </template>
