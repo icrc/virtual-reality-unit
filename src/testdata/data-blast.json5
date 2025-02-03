@@ -7,13 +7,13 @@
 	"defaultChoiceLayout": "btn_4_horiz",
 	"defaultChoiceLayoutSettings": {
 		"colour_button1": "#fc0102",
-		"text_colour_button1": "#000",
+		"text_colour_button1": "#000000",
 		"colour_button2": "#fcff00",
-		"text_colour_button2": "#000",
+		"text_colour_button2": "#000000",
 		"colour_button3": "#0bff00",
-		"text_colour_button3": "#000",
-		"colour_button4": "#000",
-		"text_colour_button5": "#fff",
+		"text_colour_button3": "#000000",
+		"colour_button4": "#000000",
+		"text_colour_button4": "#ffffff",
 		"button_align": "flex-end"
 	},
 	"videos": [

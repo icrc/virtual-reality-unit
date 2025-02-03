@@ -135,7 +135,7 @@ const newStory = async () => {
  * @param      {Function}  launchEditFunc  The function to launch the editor
  */
 const editDefaultLayoutSettings = async () => {
-  const newSettings = await layoutSettingsEditor.value.edit(story.value.defaultChoiceLayoutSettings, "Edit Settings for Default Layout")
+  const newSettings = await layoutSettingsEditor.value.edit(story.value.defaultChoiceLayout, story.value.defaultChoiceLayoutSettings, "Edit Settings for Default Layout")
   // ** TODO ** - if (newSettings) story.value.defaultChoiceLayoutSettings = newSettings
 }
 

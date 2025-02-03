@@ -1,11 +1,41 @@
 <!-- Layout Settings Editor Popup - for editing layout settings -->
 <template>
   <popup-dialog ref="dialog" v-slot="popupControl" :heading="title" class="layout-settings-s-container">
-    <div>
+    <div style="--span: 4">
+      <h6>Layout is '{{ layout.name }}':</h6>
+      <span>Leave individual settings blank for layout default.</span>
+      <hr />
+    </div>
+    <!-- <div>
       <label style="--span: 2">
-        Test
+        {{ layout }}
         <input placeholder="Testing" type="text" />
       </label>
+    </div> -->
+    <div style="--span: 4; max-height: 22rem; overflow-y: scroll">
+      <div v-for="(val, key) in currentSettings" style="--span: 4">
+        <label style="--span: 3">
+          {{ layout.options[key]?.name }}
+          <span v-if="layout.options[key].type === 'number'" class="button_input_fix">
+            <input v-model="currentSettings[key]" placeholder="Default" type="number" />
+            <button>
+              <icon title="Remove and use default" type="trash-2" class="icon button-icon" />
+            </button>
+          </span>
+
+          <colour-input
+            class="button_input_fix"
+            v-else-if="layout.options[key].type === 'colour'"
+            v-model="currentSettings[key]"
+            placeholder="Default"
+            button-title="Remove and use default" />
+
+          <select v-else-if="typeof layout.options[key].type === 'object'" v-model="currentSettings[key]">
+            <option value="">(Default)</option>
+            <option v-for="(v, k) in layout.options[key].type" :value="k">{{ v }}</option>
+          </select>
+        </label>
+      </div>
     </div>
 
     <div><hr /></div>
@@ -19,28 +49,37 @@
   </popup-dialog>
 </template>
 
-<script></script>
+<script>
+import { LAYOUTS } from "@/layouts"
+</script>
 
 <script setup>
-import { useTemplateRef, toRaw, ref } from "vue"
+import { useTemplateRef, toRaw, ref, computed, reactive } from "vue"
 
 import PopupDialog from "@/components/PopupDialog.vue"
+import ColourInput from "@/components/ColourInput.vue"
+import Icon from "vue-feather"
 
 const dialog = useTemplateRef("dialog")
 
 const title = ref("")
+const id = ref("")
+const layout = computed(() => LAYOUTS[id.value] || {})
+const currentSettings = ref({})
 
 /**
  * Set up and display the editor
  *
- * @param      {object}                  layoutSettings                    The layout settings
- * @param      {string}                  [heading="Edit Layout Settings"]  The heading
+ * @param      {string}                  layoutId        The layout id
+ * @param      {object}                  layoutSettings  The layout settings
+ * @param      {string}                  [heading="Edit  Layout Settings"]  The heading
  * @return     {Promise<(null|object)>}  Promise resolving to the edited object or null if we exited
  */
-const edit = (layoutSettings, heading = "Edit Layout Settings") => {
+const edit = (layoutId, layoutSettings, heading = "Edit Layout Settings") => {
   const settingsToEdit = toRaw(layoutSettings)
+  const id = toRaw(layoutId)
   title.value = heading
-  setupUI(settingsToEdit)
+  setupUI(id, settingsToEdit)
   const promise = dialog.value.launchPopup()
   return promise
 }
@@ -48,14 +87,23 @@ const edit = (layoutSettings, heading = "Edit Layout Settings") => {
 /**
  * Set up the UI for the passed layout settings
  *
+ * @param      {string}  layoutId        The layout id
  * @param      {object}  layoutSettings  The layout settings
  */
-const setupUI = layoutSettings => {}
+const setupUI = (layoutId, layoutSettings) => {
+  id.value = layoutId
+  const emptySettings = Object.fromEntries(Object.keys(LAYOUTS[layoutId].options).map(key => [key, undefined]))
+  currentSettings.value = { ...emptySettings, ...layoutSettings }
+}
 
 /**
  * Gets the edited settings.
  */
-const getEditedSettings = () => ({})
+const getEditedSettings = () => {
+  const ret = toRaw(currentSettings.value)
+  console.log(ret)
+  return ret
+}
 
 defineExpose({
   edit,
@@ -91,5 +139,14 @@ defineExpose({
 :deep(.disabled_icon) {
   cursor: default !important;
   pointer-events: none;
+}
+
+.button_input_fix {
+  & input,
+  & button,
+  :deep(& input),
+  :deep(& button) {
+    margin-top: 0.25rem;
+  }
 }
 </style>

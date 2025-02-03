@@ -119,7 +119,7 @@ export const LAYOUTS = {
 	},
 	// 'full' layout
 	full: {
-		name: "Full layout - centred and full width",
+		name: "Full - centred + full width",
 		thumbnail: "",
 		options: {
 			colour_button1: {
@@ -170,7 +170,7 @@ export const LAYOUTS = {
 	},
 	// Column layout
 	column: {
-		name: "Column left layout - buttons on left",
+		name: "Column - buttons left",
 		thumbnail: "",
 		options: {
 			colour_button1: {
@@ -221,7 +221,7 @@ export const LAYOUTS = {
 	},
 	// Column right layout
 	column_r: {
-		name: "Column right layout - buttons on right",
+		name: "Column - buttons right",
 		thumbnail: "",
 		options: {
 			colour_button1: {

@@ -188,8 +188,9 @@ const layoutSettingsEditor = inject("layoutSettingsEditor")
  *
  * @param      {Function}  launchEditFunc  The function to launch the editor
  */
-const editLayoutSettings = async launchEditFunc => {
-  const newSettings = await layoutSettingsEditor.value.edit(layoutSettings.value)
+const editLayoutSettings = async () => {
+  const id = layout.value || store.currentStory.defaultChoiceLayout
+  const newSettings = await layoutSettingsEditor.value.edit(id, layoutSettings.value)
   // ** TODO ** if (newSettings) layoutSettings.value = newSettings
 }
 

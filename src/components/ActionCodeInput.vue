@@ -9,16 +9,11 @@
 <script></script>
 
 <script setup>
-// TODO - flesh this out!
-
 import { inject } from "vue"
-
 import Icon from "vue-feather"
 
 const editor = inject("actionCodeEditor")
-
 const actionCode = defineModel()
-
 const props = defineProps({
   resize: String,
 })
