@@ -6,7 +6,7 @@
       <span>Leave individual settings blank for layout default.</span>
       <hr />
     </div>
-    <div style="--span: 4" class="settings_list">
+    <div style="--span: 4" class="settings_list" ref="settingsList">
       <div v-for="(val, key) in currentSettings" style="--span: 4">
         <label style="--span: 3">
           {{ layout.options[key]?.name }}
@@ -53,13 +53,14 @@ import { LAYOUTS } from "@/layouts"
 </script>
 
 <script setup>
-import { useTemplateRef, toRaw, ref, computed, reactive } from "vue"
+import { useTemplateRef, toRaw, ref, computed, nextTick } from "vue"
 
 import PopupDialog from "@/components/PopupDialog.vue"
 import ColourInput from "@/components/ColourInput.vue"
 import Icon from "vue-feather"
 
 const dialog = useTemplateRef("dialog")
+const settingsList = useTemplateRef("settingsList")
 
 const title = ref("")
 const id = ref("")
@@ -93,6 +94,7 @@ const setupUI = (layoutId, layoutSettings) => {
   id.value = layoutId
   const emptySettings = Object.fromEntries(Object.keys(LAYOUTS[layoutId].options).map(key => [key, ""]))
   currentSettings.value = { ...emptySettings, ...layoutSettings }
+  nextTick(() =>settingsList.value.scrollTo({top: 0}))
 }
 
 /**
