@@ -6,7 +6,7 @@
       <span>Leave individual settings blank for layout default.</span>
       <hr />
     </div>
-    <div style="--span: 4; max-height: 22rem; overflow-y: scroll">
+    <div style="--span: 4" class="settings_list">
       <div v-for="(val, key) in currentSettings" style="--span: 4">
         <label style="--span: 3">
           {{ layout.options[key]?.name }}
@@ -166,5 +166,10 @@ defineExpose({
   :deep(& button) {
     margin-top: 0.25rem;
   }
+}
+
+.settings_list {
+  max-height: 22rem;
+  overflow-y: auto;
 }
 </style>

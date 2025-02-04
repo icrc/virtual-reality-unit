@@ -42,7 +42,11 @@ const clear = () => hexColour.value = ''
 }
 
 .col_selector {
-  display: none;
+  visibility: hidden;
+  margin:0 -0.5em 0 0;
+  padding:0;
+  height:0;
+  width:0;
 }
 
 .sample {
