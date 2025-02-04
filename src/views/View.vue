@@ -62,7 +62,7 @@ const handleStart = async () => {
   const res = await player.value.start(abortController.signal)
   if (!res.aborted) {
     if (Object.entries(res.finalState).length) {
-     if (process.env.NODE_ENV === "development") await alert("Finished! Final state:\n\n" + JSON.stringify(res.finalState, null, 2))
+      if (process.env.NODE_ENV === "development") await alert("Finished! Final state:\n\n" + JSON.stringify(res.finalState, null, 2))
     }
     if (document.fullscreen) document.exitFullscreen()
     handleReset()
@@ -76,7 +76,7 @@ const handleStart = async () => {
  */
 const getStoryData = () => {
   const route = useRoute()
-  if (uncompressStoryData || route?.name == 'play') {
+  if (uncompressStoryData || route?.name == "play") {
     const story = uncompressStoryData || store.uncompressStoryData(props.data)
     uncompressStoryData = structuredClone(story)
     if (!story) {
@@ -86,7 +86,7 @@ const getStoryData = () => {
       return story
     }
   } else {
-    return structuredClone(toRaw(store.currentStory))
+    return toRaw(store.currentStory)
   }
 }
 

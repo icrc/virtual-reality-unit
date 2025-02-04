@@ -217,7 +217,6 @@ const resizePlayerToContainerWidth = ({ width: screenWidth, height: screenHeight
 }
 let { stopWatching: stopWatchingWindowResize } = useWindowSize(resizePlayerToContainerWidth) // make sure player gets sized appropriately on window resize
 
-
 /**
  * Go to full screen player
  */
@@ -232,7 +231,7 @@ const goFullscreen = () => {
 const getSceneSourceObject = scene => getVideoSourceObject(getVideo(scene.videoId))
 const getVideoSourceObject = ({ sourceType: type, url: src }) => ({ type: "video/" + type, src })
 const getVideo = id => props.data.videos.find(v => v.id === id)
-const getScene = id => structuredClone(toRaw(props.data.scenes.find(s => s.id === id)))
+const getScene = id => toRaw(props.data.scenes.find(s => s.id === id))
 
 // intitial options for videoJS - show the beginning of first scene video
 const getInitialPlayerOptions = () => ({
@@ -314,7 +313,7 @@ function playScene(scene, abortSignal = undefined) {
 		/**
 		 * Handler for the 'abort' event on the abortSignal (an outside request to stop)
 		 *
-		 * @return     {void}  
+		 * @return     {void}
 		 */
 		const abortHandler = () => announceDone({ aborted: true, error: "Playback aborted" })
 
@@ -373,7 +372,7 @@ function playScene(scene, abortSignal = undefined) {
 		/**
 		 * Handle reaching the end of a scene
 		 *
-		 * @return     {Promise}  
+		 * @return     {Promise}
 		 */
 		async function handleSceneEnd() {
 			// check for 'end of scene' events
@@ -401,7 +400,7 @@ function playScene(scene, abortSignal = undefined) {
 		 * Handle/run an event (action/choice)
 		 *
 		 * @param      {Object}   event   The event
-		 * @return     {Promise}  
+		 * @return     {Promise}
 		 */
 		async function handleEvent(event) {
 			completedEventIds.push(event.id)
@@ -506,7 +505,7 @@ function playScene(scene, abortSignal = undefined) {
 		 * Run the action code on the current state
 		 *
 		 * @param      {String}  code    The code
-		 * @return     {Object}  State after running the action code, with possible bailed out flag 
+		 * @return     {Object}  State after running the action code, with possible bailed out flag
 		 */
 		function runActionCode(code) {
 			return runCode(code, currentState, CMD_LIBRARY)
