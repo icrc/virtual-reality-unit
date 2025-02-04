@@ -25,6 +25,11 @@ const routes = [
     props: true
   },
   {
+    path: "/help",
+    name: "help",
+    component: views.Help,
+  },
+  {
     path: "/test",
     name: "test",
     component: views.Test,
