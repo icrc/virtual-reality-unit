@@ -1,7 +1,6 @@
 <!-- Colour Input Component -->
 <template>
   <span class="col_container">
-    <input class="col_selector" ref="selector" :placeholder="placeholder" type="color" v-model="hexColour" />
     <span @click="pick" title="Choose colour" :class="{sample: true, unset: !hexColour}"><span></span></span>
     <span class="controls">
       <input v-model="hexColour" :placeholder="placeholder" type="text" />
@@ -9,6 +8,7 @@
         <icon :title="buttonTitle" type="trash-2" class="icon button-icon" />
       </button>
     </span>
+    <input class="col_selector" ref="selector" :placeholder="placeholder" type="color" v-model="hexColour" />
   </span>
 </template>
 
@@ -35,6 +35,7 @@ const clear = () => hexColour.value = ''
   display: flex;
   align-items: center;
   gap:0.25rem;
+  position: relative;
 }
 
 .controls {
@@ -47,6 +48,8 @@ const clear = () => hexColour.value = ''
   padding:0;
   height:0;
   width:0;
+  position: absolute;
+  left:0;
 }
 
 .sample {
