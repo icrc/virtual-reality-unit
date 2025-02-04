@@ -13,7 +13,14 @@
       /></label>
       <label style="--span: 2" v-if="eventType == EVENT_TYPES.choice">
         <span>Choice layout<icon style="float: right" type="settings" class="icon" title="Layout settings" @click="editLayoutSettings" /></span>
-        <select v-model="layout" @change="popupControl.fixScroll">
+        <select
+          v-model="layout"
+          @change="
+            () => {
+              handleLayoutChange()
+              popupControl.fixScroll()
+            }
+          ">
           <option value="">Project default ({{ LAYOUTS[store.currentStory.defaultChoiceLayout]?.name }})</option>
           <option v-for="layout in LAYOUT_NAMES" :key="layout.id" :value="layout.id">
             {{ layout.name }}
@@ -185,13 +192,19 @@ const layoutSettingsEditor = inject("layoutSettingsEditor")
 
 /**
  * Edit the default layout settings
- *
- * @param      {Function}  launchEditFunc  The function to launch the editor
  */
 const editLayoutSettings = async () => {
   const id = layout.value || store.currentStory.defaultChoiceLayout
   const newSettings = await layoutSettingsEditor.value.edit(id, layoutSettings.value)
-  // ** TODO ** if (newSettings) layoutSettings.value = newSettings
+  if (newSettings) layoutSettings.value = newSettings
+}
+
+/**
+ * Handle a change of layout from the layout dropdown
+ */
+const handleLayoutChange = () => {
+  // clear layout settings as they won't be relevant to new layout
+  layoutSettings.value = {}
 }
 
 /**

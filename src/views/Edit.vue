@@ -58,7 +58,7 @@
                         title="Layout settings"
                         @click="editDefaultLayoutSettings"
                     /></span>
-                    <select v-model="story.defaultChoiceLayout">
+                    <select v-model="story.defaultChoiceLayout" @change="handleLayoutChange">
                       <option v-for="layout in LAYOUT_NAMES" :key="layout.id" :value="layout.id">
                         {{ layout.name }}
                       </option>
@@ -136,7 +136,15 @@ const newStory = async () => {
  */
 const editDefaultLayoutSettings = async () => {
   const newSettings = await layoutSettingsEditor.value.edit(story.value.defaultChoiceLayout, story.value.defaultChoiceLayoutSettings, "Edit Settings for Default Layout")
-  // ** TODO ** - if (newSettings) story.value.defaultChoiceLayoutSettings = newSettings
+  if (newSettings) story.value.defaultChoiceLayoutSettings = newSettings
+}
+
+/**
+ * Handle a change of layout from the layout dropdown
+ */
+const handleLayoutChange = () => {
+  // clear layout settings as they won't be relevant to new layout
+  story.value.defaultChoiceLayoutSettings = {}
 }
 
 /**

@@ -6,19 +6,18 @@
       <span>Leave individual settings blank for layout default.</span>
       <hr />
     </div>
-    <!-- <div>
-      <label style="--span: 2">
-        {{ layout }}
-        <input placeholder="Testing" type="text" />
-      </label>
-    </div> -->
     <div style="--span: 4; max-height: 22rem; overflow-y: scroll">
       <div v-for="(val, key) in currentSettings" style="--span: 4">
         <label style="--span: 3">
           {{ layout.options[key]?.name }}
           <span v-if="layout.options[key].type === 'number'" class="button_input_fix">
             <input v-model="currentSettings[key]" placeholder="Default" type="number" />
-            <button>
+            <button
+              @click="
+                () => {
+                  currentSettings[key] = ''
+                }
+              ">
               <icon title="Remove and use default" type="trash-2" class="icon button-icon" />
             </button>
           </span>
@@ -92,7 +91,7 @@ const edit = (layoutId, layoutSettings, heading = "Edit Layout Settings") => {
  */
 const setupUI = (layoutId, layoutSettings) => {
   id.value = layoutId
-  const emptySettings = Object.fromEntries(Object.keys(LAYOUTS[layoutId].options).map(key => [key, undefined]))
+  const emptySettings = Object.fromEntries(Object.keys(LAYOUTS[layoutId].options).map(key => [key, ""]))
   currentSettings.value = { ...emptySettings, ...layoutSettings }
 }
 
@@ -100,9 +99,28 @@ const setupUI = (layoutId, layoutSettings) => {
  * Gets the edited settings.
  */
 const getEditedSettings = () => {
-  const ret = toRaw(currentSettings.value)
+  const ret = sanitiseSettings(toRaw(currentSettings.value))
   console.log(ret)
   return ret
+}
+
+/**
+ * Sanitise the passed settings (based on the layout setup)
+ *
+ * @param      {object}  settings  The settings to sanitise
+ */
+const sanitiseSettings = settings => {
+  const sanitised = { ...settings }
+  for (const key in sanitised) {
+    let val = sanitised[key]
+    if (typeof val === "string") val = val.trim()
+    if (["", undefined].includes(val)) {
+      delete sanitised[key]
+      continue
+    }
+    if (layout.value.options[key].type === "number") sanitised[key] = +val
+  }
+  return sanitised
 }
 
 defineExpose({
