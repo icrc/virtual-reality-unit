@@ -1,7 +1,7 @@
 <template>
   <header v-if="!showContentOnly" :class="{ main_nav: true, full_screen: isFullscreen }">
     <nav class="s-container">
-      <div><icon type="video" class="icon heading_icon"/> ICRC VideoPath</div>
+      <div class="app_home_link" @click="goHome"><icon type="video" class="icon heading_icon"/> ICRC VideoPath</div>
       <menu>
         <li><RouterLink to="/">Home</RouterLink></li>
         <li><RouterLink to="/view">View</RouterLink></li>
@@ -21,12 +21,15 @@
 import Icon from "vue-feather"
 
 import { computed } from "vue"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import { useFullscreen } from "@/composables/fullscreen"
 
 const { isFullscreen } = useFullscreen()
 const route = useRoute()
+const router = useRouter()
 const showContentOnly = computed(() => route.name === "play")
+
+const goHome = () => router.push('/')
 </script>
 
 <style>
@@ -76,5 +79,9 @@ span:has(> input.show_end_time[data-val="-1"])::before {
   vertical-align: middle;
   margin-right: 0.5rem;
   margin-bottom: 0.25rem;
+}
+
+.app_home_link {
+  cursor: pointer;
 }
 </style>
