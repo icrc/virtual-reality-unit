@@ -12,12 +12,7 @@
           {{ layout.options[key]?.name }}
           <span v-if="layout.options[key].type === 'number'" class="button_input_fix">
             <input v-model="currentSettings[key]" placeholder="Default" type="number" />
-            <button
-              @click="
-                () => {
-                  currentSettings[key] = ''
-                }
-              ">
+            <button @click="() => (currentSettings[key] = '')">
               <icon title="Remove and use default" type="trash-2" class="icon button-icon" />
             </button>
           </span>
@@ -94,7 +89,7 @@ const setupUI = (layoutId, layoutSettings) => {
   id.value = layoutId
   const emptySettings = Object.fromEntries(Object.keys(LAYOUTS[layoutId].options).map(key => [key, ""]))
   currentSettings.value = { ...emptySettings, ...layoutSettings }
-  nextTick(() =>settingsList.value.scrollTo({top: 0}))
+  nextTick(() => settingsList.value.scrollTo({ top: 0 }))
 }
 
 /**

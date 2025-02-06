@@ -8,7 +8,7 @@
               <h3>{{ heading }}<icon type="x" class="icon btn_close" title="Close" @click="show(false)" /></h3>
             </header>
             <div class="s-grid">
-              <slot :setVisible="show" :fixScroll="fixScroll" :exit="exit" :returnResult="returnResult"></slot>
+              <slot v-bind="api"></slot>
             </div>
           </article>
         </main>
@@ -99,6 +99,13 @@ const launchPopup = () => {
   })
   show()
   return promise
+}
+
+const api = {
+  setVisible: show,
+  fixScroll,
+  exit,
+  returnResult,
 }
 
 onMounted(() => {
