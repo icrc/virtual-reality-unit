@@ -173,10 +173,11 @@ const saveStory = async () => {
  * Share a link to view the current story (in its current state)
  */
 const shareLink = async () => {
-  let link = store.getSharingURL(router)
+  let link = store.getSharingURL(router), oldLink = link
   if (process.env.NODE_ENV === "production") link = await shortenLink(link)
-  await navigator.clipboard.writeText(link)
-  await alert("A link for viewing this project has been successfully copied to your clipboard!\n\n" + link)
+  await navigator.clipboard.writeText(link || oldLink)
+  const msg = link ? '' : ' Unfortunately, the URL shortener is not working right now though.'
+  await alert(`A link for viewing this project has been successfully copied to your clipboard!${msg}\n\n${link}`)
 }
 
 /**
