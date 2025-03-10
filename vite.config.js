@@ -5,6 +5,7 @@ import { json5Plugin } from 'vite-plugin-json5'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: '/video-pathway/',
   build: {
     target: "esnext",
   },
