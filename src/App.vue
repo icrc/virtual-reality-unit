@@ -1,7 +1,7 @@
 <template>
   <header v-if="!showContentOnly" :class="{ main_nav: true, full_screen: isFullscreen }">
     <nav class="s-container">
-      <div class="app_home_link" @click="goHome"><icon type="video" class="icon heading_icon"/> Video Pathway</div>
+      <div class="app_home_link" @click="goHome"><icon type="video" class="icon heading_icon"/> Video Interactive Pathway</div>
       <menu>
         <li><RouterLink to="/">Home</RouterLink></li>
         <li><RouterLink to="/view">View</RouterLink></li>
