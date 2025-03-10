@@ -177,7 +177,7 @@ const shareLink = async () => {
   if (process.env.NODE_ENV === "production") link = await shortenLink(link)
   await navigator.clipboard.writeText(link || oldLink)
   const msg = link ? '' : ' Unfortunately, the URL shortener is not working right now though.'
-  await alert(`A link for viewing this project has been successfully copied to your clipboard!${msg}\n\n${link}`)
+  await alert(`A link for viewing this project has been successfully copied to your clipboard!${msg}\n\n${link || oldLink}`)
 }
 
 /**
