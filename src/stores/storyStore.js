@@ -237,7 +237,7 @@ export const useStoryStore = defineStore("story", () => {
    */
   function getSharingURL(router) {
     const data = compressedStoryForURL()
-    return router ? window.location.origin + router.resolve({ name: "play", params: { data } }).href : ''
+    return router ? window.location.origin + window.location.pathname + router.resolve({ name: "play", params: { data } }).href : ''
   }
 
   
