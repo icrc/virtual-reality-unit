@@ -19,7 +19,7 @@
                 <RouterLink to="/view">View project</RouterLink>
               </li>
               <li>
-                <a href="#" @click.prevent="shareLink" title="Share a link for viewing this project">Share link</a>
+                <a href="#" @click.prevent="shareLink" title="Share a link for viewing this project">Share view link</a>
               </li>
             </menu>
           </nav>

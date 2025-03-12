@@ -102,7 +102,7 @@ const handleReset = () => {
 
 onMounted(() => {
   storyData.value = getStoryData()
-  isPlayable.value = store.isCurrentStoryPlayable
+  isPlayable.value = store.isStoryPlayable(storyData.value)
 })
 </script>
 

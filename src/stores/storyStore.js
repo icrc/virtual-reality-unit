@@ -368,8 +368,8 @@ export const useStoryStore = defineStore("story", () => {
     return currentStory.value.scenes.filter(scene => scene.videoId === videoId)
   }
 
-  const getSceneById = sceneId => currentStory.value.scenes.find(({ id }) => id === sceneId)
-  const getVideoById = videoId => currentStory.value.videos.find(({ id }) => id === videoId)
+  const getSceneById = (sceneId, storyData = currentStory.value) => storyData.scenes.find(({ id }) => id === sceneId)
+  const getVideoById = (videoId, storyData = currentStory.value) => storyData.videos.find(({ id }) => id === videoId)
 
   const nextVideoId = () => ++currentHighestVideoId
   const getHighestVideoId = story => (story.videos.length ? Math.max(...story.videos.map(({ id }) => id)) : null)
@@ -380,21 +380,23 @@ export const useStoryStore = defineStore("story", () => {
   const getHighestEventIdForScene = scene => (scene.events.length ? Math.max(...scene.events.map(({ id }) => id)) : 0)
   const nextEventIdForScene = scene => getHighestEventIdForScene(scene) + 1
 
-  const isCurrentStoryPlayable = computed(() => {
+  const isCurrentStoryPlayable = computed(() => isStoryPlayable(currentStory.value))
+
+  const isStoryPlayable = storyData => {
     // Initial scene set?
-    const sceneId = currentStory.value.initialSceneId
+    const sceneId = storyData.initialSceneId
     if ([undefined, -1].includes(sceneId)) return false
     // Initial scene exists
-    const scene = getSceneById(sceneId)
+    const scene = getSceneById(sceneId, storyData)
     if (!scene) return false
     // Initial scene has video
-    const video = getVideoById(scene.videoId)
+    const video = getVideoById(scene.videoId, storyData)
     if (!video) return false
     // Video has sourceType and url
     if (!video.sourceType || !video.url) return false
     // probably playable (although we're not checking for valid URL)
     return true
-  })
+  }
 
   setup()
 
@@ -428,6 +430,7 @@ export const useStoryStore = defineStore("story", () => {
 
     getScenesByVideoId,
 
+    isStoryPlayable,
     isCurrentStoryPlayable,
   }
 })
