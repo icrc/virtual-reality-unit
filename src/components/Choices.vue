@@ -67,6 +67,7 @@ const emit = defineEmits(["choiceMade"])
   font-size: calc(var(--unit) * 4.5);
   opacity: 1;
   height: 100%;
+  font-family: var(--font_style), system-ui;
 }
 
 /* Basic choice layout ---------------------------------------------------------------------------------- */

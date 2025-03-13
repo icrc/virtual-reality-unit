@@ -28,6 +28,13 @@
             <option value="">(Default)</option>
             <option v-for="(v, k) in layout.options[key].type" :value="k">{{ v }}</option>
           </select>
+
+          <select :style="{fontFamily: `${currentSettings[key]}, system-ui !important`}" v-else-if="layout.options[key].type === 'font'" v-model="currentSettings[key]">
+            <option :style="{fontFamily: `system-ui !important`}" value="">(Default)</option>
+            <option :style="{fontFamily: `${k}, system-ui !important`}" v-for="(v, k) in FONTS" :value="k">{{ v }}</option>
+          </select>
+
+
         </label>
       </div>
     </div>
@@ -45,6 +52,17 @@
 
 <script>
 import { LAYOUTS } from "@/layouts"
+
+// ** NOTE ** - there is a known Firefox bugs with using external fonts in OPTION elements, in case you're trying to fix the font dropdown
+// https://bugzilla.mozilla.org/show_bug.cgi?id=1536148 
+
+const FONTS = {
+  'var(--vp-sans)': 'Sans serif',
+  'var(--vp-serif)': 'Serif',
+  'var(--vp-fancy)': 'Fancy',
+  'var(--vp-tech': 'Tech',
+}
+
 </script>
 
 <script setup>

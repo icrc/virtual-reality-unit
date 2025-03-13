@@ -8,6 +8,10 @@ export const LAYOUTS = {
 		name: "Basic",
 		thumbnail: "",
 		options: {
+			font_style: {
+				name: "Font",
+				type: "font"
+			},
 			colour_button1: {
 				name: "Button 1 background colour",
 				type: "colour",
@@ -59,6 +63,10 @@ export const LAYOUTS = {
 		name: "Horizontal buttons",
 		thumbnail: "",
 		options: {
+			font_style: {
+				name: "Font",
+				type: "font"
+			},
 			button_height: {
 				name: "Button height (default is 30)",
 				type: "number",
@@ -122,6 +130,10 @@ export const LAYOUTS = {
 		name: "Full - centred + full width",
 		thumbnail: "",
 		options: {
+			font_style: {
+				name: "Font",
+				type: "font"
+			},
 			colour_button1: {
 				name: "Button 1 background colour",
 				type: "colour",
@@ -173,6 +185,10 @@ export const LAYOUTS = {
 		name: "Column - buttons left",
 		thumbnail: "",
 		options: {
+			font_style: {
+				name: "Font",
+				type: "font"
+			},
 			colour_button1: {
 				name: "Button 1 background colour",
 				type: "colour",
@@ -224,6 +240,10 @@ export const LAYOUTS = {
 		name: "Column - buttons right",
 		thumbnail: "",
 		options: {
+			font_style: {
+				name: "Font",
+				type: "font"
+			},
 			colour_button1: {
 				name: "Button 1 background colour",
 				type: "colour",
@@ -277,7 +297,7 @@ export const LAYOUTS = {
 Option types can be:
 
 colour - a colour, obviously (bring up a picker - make sure transparency is available too)
-font - a simple choice between a few fonts? (Check with Ryan)
+font - a simple choice between a few fonts
 [Object] - a way of choosing more complex bits of css:
 	{
 		"css_var_name" : {
