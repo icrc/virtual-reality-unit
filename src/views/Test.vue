@@ -30,7 +30,7 @@ import { VIDEO_SOURCE_TYPES } from "@/config"
 </script>
 
 <script setup>
-import { ref, useTemplateRef, onMounted, nextTick } from "vue"
+import { ref, useTemplateRef, onMounted, nextTick, inject } from "vue"
 import Player from "@/components/Player.vue"
 import VideoServiceProvider from "@/components/VideoServiceProvider.vue"
 
@@ -44,6 +44,7 @@ window.US = URLShortener
 // video preloading
 const serviceProviderRefs = useTemplateRef("serviceProviders")
 onMounted(() => {
+  inject('setWindowTitle')('Test')
   nextTick(() => {
     serviceProviderRefs.value.forEach((ref, index) => {
       const startTime = index

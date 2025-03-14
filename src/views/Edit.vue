@@ -88,7 +88,7 @@ import { LAYOUT_NAMES } from "@/layouts"
 </script>
 
 <script setup>
-import { computed, useTemplateRef, nextTick, onMounted, provide } from "vue"
+import { computed, useTemplateRef, nextTick, onMounted, provide, inject } from "vue"
 import { storeToRefs } from "pinia"
 import { useRouter } from "vue-router"
 import { useStoryStore } from "@/stores/storyStore"
@@ -117,6 +117,10 @@ provide("layoutSettingsEditor", layoutSettingsEditor)
 
 const actionCodeEditor = useTemplateRef("actionCodeEditor")
 provide("actionCodeEditor", actionCodeEditor)
+
+onMounted(() => {
+  inject('setWindowTitle')('Edit')
+})
 
 /**
  * Add a new story/project (checking if current saved first)

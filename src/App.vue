@@ -17,10 +17,15 @@
   <RouterView v-else />
 </template>
 
+<script>
+  
+const APP_NAME = "Video Pathway"
+
+</script>
+
 <script setup>
 import Icon from "vue-feather"
-
-import { computed } from "vue"
+import { computed, provide } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useFullscreen } from "@/composables/fullscreen"
 
@@ -30,6 +35,16 @@ const router = useRouter()
 const showContentOnly = computed(() => route.name === "play")
 
 const goHome = () => router.push('/')
+
+// globally available function for changing window title
+provide("setWindowTitle", (title='', prefix = APP_NAME) => {
+  const titleElement = document.querySelector("title")
+  let titleFinal = prefix ? `${prefix}` : ''
+  if (prefix && title) titleFinal += ' - '
+  titleFinal += title
+  titleElement.innerHTML = titleFinal
+})
+
 </script>
 
 <style>

@@ -27,7 +27,7 @@ import { alert } from "@/libs/popups"
 </script>
 
 <script setup>
-import { ref, nextTick, toRaw, onMounted } from "vue"
+import { ref, nextTick, toRaw, onMounted, inject } from "vue"
 import { useRouter, useRoute } from "vue-router"
 import StoryPlayer from "@/components/StoryPlayer.vue"
 
@@ -102,6 +102,7 @@ const handleReset = () => {
 
 onMounted(() => {
   storyData.value = getStoryData()
+  inject('setWindowTitle')(storyData.value?.title)
   isPlayable.value = store.isStoryPlayable(storyData.value)
 })
 </script>
