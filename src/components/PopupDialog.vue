@@ -66,7 +66,8 @@ const setScrollAvailable = (state = true) => {
  * @param      {Event}  event   The event
  */
 const handleModalClick = event => {
-  if (event.target === dialog.value) show(false)
+  // the selection stuff is to mitigate a bug in chrome where click erroneously fires when mouseup occurs on a text selection
+  if (event.target === dialog.value && document.getSelection().type !== 'Range') show(false)
 }
 
 /**
