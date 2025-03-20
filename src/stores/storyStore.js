@@ -139,8 +139,8 @@ export const useStoryStore = defineStore("story", () => {
     currentStory.value = structuredClone(data)
     persistMostRecentJSON(JSON.stringify(currentStory.value))
     if (data === EMPTY_STORY) persistCurrentFilename("")
-    currentHighestVideoId = 0
-    currentHighestSceneId = 0
+    currentHighestVideoId = getHighestVideoId(data)
+    currentHighestSceneId = getHighestSceneId(data)
   }
 
   
