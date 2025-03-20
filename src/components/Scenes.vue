@@ -54,8 +54,8 @@
                 <td>{{ eventTypeLabel(event) }}</td>
                 <td v-html="event.type === EVENT_TYPES.choice ? event.data.text : (event.data.replaceAll(/\n/g, '<br/>') )"></td>
                 <td style="text-align: center">{{ event.launchTime==-1 ? 'END' : event.launchTime }}</td>
-                <td style="text-align: center; white-space: nowrap;">
-                  <icon type="edit" class="icon" title="Edit" @click="editEventForScene(scene, event)" />&nbsp;<icon type="trash-2" class="icon" title="Delete" @click="deleteEventFromScene(scene, event)" />
+                <td style="display:flex; justify-content: center; gap: 0.65rem;">
+                  <icon type="edit" class="icon" title="Edit" @click="editEventForScene(scene, event)" /><icon type="trash-2" class="icon" title="Delete" @click="deleteEventFromScene(scene, event)" />
                 </td>
               </tr>
             </tbody>

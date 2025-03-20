@@ -83,8 +83,8 @@
           <tbody>
             <tr v-for="(choice, index) in buttons" :key="index">
               <td><input placeholder="n/a" type="text" v-model="choice.text" /></td>
-              <td><action-code-input style="height: 2.6rem" v-model="choice.action" /></td>
-              <td style="position: relative">
+              <td style="width: 50%;"><action-code-input style="height: 2.6rem" v-model="choice.action" /></td>
+              <td style="vertical-align: middle;">
                 <span class="choice_options">
                   <icon :class="{ disabled_icon: index == 0, icon: true }" type="arrow-up" title="Move up" @click="moveChoiceUp(index)" />
                   <icon :class="{ disabled_icon: index == 3, icon: true }" type="arrow-down" title="Move down" @click="moveChoiceDown(index)" />
@@ -423,9 +423,7 @@ defineExpose({
 .choice_options {
   display: flex;
   align-items: center;
-  position: absolute;
-  inset: 0 0 0 0;
-  justify-content: center;
+  justify-content: space-around;
   :deep(& i) {
     cursor: pointer;
   }
