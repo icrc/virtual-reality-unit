@@ -1,8 +1,10 @@
 <!-- Scenes Component - for editing scene objects -->
 <template>
   <article>
-    <details ref="header" class="scenes_header">
-      <summary role="button">Scenes ({{ story.scenes.length }})<button title="Add scene" @click="addScene" class="add_button">+</button></summary>
+    <details ref="header" class="scenes_header" :open="story.scenes.length">
+      <summary class="scenes_header_summary" role="button">
+        Scenes ({{ story.scenes.length }})<button title="Add scene" @click="addScene" class="add_button">+</button>
+      </summary>
       <div style="--span: 4" class="s-grid scenes-container" v-for="(scene, idx) in story.scenes" :key="scene.id">
         <div :id="`scene_${scene.id}`">
           <label style="--span: 5"
@@ -23,7 +25,9 @@
         </div>
         <div>
           <label style="--span: 1">Start time (s)<input placeholder="n/a" type="number" min="-1" v-model="scene.startTime" /></label>
-          <label style="--span: 1">End time (-1: end)<input class="show_end_time" :data-val="scene.endTime" placeholder="n/a" type="number" min="-1" v-model="scene.endTime" /></label>
+          <label style="--span: 1"
+            >End time (-1: end)<input class="show_end_time" :data-val="scene.endTime" placeholder="n/a" type="number" min="-1" v-model="scene.endTime"
+          /></label>
           <label style="--span: 3"
             >Video
             <select v-model="scene.videoId">
@@ -52,10 +56,14 @@
             <tbody v-if="scene.events.length">
               <tr v-for="event in sortedEvents(scene.events)" :key="event.id">
                 <td>{{ eventTypeLabel(event) }}</td>
-                <td v-html="event.type === EVENT_TYPES.choice ? event.data.text : (event.data.replaceAll(/\n/g, '<br/>') )"></td>
-                <td style="text-align: center">{{ event.launchTime==-1 ? 'END' : event.launchTime }}</td>
-                <td style="display:flex; justify-content: center; gap: 0.65rem;">
-                  <icon type="edit" class="icon" title="Edit" @click="editEventForScene(scene, event)" /><icon type="trash-2" class="icon" title="Delete" @click="deleteEventFromScene(scene, event)" />
+                <td v-html="event.type === EVENT_TYPES.choice ? event.data.text : event.data.replaceAll(/\n/g, '<br/>')"></td>
+                <td style="text-align: center">{{ event.launchTime == -1 ? "END" : event.launchTime }}</td>
+                <td style="display: flex; justify-content: center; gap: 0.65rem">
+                  <icon type="edit" class="icon" title="Edit" @click="editEventForScene(scene, event)" /><icon
+                    type="trash-2"
+                    class="icon"
+                    title="Delete"
+                    @click="deleteEventFromScene(scene, event)" />
                 </td>
               </tr>
             </tbody>
@@ -175,7 +183,6 @@ const eventTypeLabel = event => {
   }
   return label
 }
-
 </script>
 
 <style scoped>
@@ -195,6 +202,17 @@ const eventTypeLabel = event => {
 
 .scenes_header {
   position: relative;
+}
+
+.scenes_header_summary {
+  pointer-events: none;
+  & .add_button {
+    pointer-events: all;
+    right:0.75em;
+  }
+  &::after {
+    display: none;
+  }
 }
 
 .add_button {
