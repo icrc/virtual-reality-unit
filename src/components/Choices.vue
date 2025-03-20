@@ -68,6 +68,10 @@ const emit = defineEmits(["choiceMade"])
   opacity: 1;
   height: 100%;
   font-family: var(--font_style), system-ui;
+
+  --default_button_colour: #181818;
+  --default_button_text_colour: #fff;
+
 }
 
 /* Basic choice layout ---------------------------------------------------------------------------------- */
@@ -76,15 +80,15 @@ const emit = defineEmits(["choiceMade"])
   --colour_message: #fff;
   --colour_background: transparent;
 
-  --colour_button1: #008;
-  --colour_button2: #008;
-  --colour_button3: #008;
-  --colour_button4: #008;
+  --colour_button1: var(--default_button_colour);
+  --colour_button2: var(--default_button_colour);
+  --colour_button3: var(--default_button_colour);
+  --colour_button4: var(--default_button_colour);
 
-  --text_colour_button1: #fff;
-  --text_colour_button2: #fff;
-  --text_colour_button3: #fff;
-  --text_colour_button4: #fff;
+  --text_colour_button1: var(--default_button_text_colour);
+  --text_colour_button2: var(--default_button_text_colour);
+  --text_colour_button3: var(--default_button_text_colour);
+  --text_colour_button4: var(--default_button_text_colour);
 
   display: flex;
   flex-direction: column;
@@ -162,15 +166,15 @@ const emit = defineEmits(["choiceMade"])
   --colour_message: #fff;
   --colour_background: transparent;
 
-  --colour_button1: #008;
-  --colour_button2: #008;
-  --colour_button3: #008;
-  --colour_button4: #008;
+  --colour_button1: var(--default_button_colour);
+  --colour_button2: var(--default_button_colour);
+  --colour_button3: var(--default_button_colour);
+  --colour_button4: var(--default_button_colour);
 
-  --text_colour_button1: #fff;
-  --text_colour_button2: #fff;
-  --text_colour_button3: #fff;
-  --text_colour_button4: #fff;
+  --text_colour_button1: var(--default_button_text_colour);
+  --text_colour_button2: var(--default_button_text_colour);
+  --text_colour_button3: var(--default_button_text_colour);
+  --text_colour_button4: var(--default_button_text_colour);
 
   --button_height: 30;
   --button_align: center /* or felx-start, flex-end */;
@@ -255,15 +259,15 @@ const emit = defineEmits(["choiceMade"])
   --colour_message: #fff;
   --colour_background: transparent;
 
-  --colour_button1: #008;
-  --colour_button2: #008;
-  --colour_button3: #008;
-  --colour_button4: #008;
+  --colour_button1: var(--default_button_colour);
+  --colour_button2: var(--default_button_colour);
+  --colour_button3: var(--default_button_colour);
+  --colour_button4: var(--default_button_colour);
 
-  --text_colour_button1: #fff;
-  --text_colour_button2: #fff;
-  --text_colour_button3: #fff;
-  --text_colour_button4: #fff;
+  --text_colour_button1: var(--default_button_text_colour);
+  --text_colour_button2: var(--default_button_text_colour);
+  --text_colour_button3: var(--default_button_text_colour);
+  --text_colour_button4: var(--default_button_text_colour);
 
   display: flex;
   flex-direction: column;
@@ -348,15 +352,15 @@ const emit = defineEmits(["choiceMade"])
   --colour_message: #fff;
   --colour_background: transparent;
 
-  --colour_button1: #008;
-  --colour_button2: #008;
-  --colour_button3: #008;
-  --colour_button4: #008;
+  --colour_button1: var(--default_button_colour);
+  --colour_button2: var(--default_button_colour);
+  --colour_button3: var(--default_button_colour);
+  --colour_button4: var(--default_button_colour);
 
-  --text_colour_button1: #fff;
-  --text_colour_button2: #fff;
-  --text_colour_button3: #fff;
-  --text_colour_button4: #fff;
+  --text_colour_button1: var(--default_button_text_colour);
+  --text_colour_button2: var(--default_button_text_colour);
+  --text_colour_button3: var(--default_button_text_colour);
+  --text_colour_button4: var(--default_button_text_colour);
 
   display: flex;
   flex-direction: column;
@@ -446,15 +450,15 @@ const emit = defineEmits(["choiceMade"])
   --colour_message: #fff;
   --colour_background: transparent;
 
-  --colour_button1: #008;
-  --colour_button2: #008;
-  --colour_button3: #008;
-  --colour_button4: #008;
+  --colour_button1: var(--default_button_colour);
+  --colour_button2: var(--default_button_colour);
+  --colour_button3: var(--default_button_colour);
+  --colour_button4: var(--default_button_colour);
 
-  --text_colour_button1: #fff;
-  --text_colour_button2: #fff;
-  --text_colour_button3: #fff;
-  --text_colour_button4: #fff;
+  --text_colour_button1: var(--default_button_text_colour);
+  --text_colour_button2: var(--default_button_text_colour);
+  --text_colour_button3: var(--default_button_text_colour);
+  --text_colour_button4: var(--default_button_text_colour);
 
   display: flex;
   flex-direction: column;
