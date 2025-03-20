@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@vimeo/player": "^2.24.0",
+    "dotenv": "^16.4.7",
     "feather-icons": "^4.29.2",
     "json5": "^2.2.3",
     "lz-string": "^1.5.0",
