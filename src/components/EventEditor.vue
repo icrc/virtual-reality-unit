@@ -376,7 +376,7 @@ const setupUIForChoice = event => {
       backgroundType.value = BACKGROUND_TYPES.blockLoop
       ;[loopStartTime.value, loopEndTime.value] = event.data.options.loop
     }
-    timeLimit.value = 1
+    timeLimit.value = 5
     timeoutActionCode.value = ""
   } else {
     timeLimit.value = event.data.options.timeLimit
