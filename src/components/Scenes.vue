@@ -143,7 +143,8 @@ const addScene = () => {
  * @param      {object}  scene   The scene
  */
 const addEventToScene = async scene => {
-  const newEvent = await eventEditor.value.createNew()
+  const initialEventData = { launchTime: scene.startTime }
+  const newEvent = await eventEditor.value.createNew(initialEventData)
   if (newEvent) props.store.addEvent(scene.id, newEvent)
 }
 

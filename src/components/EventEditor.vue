@@ -321,8 +321,9 @@ const sanitisedButtons = () => {
  *
  * @return     {promise}  Promise resolving to the new object (or null if cancelled)
  */
-const createNew = async () => {
-  const event = structuredClone(BLANK_NEW_EVENT)
+const createNew = async (initialEvent = {}) => {
+  const event = {...structuredClone(BLANK_NEW_EVENT), ...initialEvent }
+  console.log('create event', event)
   return await useEditor(event, "Add Event")
 }
 
