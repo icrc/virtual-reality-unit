@@ -7,7 +7,7 @@
         <li><RouterLink to="/view">View</RouterLink></li>
         <li><RouterLink to="/edit">Edit</RouterLink></li>
         <!-- <li><RouterLink to="/test">Test</RouterLink></li> -->
-        <li><RouterLink to="/help">Help</RouterLink></li>
+        <li><a target="_blank" :href="DOCS_URL">Help</a></li>
       </menu>
     </nav>
   </header>
@@ -35,6 +35,8 @@ const router = useRouter()
 const showContentOnly = computed(() => route.name === "play")
 
 const goHome = () => router.push('/')
+
+const DOCS_URL = import.meta.env.VITE_DOCS_URL
 
 // globally available function for changing window title
 provide("setWindowTitle", (title='', prefix = APP_NAME) => {
