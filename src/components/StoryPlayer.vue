@@ -535,7 +535,7 @@ function playScene(scene, abortSignal = undefined) {
 
 				// looping? Possibly (probably in a blocked choice)
 				const [startTime, endTime] = activeLoop || []
-				if (startTime && endTime) {
+				if (startTime !== undefined && endTime !== undefined) {
 					const realEndTime = endTime === -1 ? scene.endTime : endTime
 					if (time >= realEndTime) videoJS.currentTime(startTime)
 				}
