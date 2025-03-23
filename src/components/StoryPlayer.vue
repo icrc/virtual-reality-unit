@@ -536,13 +536,22 @@ function playScene(scene, abortSignal = undefined) {
 				// looping? Possibly (probably in a blocked choice)
 				const [startTime, endTime] = activeLoop || []
 				if (startTime !== undefined && endTime !== undefined) {
-					const realEndTime = endTime === -1 ? scene.endTime : endTime
-					if (time >= realEndTime) videoJS.currentTime(startTime)
+					let realEndTime = endTime === -1 ? scene.endTime : endTime			
+					if (realEndTime !== -1 && time >= realEndTime) videoJS.currentTime(startTime)
 				}
 			},
 			async ended() {
-				videoJS.pause()
-				await handleSceneEnd()
+				if (!activeLoop) {
+					videoJS.pause()
+					await handleSceneEnd()
+				} else {
+					// handle a looping background that ends at the end
+					const [startTime, endTime] = activeLoop
+					if (endTime == -1) {
+						videoJS.currentTime(startTime)
+						videoJS.play()
+					}
+				}
 			},
 			seeked() {
 				if (videoJS.paused()) {
