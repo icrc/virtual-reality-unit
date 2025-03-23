@@ -71,7 +71,7 @@ const emit = defineEmits(["choiceMade"])
 
   --default_button_colour: #181818;
   --default_button_text_colour: #fff;
-
+  --timer_height: 3;
 }
 
 /* Basic choice layout ---------------------------------------------------------------------------------- */
@@ -99,10 +99,10 @@ const emit = defineEmits(["choiceMade"])
     font-size: 0;
     display: flex;
     justify-content: center;
-    padding-bottom: calc(var(--unit) * 2);
+    padding-bottom: calc(var(--unit) * 1);
     & .time_indicator {
       background: var(--colour_timer);
-      height: calc(var(--unit) * 4);
+      height: calc(var(--unit) * var(--timer_height));
       transition-property: width;
       transition-timing-function: linear;
       transition-duration: v-bind(timeLimit + "s");
@@ -116,7 +116,7 @@ const emit = defineEmits(["choiceMade"])
   & .message {
     background-color: var(--colour_background);
     color: var(--colour_message);
-    padding: calc(var(--unit) * 3) calc(var(--unit) * 5) 0 calc(var(--unit) * 5);
+    padding: calc(var(--unit) * 1.5) calc(var(--unit) * 5) 0 calc(var(--unit) * 5);
     text-shadow:
       0 0 5px #000,
       0 0 2px #000,
@@ -188,10 +188,10 @@ const emit = defineEmits(["choiceMade"])
     font-size: 0;
     display: flex;
     justify-content: center;
-    padding-bottom: calc(var(--unit) * 2);
+    padding-bottom: calc(var(--unit) * 1);
     & .time_indicator {
       background: var(--colour_timer);
-      height: calc(var(--unit) * 4);
+      height: calc(var(--unit) * var(--timer_height));
       transition-property: width;
       transition-timing-function: linear;
       transition-duration: v-bind(timeLimit + "s");
@@ -205,7 +205,7 @@ const emit = defineEmits(["choiceMade"])
   & .message {
     background-color: var(--colour_background);
     color: var(--colour_message);
-    padding: calc(var(--unit) * 3) calc(var(--unit) * 5) 0 calc(var(--unit) * 5);
+    padding: calc(var(--unit) * 1.5) calc(var(--unit) * 5) 0 calc(var(--unit) * 5);
     text-shadow:
       0 0 5px #000,
       0 0 2px #000,
@@ -280,10 +280,10 @@ const emit = defineEmits(["choiceMade"])
     display: flex;
     justify-content: center;
     padding-bottom: calc(var(--unit) * 0);
-    padding-top: calc(var(--unit) * 4);
+    padding-top: calc(var(--unit) * 3);
     & .time_indicator {
       background: var(--colour_timer);
-      height: calc(var(--unit) * 4);
+      height: calc(var(--unit) * var(--timer_height));
       transition-property: width;
       transition-timing-function: linear;
       transition-duration: v-bind(timeLimit + "s");
@@ -297,7 +297,7 @@ const emit = defineEmits(["choiceMade"])
   & .message {
     background-color: var(--colour_background);
     color: var(--colour_message);
-    padding: calc(var(--unit) * 3) calc(var(--unit) * 5) 0 calc(var(--unit) * 5);
+    padding: calc(var(--unit) * 1.5) calc(var(--unit) * 5) 0 calc(var(--unit) * 5);
     text-shadow:
       0 0 5px #000,
       0 0 2px #000,
@@ -374,10 +374,10 @@ const emit = defineEmits(["choiceMade"])
     display: flex;
     justify-content: flex-start;
     padding-bottom: calc(var(--unit) * 0);
-    padding-top: calc(var(--unit) * 4);
+    padding-top: calc(var(--unit) * 3);
     & .time_indicator {
       background: var(--colour_timer);
-      height: calc(var(--unit) * 4);
+      height: calc(var(--unit) * var(--timer_height));
       transition-property: width;
       transition-timing-function: linear;
       transition-duration: v-bind(timeLimit + "s");
@@ -391,7 +391,7 @@ const emit = defineEmits(["choiceMade"])
   & .message {
     align-content: flex-end;
     color: var(--colour_message);
-    padding: calc(var(--unit) * 3) calc(var(--unit) * 5) 0 calc(var(--unit) * 2);
+    padding: calc(var(--unit) * 1.5) calc(var(--unit) * 5) 0 calc(var(--unit) * 2);
     text-shadow:
       0 0 5px #000,
       0 0 2px #000,
@@ -472,10 +472,10 @@ const emit = defineEmits(["choiceMade"])
     display: flex;
     justify-content: flex-end;
     padding-bottom: calc(var(--unit) * 0);
-    padding-top: calc(var(--unit) * 4);
+    padding-top: calc(var(--unit) * 3);
     & .time_indicator {
       background: var(--colour_timer);
-      height: calc(var(--unit) * 4);
+      height: calc(var(--unit) * var(--timer_height));
       transition-property: width;
       transition-timing-function: linear;
       transition-duration: v-bind(timeLimit + "s");
@@ -490,7 +490,7 @@ const emit = defineEmits(["choiceMade"])
     align-content: flex-end;
     text-align: right;
     color: var(--colour_message);
-    padding: calc(var(--unit) * 3) calc(var(--unit) * 2) 0 calc(var(--unit) * 5);
+    padding: calc(var(--unit) * 1.5) calc(var(--unit) * 2) 0 calc(var(--unit) * 5);
     text-shadow:
       0 0 5px #000,
       0 0 2px #000,
