@@ -58,13 +58,13 @@
                 <td>{{ eventTypeLabel(event) }}</td>
                 <td v-html="event.type === EVENT_TYPES.choice ? event.data.text : event.data.replaceAll(/\n/g, '<br/>')"></td>
                 <td style="text-align: center">{{ event.launchTime == -1 ? "END" : event.launchTime }}</td>
-                <td style="display: flex; justify-content: center; gap: 0.65rem">
+                <td><div style="display: flex; justify-content: center; gap: 0.75rem">
                   <icon type="edit" class="icon" title="Edit" @click="editEventForScene(scene, event)" /><icon
                     type="trash-2"
                     class="icon"
                     title="Delete"
                     @click="deleteEventFromScene(scene, event)" />
-                </td>
+                </div></td>
               </tr>
             </tbody>
           </table>
@@ -187,15 +187,33 @@ const eventTypeLabel = event => {
 </script>
 
 <style scoped>
+@media (prefers-color-scheme: light) {
+  details {
+    --selected_scene_bg_colour: #f3f3f3;
+    --selected_event_list_bg_colour: #e3e3e3;
+    --event_list_bg_colour: #eee;
+    --button_border: #fff;
+  }
+}
+@media (prefers-color-scheme: dark) {
+  details {
+    --selected_scene_bg_colour: #2a2a2a;
+    --selected_event_list_bg_colour: #404040;
+    --event_list_bg_colour: #252525;
+    --button_border: #444;
+  }
+}
+
+
 .scenes-container {
   font-size: 90%;
   &:has(*:focus) {
     margin: -0.75em;
-    background-color: #f3f3f3;
+    background-color: var(--selected_scene_bg_colour);
     border: 1px solid #888;
     border-radius: 0.5em;
     & .events_container {
-      background-color: #e3e3e3;
+      background-color: var(--selected_event_list_bg_colour);
     }
     box-shadow: 0 0 0.5em #0004;
   }
@@ -222,7 +240,7 @@ const eventTypeLabel = event => {
   position: absolute;
   height: 1em;
   font-weight: bold;
-  border: 1px solid #fff;
+  border: 1px solid var(--button_border);
   &:hover {
     background: #fff;
     color: var(--s-color-primary-80-fg);
@@ -241,7 +259,7 @@ const eventTypeLabel = event => {
 
 .events_container {
   border-radius: 0.5em;
-  background-color: #eee;
+  background-color: var(--event_list_bg_colour);
   margin: 1em 0;
   padding: 0.5em 0.5em 0.5em 0.5em;
 }

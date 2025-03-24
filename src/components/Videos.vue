@@ -139,6 +139,19 @@ const addVideo = () => {
 </script>
 
 <style scoped>
+
+@media (prefers-color-scheme: light) {
+  details {
+    --button_border: #fff;
+  }
+}
+@media (prefers-color-scheme: dark) {
+  details {
+    --button_border: #444;
+  }
+}
+
+
 .videos-container {
   font-size: 90%;
 }
@@ -163,7 +176,7 @@ const addVideo = () => {
   position: absolute;
   height: 1em;
   font-weight: bold;
-  border: 1px solid #fff;
+  border: 1px solid var(--button_border);
   &:hover {
     background: #fff;
     color: var(--s-color-primary-80-fg);
