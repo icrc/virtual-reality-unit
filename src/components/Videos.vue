@@ -88,9 +88,18 @@ const importChapters = async ({ id: videoId, sourceType, url: URL }) => {
   const [chapters, error] = await videoInfo.value.getChapters(sourceType, URL)
   if (chapters) {
     if (chapters.length) {
+      const addedSceneIds = []
       chapters.forEach(({ title, startTime, endTime }) => {
-        props.store.addScene({ ...structuredClone(NEW_SCENE_DEFAULTS), videoId, title, startTime, endTime })
+        const newSceneId = props.store.addScene({ ...structuredClone(NEW_SCENE_DEFAULTS), videoId, title, startTime, endTime })
+        addedSceneIds.push(newSceneId)
       })
+      // connect up the added scenes if there are more than 1
+      if (addedSceneIds.length > 1) {
+        const lastSceneId = addedSceneIds.pop()
+        addedSceneIds.forEach((sceneId, idx, arr) => {
+          props.store.updateScene(sceneId, { nextSceneId: arr[idx+1] || lastSceneId })
+        })
+      }
       await alert(`${chapters.length} chapters imported.`)
     } else {
       await alert("Video has no chapters to import.")

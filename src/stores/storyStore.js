@@ -309,7 +309,7 @@ export const useStoryStore = defineStore("story", () => {
    * @param      {Object}  data    The scene data
    */
   function updateScene(id, data) {
-    currentStory.value.scenes = currentStory.value.scenes.map(scene => (scene, id === id ? { ...scene, ...data } : scene))
+    currentStory.value.scenes = currentStory.value.scenes.map(scene => (scene.id === id) ? { ...scene, ...data } : scene)
   }
 
   
