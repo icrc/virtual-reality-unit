@@ -17,9 +17,11 @@
           /></label>
           <label style="--span: 3"
             >Next scene
-            <select v-model="scene.nextSceneId">
+            <select v-model="scene.nextSceneId" :title="'System ID - ' + scene.nextSceneId">
               <option :value="-1">(n/a)</option>
-              <option v-for="scene in story.scenes" :key="scene.id" :value="scene.id">{{ scene.id }} - {{ scene.title || "(No title)" }}</option>
+              <option v-for="scene in story.scenes" :key="scene.id" :value="scene.id" :title="'System ID - ' + scene.id">
+                {{ scene.id }} - {{ scene.title || "(No title)" }}
+              </option>
             </select>
           </label>
         </div>
@@ -58,13 +60,15 @@
                 <td>{{ eventTypeLabel(event) }}</td>
                 <td v-html="event.type === EVENT_TYPES.choice ? event.data.text : event.data.replaceAll(/\n/g, '<br/>')"></td>
                 <td style="text-align: center">{{ event.launchTime == -1 ? "END" : event.launchTime }}</td>
-                <td><div style="display: flex; justify-content: center; gap: 0.75rem">
-                  <icon type="edit" class="icon" title="Edit" @click="editEventForScene(scene, event)" /><icon
-                    type="trash-2"
-                    class="icon"
-                    title="Delete"
-                    @click="deleteEventFromScene(scene, event)" />
-                </div></td>
+                <td>
+                  <div style="display: flex; justify-content: center; gap: 0.75rem">
+                    <icon type="edit" class="icon" title="Edit" @click="editEventForScene(scene, event)" /><icon
+                      type="trash-2"
+                      class="icon"
+                      title="Delete"
+                      @click="deleteEventFromScene(scene, event)" />
+                  </div>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -204,7 +208,6 @@ const eventTypeLabel = event => {
   }
 }
 
-
 .scenes-container {
   font-size: 90%;
   &:has(*:focus) {
@@ -227,7 +230,7 @@ const eventTypeLabel = event => {
   pointer-events: none;
   & .add_button {
     pointer-events: all;
-    right:0.75em;
+    right: 0.75em;
   }
   &::after {
     display: none;

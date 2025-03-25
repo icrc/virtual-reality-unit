@@ -30,8 +30,8 @@
         </label>
         <label style="--span: 3" v-if="commandRequiresScene">
           Scene
-          <select v-model="simpleArg">
-            <option v-for="scene in story.scenes" :key="scene.id" :value="scene.id">{{ scene.id }} - {{ scene.title || "(No title)" }}</option>
+          <select v-model="simpleArg" :title="'System ID - ' + simpleArg">
+            <option v-for="scene in story.scenes" :key="scene.id" :value="scene.id" :title="'System ID - ' + scene.id">{{ scene.id }} - {{ scene.title || "(No title)" }}</option>
           </select>
         </label>
       </template>

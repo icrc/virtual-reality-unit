@@ -39,9 +39,9 @@
                   <label style="--span: 5">Project name<input ref="storyTitle" placeholder="(No name)" type="text" v-model="story.title" /></label>
                   <label style="--span: 3"
                     >Initial scene
-                    <select v-model="story.initialSceneId">
-                      <option v-if="story.scenes.length" :value="-1">Please select a scene...</option>
-                      <option v-if="story.scenes.length" v-for="scene in story.scenes" :key="scene.id" :value="scene.id">
+                    <select v-model="story.initialSceneId" :title="'System ID - ' + story.initialSceneId">
+                      <option v-if="story.scenes.length" :value="-1" title="kermit">Please select a scene...</option>
+                      <option v-if="story.scenes.length" v-for="scene in story.scenes" :key="scene.id" :value="scene.id" :title="'System ID - ' + scene.id">
                         {{ scene.id }} - {{ scene.title || "(No title)" }}
                       </option>
                       <option v-else :value="-1">None available. Please add one</option>
@@ -119,7 +119,7 @@ const actionCodeEditor = useTemplateRef("actionCodeEditor")
 provide("actionCodeEditor", actionCodeEditor)
 
 onMounted(() => {
-  inject('setWindowTitle')('Edit')
+  inject("setWindowTitle")("Edit")
 })
 
 /**
@@ -139,7 +139,11 @@ const newStory = async () => {
  * @param      {Function}  launchEditFunc  The function to launch the editor
  */
 const editDefaultLayoutSettings = async () => {
-  const newSettings = await layoutSettingsEditor.value.edit(story.value.defaultChoiceLayout, story.value.defaultChoiceLayoutSettings, "Edit Settings for Default Layout")
+  const newSettings = await layoutSettingsEditor.value.edit(
+    story.value.defaultChoiceLayout,
+    story.value.defaultChoiceLayoutSettings,
+    "Edit Settings for Default Layout"
+  )
   if (newSettings) story.value.defaultChoiceLayoutSettings = newSettings
 }
 
@@ -177,10 +181,11 @@ const saveStory = async () => {
  * Share a link to view the current story (in its current state)
  */
 const shareLink = async () => {
-  let link = store.getSharingURL(router), oldLink = link
+  let link = store.getSharingURL(router),
+    oldLink = link
   if (process.env.NODE_ENV === "production") link = await shortenLink(link)
   await navigator.clipboard.writeText(link || oldLink)
-  const msg = link ? '' : ' Unfortunately, the URL shortener is not working right now though.'
+  const msg = link ? "" : " Unfortunately, the URL shortener is not working right now though."
   await alert(`A link for viewing this project has been successfully copied to your clipboard!${msg}\n\n${link || oldLink}`)
 }
 
