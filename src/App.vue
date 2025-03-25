@@ -15,6 +15,7 @@
     <RouterView />
   </div>
   <RouterView v-else />
+  <alert-box ref="alertbox" />
 </template>
 
 <script>
@@ -25,9 +26,16 @@ const APP_NAME = "Video Pathway"
 
 <script setup>
 import Icon from "vue-feather"
-import { computed, provide } from "vue"
+import { computed, provide, useTemplateRef, onMounted } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useFullscreen } from "@/composables/fullscreen"
+
+import AlertBox from "@/components/AlertBox.vue"
+import AlertBoxManager from "@/libs/alertBox"
+const alertBox = useTemplateRef('alertbox')
+onMounted(() => {
+  AlertBoxManager.setComponent(alertBox.value)
+})
 
 const { isFullscreen } = useFullscreen()
 const route = useRoute()

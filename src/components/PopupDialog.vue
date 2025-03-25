@@ -89,9 +89,10 @@ const returnResult = result => {
 /**
  * Display the popup and return a promise that resolves when popup is done
  *
+ * @param      {Function}             [initAction=undefined]  The initialize action (if reqd)
  * @return     {Promise<(null|any)>}  Promise resolving to the result or null if we exited
  */
-const launchPopup = () => {
+const launchPopup = (initAction = undefined) => {
   const promise = new Promise((resolve, reject) => {
     activePromiseControl = {
       resolve,
@@ -99,6 +100,7 @@ const launchPopup = () => {
     }
   })
   show()
+  if (initAction) nextTick(initAction)
   return promise
 }
 

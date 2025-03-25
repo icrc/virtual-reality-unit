@@ -2,7 +2,7 @@
 
 // for showing info, getting info, confirming actions
 
-// for now just wrapping browser equivalents, but can move to something nicer later
+import AlertBoxManager from '@/libs/alertBox'
 
 /**
  * Show an alert message
@@ -11,7 +11,7 @@
  * @return     {Promise<void>}  Returns nothing
  */
 export const alert = async (message = undefined) => {
-	return window.alert(message)
+	return await AlertBoxManager.alert(message)
 }
 
 /**
@@ -22,7 +22,8 @@ export const alert = async (message = undefined) => {
  * @return     {Promise<(String|null)>}  Entered value or null if cancelled
  */
 export const prompt = async (message = undefined, defaultValue = undefined) => {
-	return window.prompt(message, defaultValue)
+	//return window.prompt(message, defaultValue)
+	return await AlertBoxManager.prompt(message, defaultValue)
 }
 
 /**
@@ -32,6 +33,6 @@ export const prompt = async (message = undefined, defaultValue = undefined) => {
  * @return     {Promise<Boolean>}  true - OK, false - Cancel
  */
 export const confirm = async (message = undefined) => {
-	return window.confirm(message)
+	return await AlertBoxManager.confirm(message)
 }
 
