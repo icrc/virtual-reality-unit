@@ -57,4 +57,4 @@ export const urlShortener = (...helpers) => async url => {
 	return shortenedURL
 }
 
-export default urlShortener(v_GD, IS_GD)
+export default urlShortener(V_GD, IS_GD)
