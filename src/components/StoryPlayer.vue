@@ -77,7 +77,7 @@ import Choices from "@/components/Choices.vue"
 import { useFullscreen } from "@/composables/fullscreen"
 import { useWindowSize } from "@/composables/windowSize"
 
-import { runCode } from "@/libs/actionCode"
+import getLibraryActions from '@/libs/actionLib'
 
 const props = defineProps({
 	// story data we'll be playing
@@ -291,24 +291,17 @@ function playScene(scene, abortSignal = undefined) {
 		const completedEventIds = []
 
 		/**
-		 * 'Library' of functions available in ActionCode
+		 * 'Library' of functions available in ActionCode on top of the internal ones (setStateValue, deleteStateValue)
+		 * (We pass helper functions to a function that returns the library actions)
 		 *
 		 * @type       {Object}
 		 */
-		const CMD_LIBRARY = {
-			gotoScene(id) {
-				announceDone({ nextSceneId: id })
-				return null // bail on any more commands
-			},
-			setNextScene(id) {
-				scene.nextSceneId = id
-			},
-			gotoNextScene() {
-				if (scene.nextSceneId === -1) return // do nothing if no next scene
-				announceDone({ nextSceneId: scene.nextSceneId })
-				return null // bail on any more commands
-			},
-		}
+		const CMD_LIBRARY = getLibraryActions({
+			announceDone,
+			getCurrentScene() {
+				return scene
+			}
+		})
 
 		/**
 		 * Handler for the 'abort' event on the abortSignal (an outside request to stop)
