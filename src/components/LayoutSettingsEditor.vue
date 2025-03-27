@@ -115,7 +115,6 @@ const setupUI = (layoutId, layoutSettings) => {
  */
 const getEditedSettings = () => {
   const ret = sanitiseSettings(toRaw(currentSettings.value))
-  console.log(ret)
   return ret
 }
 

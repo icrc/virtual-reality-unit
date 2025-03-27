@@ -323,7 +323,6 @@ const sanitisedButtons = () => {
  */
 const createNew = async (initialEvent = {}) => {
   const event = {...structuredClone(BLANK_NEW_EVENT), ...initialEvent }
-  console.log('create event', event)
   return await useEditor(event, "Add Event")
 }
 
