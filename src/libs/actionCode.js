@@ -18,16 +18,21 @@ const getBaseCommands = state => ({
  * @param      {String}  actionCode           The action code - commands (separated by \n)
  * @param      {Object}  initialState         The initial system state
  * @param      {Object}  [commandLibrary={}]  Command library of additional available ({ commandName: Function })
- * @return     {Object}  { newState: final state after running commands, bailed: boolean to determine if any terminating
+ * @return     {Promise<(Object)>}  { newState: final state after running commands, bailed: boolean to determine if any terminating
  *                       commands ran - ones that return null}
  */
-export const runCode = (actionCode, initialState, commandLibrary = {}) => {
+export const runCode = async (actionCode, initialState, commandLibrary = {}) => {
   const state = structuredClone(initialState)
   const commands = { ...getBaseCommands(state), ...commandLibrary }
   let bailed = false
   for (const { command, args } of parser(actionCode, state)) {
     if (!commands[command]) throw new Error(`Unknown actionCode command: ${command}`)
-    const result = commands[command](...args)
+    let result
+    if (isAsyncFunction(commands[command])) {
+      result = await commands[command](...args)
+    } else {
+      result = commands[command](...args)
+    }
     if (result === null) {
       bailed = true
       break
@@ -85,6 +90,16 @@ function splitArgs(allArgsStr) {
     .split(/,(.*)/)
     .map(x => x.trim())
     .filter(x => x)
+}
+
+/**
+ * Determines whether the specified function is asynchronous function.
+ *
+ * @param      {Function}  func    The function
+ * @return     {boolean}   True if the specified function is asynchronous function, False otherwise.
+ */
+function isAsyncFunction(func) {
+  return func.constructor.name === "AsyncFunction"
 }
 
 // TODO - getArgValue above is potentially VERY unsage - consider mobing to a safeEval function

@@ -77,7 +77,7 @@ import Choices from "@/components/Choices.vue"
 import { useFullscreen } from "@/composables/fullscreen"
 import { useWindowSize } from "@/composables/windowSize"
 
-import getLibraryActions from '@/libs/actionLib'
+import getLibraryActions from "@/libs/actionLib"
 
 const props = defineProps({
 	// story data we'll be playing
@@ -117,6 +117,7 @@ let currentState
 
 const currentChoiceData = ref()
 let inBlockChoice
+let inTimedChoice
 /** @type {any} */
 let activeLoop = false
 let choiceMadeHandler = noop
@@ -300,7 +301,10 @@ function playScene(scene, abortSignal = undefined) {
 			announceDone,
 			getCurrentScene() {
 				return scene
-			}
+			},
+			videoJS,
+			blockChoiceActive() { return inBlockChoice },
+			timedChoiceActive() { return inTimedChoice },
 		})
 
 		/**
@@ -375,7 +379,8 @@ function playScene(scene, abortSignal = undefined) {
 						// wait for a choice
 						await handleEvent(event)
 					} else {
-						handleEvent(event)
+						// do actions
+						await handleEvent(event)
 					}
 				}
 			}
@@ -398,7 +403,7 @@ function playScene(scene, abortSignal = undefined) {
 		async function handleEvent(event) {
 			completedEventIds.push(event.id)
 			if (event.type == EVENT_TYPES.action) {
-				runActionCodeAndUpdateState(event.data)
+				await runActionCodeAndUpdateState(event.data)
 			} else if ((event.type = EVENT_TYPES.choice)) {
 				return await handleChoice(event.data)
 			}
@@ -442,9 +447,10 @@ function playScene(scene, abortSignal = undefined) {
 			// return promise
 			return new Promise(resolve => {
 				inBlockChoice = true
-				choiceMadeHandler = choiceButton => {
-					let result
-					choiceButton.action && (result = runActionCodeAndUpdateState(choiceButton.action))
+
+				let result
+
+				const finishUp = () => {
 					clearChoices()
 					if (result?.bailed) {
 						resolve()
@@ -453,6 +459,18 @@ function playScene(scene, abortSignal = undefined) {
 					if (choiceData?.options?.frame !== undefined || choiceData?.options?.loop !== undefined) videoJS.currentTime(initialTime)
 					if (initiallyPlaying) videoJS.play()
 					resolve()
+				}
+
+				choiceMadeHandler = choiceButton => {
+					if (choiceButton.action) {
+						runActionCodeAndUpdateState(choiceButton.action).then(res => {
+							result = res
+							finishUp()
+						})
+					} else {
+						finishUp()
+					}
+
 				}
 				currentChoiceData.value = choiceData
 			})
@@ -467,16 +485,19 @@ function playScene(scene, abortSignal = undefined) {
 		function handleTimedChoice(choiceData) {
 			const duration = choiceData?.options?.timeLimit
 			if (!duration) return
-			choiceMadeHandler = choiceButton => {
+			choiceMadeHandler = async choiceButton => {
 				let result
-				choiceButton.action && (result = runActionCodeAndUpdateState(choiceButton.action))
+				choiceButton.action && (result = await runActionCodeAndUpdateState(choiceButton.action))
 				clearChoices()
+				inTimedChoice = false
 			}
 			currentChoiceData.value = { ...choiceData, timeLimit: duration }
+			inTimedChoice = true
 			timerTimeoutId = setTimeout(
-				() => {
-					if (choiceData?.options?.defaultAction) runActionCodeAndUpdateState(choiceData.options.defaultAction)
+				async () => {
+					if (choiceData?.options?.defaultAction) await runActionCodeAndUpdateState(choiceData.options.defaultAction)
 					clearChoices()
+					inTimedChoice = false
 				},
 				100 + duration * 1000
 			)
@@ -485,11 +506,11 @@ function playScene(scene, abortSignal = undefined) {
 		/**
 		 * Run some action code and update the current state after
 		 *
-		 * @param      {String}  code    The code
-		 * @return     {Object}  State after running the action code, with possible bailed out flag
+		 * @param      {String}             code    The code
+		 * @return     {Promise<(Object)>}  State after running the action code, with possible bailed out flag
 		 */
-		function runActionCodeAndUpdateState(code) {
-			const res = runActionCode(code)
+		async function runActionCodeAndUpdateState(code) {
+			const res = await runActionCode(code)
 			currentState = structuredClone(toRaw(res.newState))
 			return res
 		}
@@ -498,10 +519,10 @@ function playScene(scene, abortSignal = undefined) {
 		 * Run the action code on the current state
 		 *
 		 * @param      {String}  code    The code
-		 * @return     {Object}  State after running the action code, with possible bailed out flag
+		 * @return     {Promise<(Object)>}  State after running the action code, with possible bailed out flag
 		 */
-		function runActionCode(code) {
-			return runCode(code, currentState, CMD_LIBRARY)
+		async function runActionCode(code) {
+			return await runCode(code, currentState, CMD_LIBRARY)
 		}
 
 		/**
@@ -529,7 +550,7 @@ function playScene(scene, abortSignal = undefined) {
 				// looping? Possibly (probably in a blocked choice)
 				const [startTime, endTime] = activeLoop || []
 				if (startTime !== undefined && endTime !== undefined) {
-					let realEndTime = endTime === -1 ? scene.endTime : endTime			
+					let realEndTime = endTime === -1 ? scene.endTime : endTime
 					if (realEndTime !== -1 && time >= realEndTime) videoJS.currentTime(startTime)
 				}
 			},
