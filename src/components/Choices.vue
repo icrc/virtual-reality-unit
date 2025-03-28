@@ -5,10 +5,10 @@
     <div class="message" v-if="message">{{ message }}</div>
     <div class="buttons">
       <div
-        :class="{ button: true, [`choice_${index + 1}`]: true }"
+        :class="{ button: true, [`choice_${index + 1}`]: true, highlighted: highlightButtons[index] }"
         v-for="(choiceButton, index) in buttons"
         :key="`${index}-${choiceButton.text}`"
-        @click="emit('choiceMade', choiceButton)">
+        @click="handleButtonClick(choiceButton, index) /*emit('choiceMade', choiceButton)*/">
         {{ choiceButton.text }}
       </div>
     </div>
@@ -45,11 +45,14 @@ const props = defineProps({
   },
 })
 
+const highlightButtons = ref([false, false, false, false])
+
 const timerActive = ref(false)
 
 const styleSettings = computed(() => {
   return Object.fromEntries(Object.entries(props.layoutSettings).map(([key, value]) => [`--${key}`, value]))
 })
+
 
 onMounted(() => {
   if (props.timeLimit) {
@@ -58,6 +61,12 @@ onMounted(() => {
 })
 
 const emit = defineEmits(["choiceMade"])
+
+const handleButtonClick = (choiceButton, index) => {
+  highlightButtons.value = highlightButtons.value.map((_, i) => i === index)
+  emit('choiceMade', choiceButton)
+}
+
 </script>
 
 <style scoped>
@@ -72,6 +81,7 @@ const emit = defineEmits(["choiceMade"])
   --default_button_colour: #181818;
   --default_button_text_colour: #fff;
   --timer_height: 3;
+  --button_highlight_colour: #ccc;
 }
 
 /* Basic choice layout ---------------------------------------------------------------------------------- */
@@ -138,6 +148,9 @@ const emit = defineEmits(["choiceMade"])
       cursor: pointer;
       &:hover {
         filter: brightness(1.25);
+      }
+      &.highlighted {
+        background-color: var(--button_highlight_colour) !important;
       }
     }
 
@@ -232,6 +245,9 @@ const emit = defineEmits(["choiceMade"])
       &:hover {
         filter: brightness(1.25);
       }
+      &.highlighted {
+        background-color: var(--button_highlight_colour) !important;
+      }
     }
 
     & .button:nth-child(1) {
@@ -324,6 +340,9 @@ const emit = defineEmits(["choiceMade"])
       align-items: center;
       &:hover {
         filter: brightness(1.25);
+      }
+      &.highlighted {
+        background-color: var(--button_highlight_colour) !important;
       }
     }
 
@@ -423,6 +442,9 @@ const emit = defineEmits(["choiceMade"])
       &:hover {
         filter: brightness(1.25);
       }
+      &.highlighted {
+        background-color: var(--button_highlight_colour) !important;
+      }
     }
 
     & .button:nth-child(1) {
@@ -521,6 +543,9 @@ const emit = defineEmits(["choiceMade"])
       max-height: calc(var(--unit) * 32);
       &:hover {
         filter: brightness(1.25);
+      }
+      &.highlighted {
+        background-color: var(--button_highlight_colour) !important;
       }
     }
 

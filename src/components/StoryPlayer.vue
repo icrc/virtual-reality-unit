@@ -45,14 +45,16 @@
 					</g>
 				</svg>
 			</div>
-			<choices
-				v-if="currentChoiceData"
-				:timeLimit="currentChoiceData.timeLimit"
-				:message="currentChoiceData.text"
-				:buttons="currentChoiceData.buttons"
-				:layout="computedLayoutName"
-				:layout-settings="computedLayoutSettings"
-				@choice-made="choiceMadeHandler" />
+			<transition name="fade">
+				<choices
+					v-if="currentChoiceData"
+					:timeLimit="currentChoiceData.timeLimit"
+					:message="currentChoiceData.text"
+					:buttons="currentChoiceData.buttons"
+					:layout="computedLayoutName"
+					:layout-settings="computedLayoutSettings"
+					@choice-made="choiceMadeHandler" />
+			</transition>
 		</div>
 		<div v-if="props?.data?.scenes?.length">
 			<video-service-provider v-for="(scene, index) in props.data.scenes" ref="serviceProviders" />
@@ -303,8 +305,12 @@ function playScene(scene, abortSignal = undefined) {
 				return scene
 			},
 			videoJS,
-			blockChoiceActive() { return inBlockChoice },
-			timedChoiceActive() { return inTimedChoice },
+			blockChoiceActive() {
+				return inBlockChoice
+			},
+			timedChoiceActive() {
+				return inTimedChoice
+			},
 		})
 
 		/**
@@ -470,7 +476,6 @@ function playScene(scene, abortSignal = undefined) {
 					} else {
 						finishUp()
 					}
-
 				}
 				currentChoiceData.value = choiceData
 			})
@@ -668,4 +673,18 @@ defineExpose({
 	left: calc(50% - ((var(--playerfullheight) * var(--aspect))) / 2);
 	right: calc(50% - ((var(--playerfullheight) * var(--aspect))) / 2);
 }
+
+
+.fade-enter-active {
+  transition: opacity 0.5s, scale 0.5s;
+}
+.fade-leave-active {
+  transition: opacity 1s, scale 1s;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
 </style>
