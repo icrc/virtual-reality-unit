@@ -8,9 +8,10 @@
           <option v-for="ctype in EVENT_TYPES" :value="ctype">{{ EVENT_TYPE_NAMES[ctype] }}</option>
         </select>
       </label>
-      <label style="--span: 2"
-        >Launch time (s) - Use -1 for end <input class="show_end_time" :data-val="launchTime" placeholder="n/a" type="number" min="-1" v-model="launchTime"
-      /></label>
+      <label style="--span: 2">
+        Launch time (s) - Use -1 for end
+        <video-timestamp allow-end placeholder="n/a" v-model="launchTime" />
+      </label>
       <label style="--span: 2" v-if="eventType == EVENT_TYPES.choice">
         <span>Choice layout<icon style="float: right" type="settings" class="icon" title="Layout settings" @click="editLayoutSettings" /></span>
         <select
@@ -53,16 +54,15 @@
             <option :value="bgType" v-for="(bgTypeName, bgType) in BACKGROUND_TYPE_NAMES">{{ bgTypeName }}</option>
           </select>
         </label>
-        <label style="--span: 3" v-if="backgroundType === 'block'"> </label>
         <label style="--span: 3" v-if="backgroundType === 'blockFrame'">
           Frame time (s)
-          <input placeholder="0" type="number" min="0" v-model="blockFrameTime" />
+          <video-timestamp placeholder="0" v-model="blockFrameTime" />
         </label>
         <span style="--span: 3" v-if="backgroundType === 'blockLoop'">
           Range (s) - Use -1 for end of scene
           <span style="display: flex; gap: 0.5rem; padding-top: 0.25rem">
-            <input style="width: 7rem" type="number" min="0" v-model="loopStartTime" /><span style="padding-top: 0.75rem">to</span>
-            <span><input style="width: 7rem" class="show_end_time" :data-val="loopEndTime" type="number" min="-1" v-model="loopEndTime" /></span>
+            <video-timestamp style="width: 7rem" v-model="loopStartTime" /><span style="padding-top: 0.75rem">to</span>
+            <span><video-timestamp style="width: 7rem" v-model="loopEndTime" allow-end /></span>
           </span>
         </span>
       </div>
@@ -83,8 +83,8 @@
           <tbody>
             <tr v-for="(choice, index) in buttons" :key="index">
               <td><input placeholder="n/a" type="text" v-model="choice.text" /></td>
-              <td style="width: 50%;"><action-code-input style="height: 2.6rem" v-model="choice.action" /></td>
-              <td style="vertical-align: middle;">
+              <td style="width: 50%"><action-code-input style="height: 2.6rem" v-model="choice.action" /></td>
+              <td style="vertical-align: middle">
                 <span class="choice_options">
                   <icon :class="{ disabled_icon: index == 0, icon: true }" type="arrow-up" title="Move up" @click="moveChoiceUp(index)" />
                   <icon :class="{ disabled_icon: index == 3, icon: true }" type="arrow-down" title="Move down" @click="moveChoiceDown(index)" />
@@ -166,6 +166,7 @@ import { useStoryStore } from "@/stores/storyStore"
 
 import PopupDialog from "@/components/PopupDialog.vue"
 import ActionCodeInput from "@/components/ActionCodeInput.vue"
+import VideoTimestamp from "@/components/VideoTimestamp.vue"
 
 const store = useStoryStore()
 
@@ -322,7 +323,7 @@ const sanitisedButtons = () => {
  * @return     {promise}  Promise resolving to the new object (or null if cancelled)
  */
 const createNew = async (initialEvent = {}) => {
-  const event = {...structuredClone(BLANK_NEW_EVENT), ...initialEvent }
+  const event = { ...structuredClone(BLANK_NEW_EVENT), ...initialEvent }
   return await useEditor(event, "Add Event")
 }
 

@@ -26,10 +26,14 @@
           </label>
         </div>
         <div>
-          <label style="--span: 1">Start time (s)<input placeholder="n/a" type="number" min="-1" v-model="scene.startTime" /></label>
-          <label style="--span: 1"
-            >End time (-1: end)<input class="show_end_time" :data-val="scene.endTime" placeholder="n/a" type="number" min="-1" v-model="scene.endTime"
-          /></label>
+          <label style="--span: 1">
+            Start time (s)
+            <video-timestamp placeholder="n/a" v-model="scene.startTime" />
+          </label>
+          <label style="--span: 1">
+            End time (-1: end)
+            <video-timestamp placeholder="n/a" allow-end v-model="scene.endTime" />
+          </label>
           <label style="--span: 3"
             >Video
             <select v-model="scene.videoId">
@@ -102,6 +106,7 @@ import { computed, nextTick, useTemplateRef, toRaw } from "vue"
 import Icon from "vue-feather"
 
 import EventEditor from "@/components/EventEditor.vue"
+import VideoTimestamp from "@/components/VideoTimestamp.vue"
 
 const header = useTemplateRef("header")
 const eventEditor = useTemplateRef("eventEditor")
