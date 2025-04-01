@@ -277,7 +277,7 @@ async function start(abortSignal = undefined) {
  */
 function handleAbort(err) {
 	playbackActive.value = false
-	videoJS.pause()
+	if (videoJS.el_ && !videoJS.paused()) videoJS.pause()
 	return err
 }
 
