@@ -15,41 +15,13 @@
   </span>
 </template>
 
-<script setup>
-import { ref, watch, onMounted, computed } from "vue"
-import Icon from "vue-feather"
-
-const props = defineProps({
-  allowEnd: Boolean,
-  endText: {
-    type: String,
-    default: "END",
-  }
-})
-
-const setToEnd = () => model.value = -1
-
-const placeholderText = computed(() => {
-  if (props.allowEnd) {
-    return (model.value == -1) ? props.endText : "00:00"
-  } else {
-    return "00:00"
-  }
-})
-
-// Define the model using the Composition API's defineModel
-const model = defineModel({
-  default: null,
-})
-
-// Local state for the formatted value
-const formattedValue = ref("")
-const isEditing = ref(false)
+<script>
+  
 
 // Convert seconds to mm:ss format
-const secondsToFormatted = totalSeconds => {
+export const secondsToFormatted = (totalSeconds, allowEnd = false) => {
   // Handle null or undefined value
-  if (totalSeconds === null || totalSeconds === undefined || (totalSeconds == -1 && props.allowEnd)) {
+  if (totalSeconds === null || totalSeconds === undefined || (totalSeconds == -1 && allowEnd)) {
     return ""
   }
 
@@ -59,7 +31,7 @@ const secondsToFormatted = totalSeconds => {
 }
 
 // Convert formatted mm:ss to seconds
-const formattedToSeconds = formatted => {
+export const formattedToSeconds = formatted => {
   // Handle empty string as null
   if (!formatted || formatted.trim() === "") {
     return null
@@ -85,6 +57,38 @@ const formattedToSeconds = formatted => {
 
   return minutes * 60 + seconds
 }
+
+</script>
+
+<script setup>
+import { ref, watch, onMounted, computed } from "vue"
+import Icon from "vue-feather"
+
+const props = defineProps({
+  allowEnd: Boolean,
+  endText: {
+    type: String,
+    default: "END",
+  }
+})
+
+const setToEnd = () => model.value = -1
+
+const placeholderText = computed(() => {
+  if (props.allowEnd) {
+    return (model.value == -1) ? props.endText : "00:00"
+  } else {
+    return "00:00"
+  }
+})
+
+const model = defineModel({
+  default: null,
+})
+
+const formattedValue = ref("")
+const isEditing = ref(false)
+
 
 // Handle user input
 const handleInput = event => {
@@ -137,7 +141,7 @@ const formatOnBlur = () => {
   }
 
   // Otherwise format properly
-  formattedValue.value = secondsToFormatted(model.value)
+  formattedValue.value = secondsToFormatted(model.value, props.allowEnd)
 }
 
 // Handle focus to prepare for editing
@@ -166,13 +170,13 @@ const handleKeydown = event => {
 // Update formatted value when model changes externally
 watch(model, newVal => {
   if (!isEditing.value) {
-    formattedValue.value = secondsToFormatted(newVal)
+    formattedValue.value = secondsToFormatted(newVal, props.allowEnd)
   }
 })
 
 // Initialize component with the formatted value based on initial model value
 onMounted(() => {
-  formattedValue.value = secondsToFormatted(model.value)
+  formattedValue.value = secondsToFormatted(model.value, props.allowEnd)
 })
 </script>
 
