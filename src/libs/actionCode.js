@@ -26,16 +26,21 @@ export const runCode = async (actionCode, initialState, commandLibrary = {}) => 
   const commands = { ...getBaseCommands(state), ...commandLibrary }
   let bailed = false
   for (const { command, args } of parser(actionCode, state)) {
-    if (!commands[command]) throw new Error(`Unknown actionCode command: ${command}`)
+    const parsedCommand = parseCommandProbability(command)
+    if (!commands[parsedCommand.command]) throw new Error(`Unknown actionCode command: ${parsedCommand.command}`)
     let result
-    if (isAsyncFunction(commands[command])) {
-      result = await commands[command](...args)
-    } else {
-      result = commands[command](...args)
-    }
-    if (result === null) {
-      bailed = true
-      break
+    // probablistically run command
+    let c = Math.random()
+    if (c < parsedCommand.probability) {
+      if (isAsyncFunction(commands[parsedCommand.command])) {
+        result = await commands[parsedCommand.command](...args)
+      } else {
+        result = commands[parsedCommand.command](...args)
+      }
+      if (result === null) {
+        bailed = true
+        break
+      }
     }
   }
   return { newState: state, bailed }
@@ -49,13 +54,13 @@ export const runCode = async (actionCode, initialState, commandLibrary = {}) => 
  * @return     {Object}  Yields objects: { command: 'commandName', args: [] }
  */
 export function* parser(code, state) {
-  const c = typeof code=="string" ? code.trim() : ''
+  const c = typeof code == "string" ? code.trim() : ""
   if (!c) return
 
   const lines = c.split("\n").map(line => line.trim())
 
   for (let line of lines) {
-    const [command, argString] = line.split(":").map(part => part.trim())
+    const [command, argString] = splitCommandAndArgs(line).map(part => part.trim())
     const args = argString && splitArgs(argString)
     yield { command, args: args ? args.map(arg => getArgValue(arg, state)) : [] }
   }
@@ -70,13 +75,17 @@ export function* parser(code, state) {
  */
 function getArgValue(expression, state) {
   window[TEMP_VAR_NAME] = structuredClone(state)
-  const xp = expression.replace(/@([a-zA-Z]*)/g, `window.${TEMP_VAR_NAME}["$1"]`)
+  const expr = '' + expression
+  const xp = expr.replace(/@([a-zA-Z]*)/g, `window.${TEMP_VAR_NAME}["$1"]`)
   try {
     return eval(xp)
   } catch (e) {
     return `Error in expression: ${expression}`
   }
 }
+
+// TODO - getArgValue above is potentially VERY unsage - consider mobing to a safeEval function
+// See - https://stackoverflow.com/a/37154736
 
 /**
  * Splits and trims arguments from string (comma separated, trimming too).
@@ -102,5 +111,39 @@ function isAsyncFunction(func) {
   return func.constructor.name === "AsyncFunction"
 }
 
-// TODO - getArgValue above is potentially VERY unsage - consider mobing to a safeEval function
-// See - https://stackoverflow.com/a/37154736
+/**
+ * Parse a command name with a probability
+ *
+ * @param      {string}  input   The input command string (may or may not have a probability in square brackets after it)
+ * @return     {Object}  { command, probaility }
+ */
+function parseCommandProbability(input) {
+  // This pattern has two parts:
+  // 1. Capturing the command before any brackets
+  // 2. Optionally capturing any probability value inside brackets
+  const pattern = /^([^\[\]]+)(?:\[([0-1](?:\.\d+)?|)\])?$/
+  const match = input.match(pattern)
+
+  if (!match) {
+    throw new Error("Invalid format. Expected 'command' or 'command[probability]' or 'command[]'")
+  }
+
+  const command = match[1].trim()
+
+  // If there's no second match group or it's an empty string, default to 1
+  const probability = match[2] && match[2] !== "" ? parseFloat(match[2]) : 1
+
+  return { command, probability }
+}
+
+
+/**
+ * Splits command and arguments.
+ *
+ * @param      {string}   input   The input
+ * @return     {array}  [command, args]
+ */
+const splitCommandAndArgs = input => {
+  const colonIndex = input.indexOf(':');
+  return colonIndex === -1 ? [input, ""] : [input.substring(0, colonIndex), input.substring(colonIndex + 1)];
+}
