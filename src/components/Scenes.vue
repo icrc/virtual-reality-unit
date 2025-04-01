@@ -27,12 +27,12 @@
         </div>
         <div>
           <label style="--span: 1">
-            Start time (s)
-            <video-timestamp placeholder="n/a" v-model="scene.startTime" />
+            Start time
+            <video-timestamp style="padding-top: 0.25rem; display:flex" v-model="scene.startTime" />
           </label>
           <label style="--span: 1">
-            End time (-1: end)
-            <video-timestamp placeholder="n/a" allow-end v-model="scene.endTime" />
+            End time
+            <video-timestamp style="padding-top: 0.25rem; display:flex" end-text="Video end" allow-end v-model="scene.endTime" />
           </label>
           <label style="--span: 3"
             >Video
@@ -63,9 +63,9 @@
               <tr v-for="event in sortedEvents(scene.events)" :key="event.id">
                 <td>{{ eventTypeLabel(event) }}</td>
                 <td v-html="event.type === EVENT_TYPES.choice ? event.data.text : event.data.replaceAll(/\n/g, '<br/>')"></td>
-                <td style="text-align: center">{{ event.launchTime == -1 ? "END" : event.launchTime }}</td>
+                <td style="text-align: center; font-family: monospace;">{{ event.launchTime == -1 ? "END" : event.launchTime }}</td>
                 <td>
-                  <div style="display: flex; justify-content: center; gap: 0.75rem">
+                  <div style="display: flex; justify-content: center; gap: 1rem">
                     <icon type="edit" class="icon" title="Edit" @click="editEventForScene(scene, event)" /><icon
                       type="trash-2"
                       class="icon"

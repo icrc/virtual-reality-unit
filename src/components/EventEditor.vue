@@ -9,8 +9,8 @@
         </select>
       </label>
       <label style="--span: 2">
-        Launch time (s) - Use -1 for end
-        <video-timestamp allow-end placeholder="n/a" v-model="launchTime" />
+        Launch time
+        <video-timestamp allow-end end-text="Scene end" style="padding-top: 0.25rem; display:flex" v-model="launchTime" />
       </label>
       <label style="--span: 2" v-if="eventType == EVENT_TYPES.choice">
         <span>Choice layout<icon style="float: right" type="settings" class="icon" title="Layout settings" @click="editLayoutSettings" /></span>
@@ -48,21 +48,23 @@
         </label>
       </div>
       <div v-else>
-        <label style="--span: 3">
+        <label style="--span: 2">
           Background
           <select v-model="backgroundType" @change="popupControl.fixScroll">
             <option :value="bgType" v-for="(bgTypeName, bgType) in BACKGROUND_TYPE_NAMES">{{ bgTypeName }}</option>
           </select>
         </label>
-        <label style="--span: 3" v-if="backgroundType === 'blockFrame'">
-          Frame time (s)
-          <video-timestamp placeholder="0" v-model="blockFrameTime" />
+        <label style="--span: 4" v-if="backgroundType === 'blockFrame'">
+          Frame time
+          <span style="display:flex; padding-top: 0.25rem">
+            <video-timestamp style="flex-grow: 1;" v-model="blockFrameTime" />
+          </span>
         </label>
-        <span style="--span: 3" v-if="backgroundType === 'blockLoop'">
-          Range (s) - Use -1 for end of scene
+        <span style="--span: 4" v-if="backgroundType === 'blockLoop'">
+          Loop range
           <span style="display: flex; gap: 0.5rem; padding-top: 0.25rem">
-            <video-timestamp style="width: 7rem" v-model="loopStartTime" /><span style="padding-top: 0.75rem">to</span>
-            <span><video-timestamp style="width: 7rem" v-model="loopEndTime" allow-end /></span>
+            <video-timestamp style="flex-grow: 1" v-model="loopStartTime" /><span style="padding-top: 0.75rem">to</span>
+            <span><video-timestamp style="flex-grow: 1" v-model="loopEndTime" allow-end end-text="Scene end" /></span>
           </span>
         </span>
       </div>

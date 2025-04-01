@@ -19,6 +19,14 @@
       <button @click="vimeoChapters">Chapters Info</button>
       <button @click="testActionCode">Test ActionCode</button>
     </div>
+    <div>
+      <video-timestamp2 allow-end v-model="vt" />
+      <br>
+      <strong>Timestamp: {{ vt }}</strong>
+      <br>
+      <button @click="()=>vt='96'">Set timestamp to 96</button>
+      <button @click="()=>vt=''">Set timestamp to empty</button>
+    </div>
 
     <!-- Video service providers for doing preloads -->
     <video-service-provider v-for="n in 10" ref="serviceProviders" />
@@ -34,12 +42,17 @@ import { ref, useTemplateRef, onMounted, nextTick, inject } from "vue"
 import Player from "@/components/Player.vue"
 import VideoServiceProvider from "@/components/VideoServiceProvider.vue"
 
+import VideoTimestamp2 from "@/components/VideoTimestamp.vue"
+
 import { useFullscreen } from "@/composables/fullscreen"
 
 import { runCode } from "@/libs/actionCode"
 
 import URLShortener from "@/libs/shortenURL"
 window.US = URLShortener
+
+
+const vt = ref('')
 
 // video preloading
 const serviceProviderRefs = useTemplateRef("serviceProviders")
