@@ -43,7 +43,7 @@ const alert = message => {
   showCancel.value = false
   cancelIsNull.value = false
   showUserText.value = false
-  msg.value = markdown(message)
+  msg.value = markdown('' + message)
   const promise = dialog.value.launchPopup()
   return promise
 }
