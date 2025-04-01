@@ -58,7 +58,7 @@ const confirm = message => {
   showCancel.value = true
   cancelIsNull.value = false
   showUserText.value = false
-  msg.value = markdown(message)
+  msg.value = markdown('' + message)
   const promise = dialog.value.launchPopup()
   return promise
 }
@@ -73,7 +73,7 @@ const confirm = message => {
 const prompt = (message, defaultValue = undefined) => {
   showCancel.value = true
   cancelIsNull.value = true
-  msg.value = markdown(message)
+  msg.value = markdown('' + message)
   showUserText.value = true
   userText.value = defaultValue === undefined ? "" : defaultValue
   const promise = dialog.value.launchPopup(()=>textbox.value?.focus())
