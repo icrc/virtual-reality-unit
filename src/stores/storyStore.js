@@ -10,7 +10,7 @@ const LAST_SAVED_JSON_KEY = "videopath_last_saved_json"
 const CURRENT_FILENAME_KEY = "videopath_current_filename"
 
 /** empty, blank story/project */
-const EMPTY_STORY = {
+export const EMPTY_STORY = {
   version: VERSION,
   title: "",
   author: "",

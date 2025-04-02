@@ -13,7 +13,6 @@
     "@vimeo/player": "^2.24.0",
     "dotenv": "^16.4.7",
     "feather-icons": "^4.29.2",
-    "json5": "^2.2.3",
     "lz-string": "^1.5.0",
     "pinia": "^2.2.4",
     "snarkdown": "^2.0.0",
@@ -24,7 +23,6 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.1.4",
-    "vite": "^5.4.8",
-    "vite-plugin-json5": "^1.1.6"
+    "vite": "^5.4.8"
   }
 }

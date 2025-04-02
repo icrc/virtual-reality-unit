@@ -4,11 +4,11 @@ let ready = false
 
 import { alert, prompt } from "@/libs/popups"
 
-import blastVimeo from "@/testdata/data-blast.json5"
-import multiMP4 from "@/testdata/data-multi-mp4.json5"
-import playthru from "@/testdata/data-playthru.json5"
-import actionEvents from "@/testdata/data-actionevents.json5"
-import layoutTest from "@/testdata/data-layouttest.json5"
+import blastVimeo from "@/samples/blast.json"
+import multiMP4 from "@/samples/multi-mp4.json"
+import playthru from "@/samples/playthru.json"
+import actionEvents from "@/samples/actionevents.json"
+import layoutTest from "@/samples/layouttest.json"
 
 const testData = {
 	blastVimeo,

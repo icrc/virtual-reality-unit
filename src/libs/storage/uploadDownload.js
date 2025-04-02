@@ -1,5 +1,4 @@
 // 'uploadDownload' storage provider - loading is just uploading a file, saving just initiates a file download
-import JSON5 from "json5"
 import { isValidStory, isOldVersion } from "@/stores/storyStore"
 
 const INPUT_ELEMENT_ID = "__ULDL_STORAGE_INPUT"
@@ -140,7 +139,7 @@ const loadFileContent = async file => {
 		return [null, LOAD_ERRORS.loadProblem]
 	}
 	try {
-		storyObject = JSON5.parse(fileText)
+		storyObject = JSON.parse(fileText)
 	} catch (error) {
 		return [null, LOAD_ERRORS.badJSON]
 	}
