@@ -62,7 +62,10 @@
             <tbody v-if="scene.events.length">
               <tr v-for="event in sortedEvents(scene.events)" :key="event.id">
                 <td>{{ eventTypeLabel(event) }}</td>
-                <td v-html="event.type === EVENT_TYPES.choice ? event.data.text : event.data.replaceAll(/\n/g, '<br/>')"></td>
+
+                <td v-if="event.type === EVENT_TYPES.choice" v-html="event.data.text"></td>
+                <td v-else><div class="action_code_long" v-html="event.data.replaceAll(/\n/g, '<br/>')"></div></td>
+
                 <td style="text-align: center; font-family: monospace; text-transform: uppercase;">{{ event.launchTime == -1 ? "Scene end" : secondsToFormatted(event.launchTime) }}</td>
                 <td>
                   <div style="display: flex; justify-content: center; gap: 1rem">
@@ -280,5 +283,12 @@ const eventTypeLabel = event => {
   :deep(& svg):hover {
     stroke: var(--s-color-primary);
   }
+}
+
+.action_code_long {
+  font-family: monospace;
+  font-size:0.8rem;
+  max-height: 3.5rem;
+  overflow-y: auto;
 }
 </style>
