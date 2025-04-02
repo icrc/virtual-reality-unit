@@ -57,7 +57,10 @@ export function* parser(code, state) {
   const c = typeof code == "string" ? code.trim() : ""
   if (!c) return
 
-  const lines = c.split("\n").map(line => line.trim())
+  const lines = c
+    .split("\n")
+    .map(line => line.trim())
+    .filter(line => line && !line.startsWith("//"))
 
   for (let line of lines) {
     const [command, argString] = splitCommandAndArgs(line).map(part => part.trim())
@@ -75,7 +78,7 @@ export function* parser(code, state) {
  */
 function getArgValue(expression, state) {
   window[TEMP_VAR_NAME] = structuredClone(state)
-  const expr = '' + expression
+  const expr = "" + expression
   const xp = expr.replace(/@([a-zA-Z]*)/g, `window.${TEMP_VAR_NAME}["$1"]`)
   try {
     return eval(xp)
@@ -136,7 +139,6 @@ function parseCommandProbability(input) {
   return { command, probability }
 }
 
-
 /**
  * Splits command and arguments.
  *
@@ -144,6 +146,6 @@ function parseCommandProbability(input) {
  * @return     {array}  [command, args]
  */
 const splitCommandAndArgs = input => {
-  const colonIndex = input.indexOf(':');
-  return colonIndex === -1 ? [input, ""] : [input.substring(0, colonIndex), input.substring(colonIndex + 1)];
+  const colonIndex = input.indexOf(":")
+  return colonIndex === -1 ? [input, ""] : [input.substring(0, colonIndex), input.substring(colonIndex + 1)]
 }

@@ -5,9 +5,7 @@
 	"info": "A sample project for testing with multiple MP4 videos",
 	"locales": ["en"],
 	"defaultChoiceLayout": "basic",
-	"defaultChoiceLayoutSettings": {
-		"colour_button2": "#800"
-	},
+	"defaultChoiceLayoutSettings": { "colour_button2": "#800" },
 	"videos": [
 		{
 			"id": 1,
@@ -121,7 +119,7 @@
 				{
 					"type": "action",
 					"launchTime": 1,
-					"data": "setStateValue:'number',1\nsetStateValue[0.333]:'number', 2\nsetStateValue[0.5]:'number', 3\nshowMessage: '## Random number: ' + @number",
+					"data": "// Set up a random number between 1 and 3 (inclusive)\nsetStateValue:'number',1\nsetStateValue[0.333]:'number', 2\nsetStateValue[0.333]:'number', 3\n\n// Show the number\nshowMessage: '## Random number: ' + @number",
 					"id": 2
 				},
 				{
@@ -131,40 +129,19 @@
 					"data": {
 						"text": "Where to next? (Choice should be on top of looping video)",
 						"type": "block",
-						"options": {
-							"loop": [1, 2]
-						},
+						"options": { "loop": [1, 2] },
 						"layout": "",
-						"layoutSettings": {
-							"colour_button3": "#080"
-						},
+						"layoutSettings": { "colour_button3": "#080" },
 						"buttons": [
-							{
-								"text": "Fireworks",
-								"action": "setNextScene:2"
-							},
-							{
-								"text": "Silent Movie (+)",
-								"action": "setNextScene:3"
-							},
-							{
-								"text": "Film Roll (+ more)",
-								"action": "setNextScene:4"
-							}
+							{ "text": "Fireworks", "action": "setNextScene:2" },
+							{ "text": "Silent Movie (+)", "action": "setNextScene:3" },
+							{ "text": "Film Roll (+ more)", "action": "setNextScene:4" }
 						]
 					}
 				}
 			]
 		},
-		{
-			"id": 2,
-			"videoId": 2,
-			"title": "A fireworks-styled countdown",
-			"startTime": 0,
-			"endTime": -1,
-			"nextSceneId": -1,
-			"events": []
-		},
+		{ "id": 2, "videoId": 2, "title": "A fireworks-styled countdown", "startTime": 0, "endTime": -1, "nextSceneId": -1, "events": [] },
 		{
 			"id": 3,
 			"videoId": 3,
@@ -180,20 +157,12 @@
 					"data": {
 						"text": "Play again? (Choice should be on top of frame with a 3)",
 						"type": "block",
-						"options": {
-							"frame": 7
-						},
+						"options": { "frame": 7 },
 						"layout": "",
 						"layoutSettings": {},
 						"buttons": [
-							{
-								"text": "Yes",
-								"action": "gotoScene:3"
-							},
-							{
-								"text": "No",
-								"action": ""
-							}
+							{ "text": "Yes", "action": "gotoScene:3" },
+							{ "text": "No", "action": "" }
 						]
 					}
 				}
@@ -214,36 +183,18 @@
 					"data": {
 						"text": "Go somewhere else?",
 						"type": "timed",
-						"options": {
-							"timeLimit": 4
-						},
+						"options": { "timeLimit": 4 },
 						"layout": "full",
-						"layoutSettings": {
-							"colour_background": "#000"
-						},
+						"layoutSettings": { "colour_background": "#000" },
 						"buttons": [
-							{
-								"text": "Yes",
-								"action": "gotoScene:5"
-							},
-							{
-								"text": "No",
-								"action": ""
-							}
+							{ "text": "Yes", "action": "gotoScene:5" },
+							{ "text": "No", "action": "" }
 						]
 					}
 				}
 			]
 		},
-		{
-			"id": 5,
-			"videoId": 7,
-			"title": "Bonus scene",
-			"startTime": 0,
-			"endTime": -1,
-			"nextSceneId": -1,
-			"events": []
-		}
+		{ "id": 5, "videoId": 7, "title": "Bonus scene", "startTime": 0, "endTime": -1, "nextSceneId": -1, "events": [] }
 	],
 	"initialSceneId": 1,
 	"initialState": {},
