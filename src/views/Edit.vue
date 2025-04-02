@@ -21,6 +21,9 @@
               <li>
                 <a href="#" @click.prevent="shareLink" title="Share a link for viewing this project">Share view link</a>
               </li>
+              <li>
+                <a href="#" @click.prevent="newProject">Test New Project new</a>
+              </li>
             </menu>
           </nav>
         </aside>
@@ -76,6 +79,8 @@
 
           <layout-settings-editor ref="layoutSettingsEditor" />
           <action-code-editor ref="actionCodeEditor" />
+          <new-project-dialog ref="newProjectDialog" />
+
         </main>
       </div>
     </div>
@@ -100,6 +105,7 @@ import Videos from "@/components/Videos.vue"
 import Scenes from "@/components/Scenes.vue"
 import LayoutSettingsEditor from "@/components/LayoutSettingsEditor.vue"
 import ActionCodeEditor from "@/components/ActionCodeEditor.vue"
+import NewProjectDialog from "@/components/NewProjectDialog.vue"
 
 const store = useStoryStore()
 const story = computed(() => store.currentStory)
@@ -118,6 +124,8 @@ provide("layoutSettingsEditor", layoutSettingsEditor)
 const actionCodeEditor = useTemplateRef("actionCodeEditor")
 provide("actionCodeEditor", actionCodeEditor)
 
+const newProjectDialog = useTemplateRef("newProjectDialog")
+
 onMounted(() => {
   inject("setWindowTitle")("Edit")
 })
@@ -131,6 +139,13 @@ const newStory = async () => {
   if (!(await confirmUnsaved())) return
   store.newStory()
   nextTick(() => storyTitle.value.focus())
+}
+
+/**
+ * Attempt to start a new project
+ */
+const newProject = async () => {
+  const template = await newProjectDialog.value.getTemplate()
 }
 
 /**
