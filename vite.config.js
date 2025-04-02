@@ -1,7 +1,6 @@
 import { defineConfig } from "vite"
 import path from "path"
 import vue from "@vitejs/plugin-vue"
-import { json5Plugin } from "vite-plugin-json5"
 
 import * as dotenv from "dotenv"
 import { fileURLToPath } from "url"
@@ -28,7 +27,6 @@ export default ({ mode }) => {
       target: "esnext",
     },
     plugins: [
-      json5Plugin(),
       vue({
         template: {
           compilerOptions: {

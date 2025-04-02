@@ -6,7 +6,7 @@
 	"initialSceneId": 1,
 	"locales": ["en"],
 	"defaultChoiceLayout": "column_r",
-	"defaultChoiceLayoutSettings": {jon:1},
+	"defaultChoiceLayoutSettings": { "jon": 1 },
 	"videos": [
 		{
 			"title": "Hourglass",
@@ -35,7 +35,7 @@
 						"type": "block",
 						"options": {},
 						"layout": "",
-						"layoutSettings": {jonChoice1LayourSettings:42},
+						"layoutSettings": { "jonChoice1LayourSettings": 42 },
 						"buttons": [
 							{
 								"text": "Option 1",
@@ -129,7 +129,7 @@
 					"data": {
 						"text": "A timed choice (4 options)",
 						"type": "timed",
-						"options": {timeLimit:4},
+						"options": { "timeLimit": 4 },
 						"layout": "",
 						"layoutSettings": {},
 						"buttons": [
@@ -148,7 +148,7 @@
 							{
 								"text": "Option 4",
 								"action": "setNextScene:1"
-							},
+							}
 						]
 					}
 				},
@@ -159,7 +159,7 @@
 					"data": {
 						"text": "A timed choice (3 options)",
 						"type": "timed",
-						"options": {timeLimit:4},
+						"options": { "timeLimit": 4 },
 						"layout": "",
 						"layoutSettings": {},
 						"buttons": [
@@ -174,7 +174,7 @@
 							{
 								"text": "Option 3",
 								"action": "setNextScene:1"
-							},
+							}
 						]
 					}
 				},
@@ -185,7 +185,7 @@
 					"data": {
 						"text": "A timed choice (2 options)",
 						"type": "timed",
-						"options": {timeLimit:4},
+						"options": { "timeLimit": 4 },
 						"layout": "",
 						"layoutSettings": {},
 						"buttons": [
@@ -207,7 +207,7 @@
 					"data": {
 						"text": "A timed choice (1 option)",
 						"type": "timed",
-						"options": {timeLimit:4},
+						"options": { "timeLimit": 4 },
 						"layout": "",
 						"layoutSettings": {},
 						"buttons": [
