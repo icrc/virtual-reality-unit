@@ -7,7 +7,7 @@
           <nav class="side_nav">
             <menu id="side-navigation" class="svelte-1jn03lf">
               <li>
-                <a href="#" @click.prevent="newStory">Create new</a>
+                <a href="#" @click.prevent="newProject">Create new</a>
               </li>
               <li>
                 <a href="#" @click.prevent="loadStory">Load existing</a>
@@ -20,9 +20,6 @@
               </li>
               <li>
                 <a href="#" @click.prevent="shareLink" title="Share a link for viewing this project">Share view link</a>
-              </li>
-              <li>
-                <a href="#" @click.prevent="newProject">Test New Project new</a>
               </li>
             </menu>
           </nav>
@@ -131,21 +128,15 @@ onMounted(() => {
 })
 
 /**
- * Add a new story/project (checking if current saved first)
- *
- * @return     {Promise}  n/a
- */
-const newStory = async () => {
-  if (!(await confirmUnsaved())) return
-  store.newStory()
-  nextTick(() => storyTitle.value.focus())
-}
-
-/**
  * Attempt to start a new project
  */
 const newProject = async () => {
+  if (!(await confirmUnsaved())) return
   const template = await newProjectDialog.value.getTemplate()
+  if (template) {
+    store.newStory(template)
+    nextTick(() => storyTitle.value.focus())
+  }
 }
 
 /**

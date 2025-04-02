@@ -1,15 +1,20 @@
 <!-- New Project Popup -->
 <template>
   <popup-dialog ref="dialog" v-slot="popupControl" heading="New Project" class="new-project-container">
-    <div style="--span: 4">
-      <span>Please select the project template or sample you wish to start from:</span>
-      <hr />
+    <div>
+      <label style="--span: 4">
+        Please select the project template or sample you wish to start from:
+        <select autofocus v-model="templateId" @change="popupControl.fixScroll">
+          <option :value="id" v-for="(template, id) in TEMPLATES">{{ template.name }}</option>
+        </select>
+      </label>
+      <label style="--span: 4">Template/sample description<textarea readonly>{{ templateDescription }}</textarea></label>
     </div>
-    
+
     <div>
       <span class="actions">
         <button class="s-outline" @click="popupControl.setVisible(false)">Cancel</button>
-        <button @click="() => popupControl.returnResult(true)">Go</button>
+        <button @click="() => popupControl.returnResult(TEMPLATES[templateId].data)">Go</button>
       </span>
     </div>
   </popup-dialog>
@@ -17,16 +22,22 @@
 
 <script>
 import SAMPLES from "@/samples"
+import { EMPTY_STORY } from "@/stores/storyStore"
+
+const TEMPLATES = [
+  { name: "Blank project", description: "A new, blank project with basic structure.", data: EMPTY_STORY },
+  ...SAMPLES.map(sample => ({ name: '[Sample] - ' + sample.title, description: sample.info, data: sample })),
+]
 </script>
 
 <script setup>
-import { useTemplateRef, toRaw, ref, computed, nextTick } from "vue"
+import { useTemplateRef, ref, computed } from "vue"
 
 import PopupDialog from "@/components/PopupDialog.vue"
-import Icon from "vue-feather"
 
 const dialog = useTemplateRef("dialog")
-
+const templateId = ref(0)
+const templateDescription = computed(() => TEMPLATES[templateId.value].description)
 
 /**
  * Gets the template for the new project, or falsey if cancelled
@@ -34,6 +45,7 @@ const dialog = useTemplateRef("dialog")
  * @return     {object|null}  The template.
  */
 const getTemplate = () => {
+  templateId.value = 0
   const promise = dialog.value.launchPopup()
   return promise
 }
@@ -41,7 +53,6 @@ const getTemplate = () => {
 defineExpose({
   getTemplate,
 })
-
 </script>
 
 <style scoped>
@@ -49,10 +60,6 @@ defineExpose({
   width: 32%;
   max-width: 750px;
   min-width: 450px;
-}
-
-.icon {
-  cursor: pointer;
 }
 
 .actions {
@@ -65,15 +72,14 @@ defineExpose({
   }
 }
 
-.disabled_icon {
-  :deep(& svg) {
-    stroke: #ccc !important;
+select {
+  font-weight: bold;
+  & option {
+    font-weight: normal;
   }
 }
-:deep(.disabled_icon) {
-  cursor: default !important;
-  pointer-events: none;
+
+textarea {
+  height: 4.5rem;
 }
-
-
 </style>
