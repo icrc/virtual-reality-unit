@@ -11,7 +11,7 @@
 			"id": 1,
 			"title": "Welcome",
 			"sourceType": "mp4",
-			"url": "/videos/00.mp4",
+			"url": "./videos/00.mp4",
 			"thumbnail": "TODO later - maybe we need this?",
 			"info": "A short test video with a 'welcome' feel",
 			"audiotracks": []
@@ -20,7 +20,7 @@
 			"id": 2,
 			"title": "Fireworks",
 			"sourceType": "mp4",
-			"url": "/videos/01.mp4",
+			"url": "./videos/01.mp4",
 			"thumbnail": "TODO later - maybe we need this?",
 			"info": "A short test video with a 'fireworks' feel",
 			"audiotracks": []
@@ -29,7 +29,7 @@
 			"id": 3,
 			"title": "Silent Movie",
 			"sourceType": "mp4",
-			"url": "/videos/02.mp4",
+			"url": "./videos/02.mp4",
 			"thumbnail": "TODO later - maybe we need this?",
 			"info": "A short test video with a 'silent movie' feel",
 			"audiotracks": []
@@ -38,7 +38,7 @@
 			"id": 4,
 			"title": "Film Roll",
 			"sourceType": "mp4",
-			"url": "/videos/03.mp4",
+			"url": "./videos/03.mp4",
 			"thumbnail": "TODO later - maybe we need this?",
 			"info": "A short test video with a 'film roll' feel",
 			"audiotracks": []
@@ -47,7 +47,7 @@
 			"id": 5,
 			"title": "Hacker",
 			"sourceType": "mp4",
-			"url": "/videos/04.mp4",
+			"url": "./videos/04.mp4",
 			"thumbnail": "TODO later - maybe we need this?",
 			"info": "A short test video with a 'hacker' feel",
 			"audiotracks": []
@@ -56,7 +56,7 @@
 			"id": 6,
 			"title": "Radar Sweep",
 			"sourceType": "mp4",
-			"url": "/videos/05.mp4",
+			"url": "./videos/05.mp4",
 			"thumbnail": "TODO later - maybe we need this?",
 			"info": "A short test video with a 'radar sweep' feel",
 			"audiotracks": []
@@ -65,7 +65,7 @@
 			"id": 7,
 			"title": "Bold Green",
 			"sourceType": "mp4",
-			"url": "/videos/06.mp4",
+			"url": "./videos/06.mp4",
 			"thumbnail": "TODO later - maybe we need this?",
 			"info": "A short test video with a 'bold green' feel",
 			"audiotracks": []
@@ -74,7 +74,7 @@
 			"id": 8,
 			"title": "Racing",
 			"sourceType": "mp4",
-			"url": "/videos/07.mp4",
+			"url": "./videos/07.mp4",
 			"thumbnail": "TODO later - maybe we need this?",
 			"info": "A short test video with a 'racing' feel",
 			"audiotracks": []
@@ -83,7 +83,7 @@
 			"id": 9,
 			"title": "SciFi",
 			"sourceType": "mp4",
-			"url": "/videos/08.mp4",
+			"url": "./videos/08.mp4",
 			"thumbnail": "TODO later - maybe we need this?",
 			"info": "A short test video with a'sci-fi' feel",
 			"audiotracks": []
@@ -92,7 +92,7 @@
 			"id": 10,
 			"title": "Neon",
 			"sourceType": "mp4",
-			"url": "/videos/09.mp4",
+			"url": "./videos/09.mp4",
 			"thumbnail": "TODO later - maybe we need this?",
 			"info": "A short test video with a 'neon' feel",
 			"audiotracks": []
@@ -101,7 +101,7 @@
 			"id": 11,
 			"title": "Fire",
 			"sourceType": "mp4",
-			"url": "/videos/10.mp4",
+			"url": "./videos/10.mp4",
 			"thumbnail": "TODO later - maybe we need this?",
 			"info": "A short test video with a 'fire' feel",
 			"audiotracks": []

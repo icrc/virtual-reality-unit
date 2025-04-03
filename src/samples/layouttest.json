@@ -11,7 +11,7 @@
 		{
 			"title": "Hourglass",
 			"sourceType": "mp4",
-			"url": "/videos/time.mp4",
+			"url": "./videos/time.mp4",
 			"thumbnail": "",
 			"info": "",
 			"audiotracks": [],

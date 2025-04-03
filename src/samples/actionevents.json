@@ -11,7 +11,7 @@
       "id": 1,
       "title": "Hacker",
       "sourceType": "mp4",
-      "url": "/videos/04.mp4",
+      "url": "./videos/04.mp4",
       "thumbnail": "TODO later - maybe we need this?",
       "info": "A short test video with a 'hacker' feel",
       "audiotracks": []
@@ -19,7 +19,7 @@
     {
       "title": "Radar",
       "sourceType": "mp4",
-      "url": "/videos/05.mp4",
+      "url": "./videos/05.mp4",
       "thumbnail": "",
       "info": "",
       "audiotracks": [],
@@ -28,7 +28,7 @@
     {
       "title": "Green Bold",
       "sourceType": "mp4",
-      "url": "/videos/06.mp4",
+      "url": "./videos/06.mp4",
       "thumbnail": "",
       "info": "",
       "audiotracks": [],
