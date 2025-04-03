@@ -63,6 +63,14 @@ const intVersion = versionStr => versionStr.split(".").reduce((total, part, inde
  */
 export const isOldVersion = version => intVersion(VERSION) > intVersion(version)
 
+/**
+ * Gets the scene label.
+ *
+ * @param      {object}  scene   The scene
+ * @return     {string}  The scene label.
+ */
+export const getSceneLabel = scene => (scene.ref ? `[${scene.ref}] - ` : '') + (scene.title || "(No title)")
+
 export const useStoryStore = defineStore("story", () => {
   // In returned items:
   //  ref()s become state properties (can get actual refs by using pina.storeToRefs)
