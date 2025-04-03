@@ -40,6 +40,8 @@ button {
 }
 
 textarea {
+  font-family: monospace;
+  font-size: 0.8rem;
   padding: 0.5rem;
   height: 100%;
   min-height: 2.6rem;

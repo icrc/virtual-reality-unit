@@ -7,20 +7,21 @@
       </summary>
       <div style="--span: 4" class="s-grid scenes-container" v-for="(scene, idx) in story.scenes" :key="scene.id">
         <div :id="`scene_${scene.id}`">
-          <label style="--span: 5"
-            ><strong>{{ scene.id }}</strong> - Title<input
-              style="font-weight: bold"
-              class="scene_title"
-              placeholder="(No title)"
-              type="text"
-              v-model="scene.title"
-          /></label>
+          <label style="--span: 1">
+            Ref.
+            <input placeholder="--" style="font-weight: bold" type="text" stsyle="width: 50px" v-model="scene.ref" />
+          </label>
+          <label style="--span: 3">
+            Title
+            <input style="font-weight: bold" class="scene_title" placeholder="(No title)" type="text" v-model="scene.title" />
+          </label>
+
           <label style="--span: 3"
             >Next scene
             <select v-model="scene.nextSceneId" :title="'System ID - ' + scene.nextSceneId">
               <option :value="-1">(n/a)</option>
               <option v-for="scene in story.scenes" :key="scene.id" :value="scene.id" :title="'System ID - ' + scene.id">
-                {{ scene.id }} - {{ scene.title || "(No title)" }}
+                {{ getSceneLabel(scene) }}
               </option>
             </select>
           </label>
@@ -66,7 +67,9 @@
                 <td v-if="event.type === EVENT_TYPES.choice" v-html="event.data.text"></td>
                 <td v-else><div class="action_code_long" v-html="event.data.replaceAll(/\n/g, '<br/>')"></div></td>
 
-                <td style="text-align: center; font-family: monospace; text-transform: uppercase;">{{ event.launchTime == -1 ? "Scene end" : secondsToFormatted(event.launchTime) }}</td>
+                <td style="text-align: center; font-family: monospace; text-transform: uppercase">
+                  {{ event.launchTime == -1 ? "Scene end" : secondsToFormatted(event.launchTime) }}
+                </td>
                 <td>
                   <div style="display: flex; justify-content: center; gap: 1rem">
                     <icon type="edit" class="icon" title="Edit" @click="editEventForScene(scene, event)" /><icon
@@ -94,6 +97,8 @@
 
 <script>
 import { EVENT_TYPES, EVENT_TYPE_NAMES, CHOICE_TYPES } from "@/components/EventEditor.vue"
+import { getSceneLabel } from "@/stores/storyStore"
+
 const NEW_SCENE_DEFAULTS = {
   videoId: -1,
   title: "",
@@ -287,7 +292,7 @@ const eventTypeLabel = event => {
 
 .action_code_long {
   font-family: monospace;
-  font-size:0.8rem;
+  font-size: 0.8rem;
   max-height: 3.5rem;
   overflow-y: auto;
 }

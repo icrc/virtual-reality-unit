@@ -1,4 +1,3 @@
-<!-- Action Editor Popup - for editing action code -->
 <template>
   <popup-dialog ref="dialog" v-slot="popupControl" :heading="title" class="action-code-s-container">
     <div>
@@ -19,6 +18,15 @@
             type="text"
             v-model="actionCodeAdv"></textarea>
         </label>
+        <label style="--span: 6" v-if="isAdvanced">
+          Scenes (with system IDs)
+          <span style="display: flex; gap: 0.5rem">
+            <select style="flex-grow: 1" v-model="sceneRef" :title="'System ID - ' + sceneRef">
+              <option v-for="scene in story.scenes" :key="scene.id" :value="scene.id" :title="'System ID - ' + scene.id">{{ `${scene.id}:      ` + getSceneLabel(scene) }}</option>
+            </select>
+            <button style="width: auto; white-space: nowrap" @click="copySceneIdToClipboard">Copy ID to clipboard</button>
+          </span>
+        </label>
       </template>
       <template v-else>
         <label :style="{ '--span': commandRequiresScene ? 3 : 6 }">
@@ -31,7 +39,7 @@
         <label style="--span: 3" v-if="commandRequiresScene">
           Scene
           <select v-model="simpleArg" :title="'System ID - ' + simpleArg">
-            <option v-for="scene in story.scenes" :key="scene.id" :value="scene.id" :title="'System ID - ' + scene.id">{{ scene.id }} - {{ scene.title || "(No title)" }}</option>
+            <option v-for="scene in story.scenes" :key="scene.id" :value="scene.id" :title="'System ID - ' + scene.id">{{ getSceneLabel(scene) }}</option>
           </select>
         </label>
       </template>
@@ -50,6 +58,7 @@
 
 <script>
 import { parser } from "@/libs/actionCode"
+import { getSceneLabel } from "@/stores/storyStore"
 
 const SIMPLE_COMMANDS = {
   gotoNextScene: {},
@@ -93,6 +102,7 @@ const isAdvanced = ref(false)
 
 const simpleCommand = ref("")
 const simpleArg = ref()
+const sceneRef = ref()
 const commandRequiresScene = computed(() => {
   return SIMPLE_COMMANDS[simpleCommand.value]?.requiresScene
 })
@@ -100,6 +110,13 @@ const commandRequiresScene = computed(() => {
 const isCurrentCodeSimple = computed(() => {
   return isSimpleCode(getEditedActionCode())
 })
+
+/**
+ * Copy Scene ID to Clipboard
+ */
+const copySceneIdToClipboard = () => {
+  navigator.clipboard.writeText(sceneRef.value)
+}
 
 /**
  * Set up and display the editor
@@ -205,5 +222,10 @@ defineExpose({
   & button {
     width: fit-content;
   }
+}
+
+textarea {
+  font-family: monospace;
+  font-size: 0.8rem;
 }
 </style>
