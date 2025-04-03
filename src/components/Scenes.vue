@@ -295,5 +295,8 @@ const eventTypeLabel = event => {
   font-size: 0.8rem;
   max-height: 3.5rem;
   overflow-y: auto;
+  padding: 0.25rem;
+  border-radius: 0.4rem;
+  border: 1px solid #666;
 }
 </style>

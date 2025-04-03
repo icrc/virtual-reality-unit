@@ -444,7 +444,7 @@ defineExpose({
 
 .action_event_editor {
   :deep(& textarea) {
-    height: 8rem;
+    height: 3.5rem;
   }
 }
 
