@@ -70,18 +70,18 @@ const SIMPLE_COMMANDS = {
  * Determines whether the specified action code is 'simple' code (can be edited in simple mode).
  *
  * @param      {string}   actionCode  The action code
- * @return     {boolean}  True if the specified action code is simple code, False otherwise.
+ * @return     {object}   Object with info about the code if the specified action code is simple code, False otherwise.
  */
-const isSimpleCode = actionCode => {
+export const isSimpleCode = actionCode => {
   const commands = [...parser(actionCode, {})]
   if (commands.length > 1) return false
-  if (!commands.length) return true
+  if (!commands.length) return {}
   const command = commands[0].command
   const arg = commands[0].args[0]
   const isSimpleCommand = command in SIMPLE_COMMANDS
   if (!isSimpleCommand) return false
   if (isSimpleCommand && SIMPLE_COMMANDS[command].requiresScene && typeof arg !== "number") return false
-  return true
+  return { command, arg, requiresScene: SIMPLE_COMMANDS[command].requiresScene }
 }
 </script>
 

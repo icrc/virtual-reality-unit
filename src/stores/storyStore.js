@@ -436,6 +436,7 @@ export const useStoryStore = defineStore("story", () => {
     deleteEvent,
     updateEvent,
 
+    getSceneById,
     getScenesByVideoId,
 
     isStoryPlayable,

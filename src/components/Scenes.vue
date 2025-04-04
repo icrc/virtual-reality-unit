@@ -65,7 +65,7 @@
                 <td>{{ eventTypeLabel(event) }}</td>
 
                 <td v-if="event.type === EVENT_TYPES.choice" v-html="event.data.text"></td>
-                <td v-else><div class="action_code_long" v-html="event.data.replaceAll(/\n/g, '<br/>')"></div></td>
+                <td v-else><div class="action_code_long" v-html="readableLongAction(event.data)"></div></td>
 
                 <td style="text-align: center; font-family: monospace; text-transform: uppercase">
                   {{ event.launchTime == -1 ? "Scene end" : secondsToFormatted(event.launchTime) }}
@@ -98,6 +98,8 @@
 <script>
 import { EVENT_TYPES, EVENT_TYPE_NAMES, CHOICE_TYPES } from "@/components/EventEditor.vue"
 import { getSceneLabel } from "@/stores/storyStore"
+import { readableActionCode } from "@/components/ActionCodeInput.vue"
+import { isSimpleCode } from "@/components/ActionCodeEditor.vue"
 
 const NEW_SCENE_DEFAULTS = {
   videoId: -1,
@@ -112,12 +114,26 @@ const NEW_SCENE_DEFAULTS = {
 <script setup>
 import { computed, nextTick, useTemplateRef, toRaw } from "vue"
 import Icon from "vue-feather"
+import { useStoryStore } from "@/stores/storyStore"
 
 import EventEditor from "@/components/EventEditor.vue"
 import { default as VideoTimestamp, secondsToFormatted } from "@/components/VideoTimestamp.vue"
 
 const header = useTemplateRef("header")
 const eventEditor = useTemplateRef("eventEditor")
+
+const store = useStoryStore()
+
+const readableLongAction = actionCode => {
+  const simpleCode = isSimpleCode(actionCode)
+  let ret
+  if (simpleCode) {
+    ret = readableActionCode(simpleCode, store)
+  } else {
+    ret = actionCode
+  }
+  return ret.replaceAll(/\n/g, '<br/>')
+}
 
 const props = defineProps({
   store: {
@@ -292,7 +308,7 @@ const eventTypeLabel = event => {
 
 .action_code_long {
   font-family: monospace;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   max-height: 3.5rem;
   overflow-y: auto;
   padding: 0.25rem;
