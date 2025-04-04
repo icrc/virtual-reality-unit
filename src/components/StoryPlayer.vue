@@ -436,18 +436,30 @@ function playScene(scene, abortSignal = undefined) {
 		 * @return     {Promise}  Will resolve when the choice is made/done
 		 */
 		function handleBlockChoice(choiceData) {
-			const initiallyPlaying = !videoJS.paused()
-			videoJS.pause()
-			const initialTime = videoJS.currentTime()
+			let initiallyPlaying, initialTime
 
-			// show a frame if requested
-			if (choiceData?.options?.frame !== undefined) videoJS.currentTime(choiceData.options.frame)
+			function afterPauseDelay() {
+				initiallyPlaying = !videoJS.paused()
+				videoJS.pause()
+				initialTime = videoJS.currentTime()
 
-			// show a loop if requested
-			if (choiceData?.options?.loop !== undefined) {
-				videoJS.currentTime(choiceData.options.loop[0])
-				activeLoop = choiceData.options.loop
-				videoJS.play()
+				// show a frame if requested
+				if (choiceData?.options?.frame !== undefined) videoJS.currentTime(choiceData.options.frame)
+
+				// show a loop if requested
+				if (choiceData?.options?.loop !== undefined) {
+					videoJS.currentTime(choiceData.options.loop[0])
+					activeLoop = choiceData.options.loop
+					videoJS.play()
+				}
+			}
+
+			const pauseDelay = choiceData?.options?.pauseDelay || 0
+			
+			if (pauseDelay) {
+				setTimeout(afterPauseDelay, pauseDelay * 1000)
+			} else {
+				afterPauseDelay()
 			}
 
 			// return promise
@@ -674,17 +686,19 @@ defineExpose({
 	right: calc(50% - ((var(--playerfullheight) * var(--aspect))) / 2);
 }
 
-
 .fade-enter-active {
-  transition: opacity 0.5s, scale 0.5s;
+	transition:
+		opacity 0.5s,
+		scale 0.5s;
 }
 .fade-leave-active {
-  transition: opacity 1s, scale 1s;
+	transition:
+		opacity 1s,
+		scale 1s;
 }
 
 .fade-enter-from,
 .fade-leave-to {
-  opacity: 0;
+	opacity: 0;
 }
-
 </style>
