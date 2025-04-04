@@ -48,19 +48,20 @@
         </label>
       </div>
       <div v-else>
-        <label style="--span: 2">
+        <label style="--span: 1">Pause delay<input placeholder="0" type="number" min="0" v-model="blockChoicePauseDelay" /></label>
+        <label style="--span: 3">
           Background
           <select v-model="backgroundType" @change="popupControl.fixScroll">
             <option :value="bgType" v-for="(bgTypeName, bgType) in BACKGROUND_TYPE_NAMES">{{ bgTypeName }}</option>
           </select>
         </label>
-        <label style="--span: 4" v-if="backgroundType === 'blockFrame'">
+        <label style="--span: 3" v-if="backgroundType === 'blockFrame'">
           Frame time
           <span style="display:flex; padding-top: 0.25rem">
             <video-timestamp style="flex-grow: 1;" v-model="blockFrameTime" />
           </span>
         </label>
-        <span style="--span: 4" v-if="backgroundType === 'blockLoop'">
+        <span style="--span: 3" v-if="backgroundType === 'blockLoop'">
           Loop range
           <span style="display: flex; gap: 0.5rem; padding-top: 0.25rem">
             <video-timestamp style="flex-grow: 1" v-model="loopStartTime" /><span style="padding-top: 0.75rem">to</span>
@@ -188,6 +189,7 @@ const loopStartTime = ref(0)
 const loopEndTime = ref(-1)
 const blockFrameTime = ref(0)
 const buttons = ref(Array.from({ length: 4 }, () => ({ text: "", action: "" })))
+const blockChoicePauseDelay = ref(0)
 
 const title = ref("")
 
@@ -294,6 +296,7 @@ const makeChoiceEventObject = () => {
       [BACKGROUND_TYPES.blockFrame]: { frame: blockFrameTime.value },
       [BACKGROUND_TYPES.blockLoop]: { loop: [loopStartTime.value, loopEndTime.value] },
     }[backgroundType.value]
+    opts.pauseDelay = blockChoicePauseDelay.value
   }
   return {
     type: EVENT_TYPES.choice,
@@ -370,6 +373,7 @@ const setupUIForChoice = event => {
   loopEndTime.value = -1
   blockFrameTime.value = 0
   eventActionCode.value = ""
+  blockChoicePauseDelay.value = 0
   if (!isTimedChoice.value) {
     if (event.data.options.hasOwnProperty("frame")) {
       backgroundType.value = BACKGROUND_TYPES.blockFrame
@@ -378,6 +382,7 @@ const setupUIForChoice = event => {
       backgroundType.value = BACKGROUND_TYPES.blockLoop
       ;[loopStartTime.value, loopEndTime.value] = event.data.options.loop
     }
+    blockChoicePauseDelay.value = (+event.data.options?.pauseDelay) || 0
     timeLimit.value = 5
     timeoutActionCode.value = ""
   } else {
@@ -407,7 +412,7 @@ defineExpose({
 <style scoped>
 .event-editor-s-container {
   width: 80%;
-  max-width: 750px;
+  max-width: 850px;
   min-width: 350px;
 }
 
