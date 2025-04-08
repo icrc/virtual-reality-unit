@@ -97,9 +97,8 @@ function getArgValue(expression, state) {
  * @return     {String[]}  array of arguments (strings ready to be evaluated)
  */
 function splitArgs(allArgsStr) {
-  // BEWARE - we will have issues with commas inside args - so this should be avoided
   return allArgsStr
-    .split(/,(.*)/)
+    .split(/,([^,]*)/g)
     .map(x => x.trim())
     .filter(x => x)
 }

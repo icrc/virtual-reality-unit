@@ -1,6 +1,7 @@
 // 'Library' of actions that we can perform (other than the standard internal actionCode ones - setStateValue, deleteStateValue)
 
 import { alert } from "@/libs/popups"
+import { downloadCSV } from "@/libs/csv"
 
 export default ({ getCurrentScene, announceDone, videoJS, blockChoiceActive, timedChoiceActive }) => ({
 
@@ -30,6 +31,12 @@ export default ({ getCurrentScene, announceDone, videoJS, blockChoiceActive, tim
 		if (needStopStart) videoJS.pause()
 		await alert(message)
 		if (needStopStart) videoJS.play()
+	},
+
+	// download some data (CSV format)
+	downloadData(...rowStrings) {
+		const rows = rowStrings.map(row => row.split('|'))
+		downloadCSV(rows, null, 'data.csv')
 	}
 
 })
