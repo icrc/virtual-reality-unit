@@ -313,6 +313,7 @@ const eventTypeLabel = event => {
   overflow-y: auto;
   padding: 0.25rem;
   border-radius: 0.4rem;
-  border: 1px solid #666;
+  border: 1px solid color-mix(in srgb, var(--s-color-bg) 76%, var(--s-color-fg));
+  background-color: color-mix(in srgb, var(--s-color-bg) 96%, var(--s-color-fg));
 }
 </style>

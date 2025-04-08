@@ -226,6 +226,6 @@ defineExpose({
 
 textarea {
   font-family: monospace;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
 }
 </style>
