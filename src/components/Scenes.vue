@@ -75,8 +75,8 @@
                     <icon type="edit" class="icon" title="Edit" @click="editEventForScene(scene, event)" /><icon
                       type="trash-2"
                       class="icon"
-                      title="Delete"
-                      @click="deleteEventFromScene(scene, event)" />
+                      title="Delete - hold Ctrl or ⌘ to skip confirmation"
+                      @click="e => deleteEventFromScene(scene, event, e.ctrlKey || e.metaKey)" />
                   </div>
                 </td>
               </tr>
@@ -85,7 +85,7 @@
         </div>
 
         <div style="justify-items: end">
-          <button @click="deleteScene(scene.id)" style="width: fit-content">Delete</button>
+          <button @click="e => deleteScene(scene.id, e.ctrlKey || e.metaKey)" style="width: fit-content" title="Hold Ctrl or ⌘ to skip confirmation">Delete</button>
         </div>
         <hr v-if="idx < story.scenes.length - 1" />
       </div>
@@ -100,6 +100,8 @@ import { EVENT_TYPES, EVENT_TYPE_NAMES, CHOICE_TYPES } from "@/components/EventE
 import { getSceneLabel } from "@/stores/storyStore"
 import { readableActionCode } from "@/components/ActionCodeInput.vue"
 import { isSimpleCode } from "@/components/ActionCodeEditor.vue"
+import { confirm } from "@/libs/popups"
+
 
 const NEW_SCENE_DEFAULTS = {
   videoId: -1,
@@ -145,7 +147,12 @@ const props = defineProps({
 })
 
 const story = computed(() => props.store.currentStory)
-const deleteScene = props.store.deleteScene
+
+
+const deleteScene = async (id, skipConfirm=false) => {
+  if (!skipConfirm && !(await confirm('### Delete Scene\n<br>Are you sure?'))) return
+  props.store.deleteScene(id)
+}
 
 /**
  * Sort an array of event objects (by launch time)
@@ -199,7 +206,8 @@ const editEventForScene = async (scene, event) => {
  * @param      {object}  scene   The scene
  * @param      {object}  event   The event
  */
-const deleteEventFromScene = (scene, event) => {
+const deleteEventFromScene = async (scene, event, skipConfirm) => {
+  if (!skipConfirm && !(await confirm('### Delete Event\n<br>Are you sure?'))) return
   props.store.deleteEvent(scene.id, event.id)
 }
 
