@@ -65,7 +65,7 @@ const handleStart = async () => {
   const res = await player.value.start(abortController.signal)
   if (!res.aborted) {
     if (Object.entries(res.finalState).length) {
-      if (process.env.NODE_ENV === "development") await alert("Finished! Final state:\n\n" + JSON.stringify(res.finalState, null, 2))
+      if (process.env.NODE_ENV === "development") console.log("Finished! Final state:\n\n" + JSON.stringify(res.finalState, null, 2))
     }
     if (document.fullscreen) document.exitFullscreen()
     handleReset()
