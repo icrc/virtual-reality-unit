@@ -79,7 +79,7 @@ export function* parser(code, state) {
 function getArgValue(expression, state) {
   window[TEMP_VAR_NAME] = structuredClone(state)
   const expr = "" + expression
-  const xp = expr.replace(/@([a-zA-Z]*)/g, `window.${TEMP_VAR_NAME}["$1"]`)
+  const xp = expr.replace(/@([a-zA-Z\_\$]{1}[a-zA-Z0-9\_\$]*)/g, `window.${TEMP_VAR_NAME}["$1"]`)
   try {
     return eval(xp)
   } catch (e) {
