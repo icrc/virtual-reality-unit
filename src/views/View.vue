@@ -10,6 +10,7 @@
         @showable="handlePlayerShowable"
         :data="storyData"
         ref="player"
+        :handle-double-click="toggleFullscreen"
         :containerEl="mainViewContainer" />
       <div class="unplayable_message" v-if="!isPlayable">Current project is not playable.<br />Please check for a valid start scene and video.</div>
     </main>
@@ -53,6 +54,8 @@ let abortController
 const props = defineProps({
   data: String,
 })
+
+const toggleFullscreen = () => player.value.goFullscreen(!player.value.isFullscreen)
 
 /**
  * Start the playback

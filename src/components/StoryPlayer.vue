@@ -2,7 +2,7 @@
 <template>
 	<div :class="{ player_container: true, [superWide ? 'full_screen_superwide' : 'full_screen']: isFullscreen }">
 		<player @ready="onPlayerReady" :options="playerOptions" />
-		<div class="overlay">
+		<div class="overlay" @dblclick="doubleClickHandler">
 			<div
 				:title="playbackActive ? 'Reset' : 'Start'"
 				v-if="doStart && doAbort"
@@ -102,8 +102,17 @@ const props = defineProps({
 		type: Function,
 		default: null,
 	},
+	// doubleclick function
+	handleDoubleClick: {
+		type: Function,
+		default: () => {}
+	}
 })
 const emit = defineEmits(["ready", "error", "showable"])
+
+const doubleClickHandler = e => {
+	props.handleDoubleClick(e)
+}
 
 const { isFullscreen } = useFullscreen()
 
@@ -221,13 +230,15 @@ const resizePlayerToContainerWidth = ({ width: screenWidth, height: screenHeight
 let { stopWatching: stopWatchingWindowResize } = useWindowSize(resizePlayerToContainerWidth) // make sure player gets sized appropriately on window resize
 
 /**
- * Go to full screen player
+ * Go to full screen player (or exit fullscreen)
  */
-const goFullscreen = () => {
-	document
-		.querySelector("html")
-		.requestFullscreen()
-		.then(setTimeout(() => resizePlayerToContainerWidth({ width: window.innerWidth, height: window.innerHeight }), 250))
+const goFullscreen = (state = true) => {
+	const doAfter = () => setTimeout(() => resizePlayerToContainerWidth({ width: window.innerWidth, height: window.innerHeight }), 250)
+	if (state) {
+		document.querySelector("html").requestFullscreen().then(doAfter)
+	} else {
+		document.exitFullscreen().then(doAfter)
+	}
 }
 
 // getting videos, scenes, source objects for videoJS
@@ -606,6 +617,7 @@ function teardownComponent() {
 onUnmounted(teardownComponent)
 
 defineExpose({
+	isFullscreen,
 	goFullscreen,
 	playbackActive,
 	start,
