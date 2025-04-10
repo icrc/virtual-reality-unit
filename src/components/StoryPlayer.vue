@@ -383,12 +383,15 @@ function playScene(scene, abortSignal = undefined) {
 			resolve(result)
 		}
 
+		let handlingSceneEnd = false
 		/**
 		 * Handle reaching the end of a scene
 		 *
 		 * @return     {Promise}
 		 */
 		async function handleSceneEnd() {
+			if (handlingSceneEnd) return
+			handlingSceneEnd = true
 			// check for 'end of scene' events
 			for (const event of scene.events) {
 				if (event.launchTime == -1 && !completedEventIds.includes(event.id)) {
@@ -409,6 +412,7 @@ function playScene(scene, abortSignal = undefined) {
 				// otherwise we're done - no next scene, return final state
 				announceDone({ nextSceneId: false, finalState: currentState })
 			}
+			handlingSceneEnd = false
 		}
 
 		/**
@@ -559,19 +563,19 @@ function playScene(scene, abortSignal = undefined) {
 		 * @type       {Object}
 		 */
 		const handlers = {
-			timeupdate() {
+			async timeupdate() {
 				const time = videoJS.currentTime()
 
 				if (!inBlockChoice) {
 					// check to see if scene end time has passed (if it has one)
 					if (scene.endTime !== -1 && time >= scene.endTime) {
 						videoJS.pause()
-						handleSceneEnd()
+						await handleSceneEnd()
 					}
 
 					// check to see if it is time for an event
-					scene.events.forEach(event => {
-						if (event.launchTime !== -1 && time >= event.launchTime && !completedEventIds.includes(event.id)) handleEvent(event)
+					scene.events.forEach(async event => {
+						if (event.launchTime !== -1 && time >= event.launchTime && !completedEventIds.includes(event.id)) await handleEvent(event)
 					})
 				}
 
