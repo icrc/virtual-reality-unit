@@ -384,6 +384,7 @@ export const useStoryStore = defineStore("story", () => {
 
   const nextSceneId = () => ++currentHighestSceneId
   const getHighestSceneId = story => (story.scenes.length ? Math.max(...story.scenes.map(({ id }) => id)) : null)
+  const getLowestSceneId = (story = currentStory.value) => (story.scenes.length ? Math.min(...story.scenes.map(({ id }) => id)) : null)
 
   const getHighestEventIdForScene = scene => (scene.events.length ? Math.max(...scene.events.map(({ id }) => id)) : 0)
   const nextEventIdForScene = scene => getHighestEventIdForScene(scene) + 1
@@ -438,6 +439,7 @@ export const useStoryStore = defineStore("story", () => {
 
     getSceneById,
     getScenesByVideoId,
+    getLowestSceneId,
 
     isStoryPlayable,
     isCurrentStoryPlayable,

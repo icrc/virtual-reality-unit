@@ -102,7 +102,7 @@ const isAdvanced = ref(false)
 
 const simpleCommand = ref("")
 const simpleArg = ref()
-const sceneRef = ref()
+const sceneRef = ref(store.getLowestSceneId())
 const commandRequiresScene = computed(() => {
   return SIMPLE_COMMANDS[simpleCommand.value]?.requiresScene
 })
@@ -172,7 +172,7 @@ const setupAdvancedMode = code => {
  */
 const fixScene = () => {
   const cmd = simpleCommand.value
-  if (SIMPLE_COMMANDS[cmd]?.requiresScene && !simpleArg.value) simpleArg.value = 1
+  if (SIMPLE_COMMANDS[cmd]?.requiresScene && !simpleArg.value) simpleArg.value = store.getLowestSceneId()
 }
 
 /**
