@@ -31,7 +31,7 @@ const dialog = useTemplateRef("dialog")
 let activePromiseControl = null
 
 /**
- * Show/hide the editor
+ * Show/hide the popup
  *
  * @param      {boolean}  [state=true]  The 'visible' state
  */
@@ -40,7 +40,7 @@ const show = (state = true) => {
     dialog.value.showModal()
     setScrollAvailable(false)
   } else {
-    dialog.value.close()
+    dialog.value.close('fromShow')
   }
 }
 
@@ -76,6 +76,7 @@ const handleModalClick = event => {
 const exit = () => {
   setScrollAvailable(true)
   activePromiseControl?.resolve(null)
+  activePromiseControl = null
 }
 
 /**
@@ -83,7 +84,8 @@ const exit = () => {
  */
 const returnResult = result => {
   show(false)
-  activePromiseControl.resolve(result)
+  activePromiseControl?.resolve(result)
+  activePromiseControl = null
 }
 
 /**
@@ -112,7 +114,9 @@ const api = {
 }
 
 onMounted(() => {
-  dialog.value.addEventListener("close", exit)
+  dialog.value.addEventListener("close", () => {
+    if (dialog.value.returnValue !== 'fromShow') exit()
+  })
 })
 
 defineExpose({

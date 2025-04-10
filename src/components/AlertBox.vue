@@ -9,7 +9,7 @@
     </div>
     <div>
       <span class="btn_actions">
-        <button v-if="showCancel" class="s-outline" @click="cancelIsNull ? popupControl.setVisible(false) : popupControl.returnResult(false)">Cancel</button>
+        <button v-if="showCancel" class="s-outline" @click="() => cancelIsNull ? popupControl.setVisible(false) : popupControl.returnResult(false)">Cancel</button>
         <button @click="() => popupControl.returnResult(showUserText ? userText : true)">OK</button>
       </span>
     </div>
