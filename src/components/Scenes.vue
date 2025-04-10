@@ -134,6 +134,8 @@ const readableLongAction = actionCode => {
   } else {
     ret = actionCode
   }
+  ret = ret.replaceAll('<', '&lt;')
+  ret = ret.replaceAll('>', '&gt;')
   return ret.replaceAll(/\n/g, '<br/>')
 }
 

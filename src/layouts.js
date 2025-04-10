@@ -222,7 +222,7 @@ export const LAYOUTS = {
 				type: "colour",
 			},
 			colour_background: {
-				name: "Background colour for buttons",
+				name: "Background colour behind buttons",
 				type: "colour",
 			},
 			colour_timer: {
@@ -277,7 +277,7 @@ export const LAYOUTS = {
 				type: "colour",
 			},
 			colour_background: {
-				name: "Background colour for buttons",
+				name: "Background colour behind buttons",
 				type: "colour",
 			},
 			colour_timer: {
