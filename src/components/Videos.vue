@@ -26,7 +26,7 @@
               class="s-outline">
               Import Chapters as Scenes
             </button>
-            <button @click="deleteVideo(video.id)">Delete</button>
+            <button @click="e => deleteVideo(video.id, e.ctrlKey || e.metaKey)" title="Hold Ctrl or ⌘ to skip confirmation">Delete</button>
           </div>
           <hr v-if="idx < story.videos.length - 1" />
         </template>
@@ -125,15 +125,18 @@ const story = computed(() => props.store.currentStory)
  * @param      {Number}  videoId  The video identifier
  * @return     {Promise}     n/a
  */
-const deleteVideo = async videoId => {
+const deleteVideo = async (videoId, skipConfirm = false) => {
   const relatedScenes = props.store.getScenesByVideoId(videoId)
+  let confirmed = false
   if (
     relatedScenes.length &&
-    !(await confirm(
-      `This video has ${relatedScenes.length} related scene${relatedScenes.length > 1 ? "s" : ""}:\n\n${relatedScenes.map(scene => `'${scene.title}'`).join("\n")}\n\nAre you sure you want to delete this video and related scenes?`
+    !(confirmed = await confirm(
+      `### Delete Video - Warning!\n<br>This video has ${relatedScenes.length} related scene${relatedScenes.length > 1 ? "s" : ""}:\n\n${relatedScenes.map(scene => `* ${scene.title}`).join("\n")}\nAre you sure you want to delete this video and related scenes?`
     ))
   )
     return
+  confirmed ||= skipConfirm
+  if (!confirmed && !(await confirm('### Delete Video\n<br>Are you sure?'))) return
   props.store.deleteVideo(videoId, true)
 }
 
