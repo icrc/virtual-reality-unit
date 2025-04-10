@@ -19,7 +19,7 @@
             v-model="actionCodeAdv"></textarea>
         </label>
         <label style="--span: 6" v-if="isAdvanced">
-          Scenes (with system IDs)
+          Scenes (with system IDs) - for reference
           <span style="display: flex; gap: 0.5rem">
             <select style="flex-grow: 1" v-model="sceneRef" :title="'System ID - ' + sceneRef">
               <option v-for="scene in story.scenes" :key="scene.id" :value="scene.id" :title="'System ID - ' + scene.id">{{ `${scene.id}:      ` + getSceneLabel(scene) }}</option>
