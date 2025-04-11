@@ -1,7 +1,7 @@
 {
 	"version": "0.0.1",
 	"title": "Play through test for Multiple MP4 videos",
-	"author": "Jon Randy",
+	"author": "VideoPath",
 	"info": "Should play through hacker, racing, sci-fi",
 	"locales": ["en"],
   "defaultChoiceLayout": "basic",

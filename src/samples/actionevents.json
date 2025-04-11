@@ -1,7 +1,7 @@
 {
   "version": "0.0.1",
   "title": "Action Events Test",
-  "author": "Jon Randy",
+  "author": "VideoPath",
   "info": "For testing action events",
   "locales": ["en"],
   "defaultChoiceLayout": "basic",

@@ -1,7 +1,7 @@
 {
 	"version": "0.0.1",
 	"title": "Blast Trauma Triage Training",
-	"author": "Jon Randy",
+	"author": "VideoPath",
 	"info": "A sample VideoPath project for testing",
 	"locales": ["en"],
 	"defaultChoiceLayout": "btn_4_horiz",

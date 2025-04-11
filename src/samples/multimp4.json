@@ -1,7 +1,7 @@
 {
 	"version": "0.0.1",
 	"title": "Simple Test for Multiple MP4 videos",
-	"author": "Jon Randy",
+	"author": "VideoPath",
 	"info": "A sample project for testing with multiple MP4 videos",
 	"locales": ["en"],
 	"defaultChoiceLayout": "basic",

@@ -1,7 +1,7 @@
 {
 	"version": "0.0.1",
 	"title": "Layout Tests",
-	"author": "Jon Randy",
+	"author": "VideoPath",
 	"info": "Test project for testing layouts",
 	"initialSceneId": 1,
 	"locales": ["en"],
