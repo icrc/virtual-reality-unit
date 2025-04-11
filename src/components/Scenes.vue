@@ -72,7 +72,9 @@
                 </td>
                 <td>
                   <div style="display: flex; justify-content: center; gap: 1rem">
-                    <icon type="edit" class="icon" title="Edit" @click="editEventForScene(scene, event)" /><icon
+                    <icon type="edit" class="icon" title="Edit" @click="editEventForScene(scene, event)" />
+                    <icon type="copy" class="icon" title="New event from a copy of this one" @click="addEventFromExistingToScene(scene, event)" />
+                    <icon
                       type="trash-2"
                       class="icon"
                       title="Delete - hold Ctrl or ⌘ to skip confirmation"
@@ -85,7 +87,9 @@
         </div>
 
         <div style="justify-items: end">
-          <button @click="e => deleteScene(scene.id, e.ctrlKey || e.metaKey)" style="width: fit-content" title="Hold Ctrl or ⌘ to skip confirmation">Delete</button>
+          <button @click="e => deleteScene(scene.id, e.ctrlKey || e.metaKey)" style="width: fit-content" title="Hold Ctrl or ⌘ to skip confirmation">
+            Delete
+          </button>
         </div>
         <hr v-if="idx < story.scenes.length - 1" />
       </div>
@@ -101,7 +105,6 @@ import { getSceneLabel } from "@/stores/storyStore"
 import { readableActionCode } from "@/components/ActionCodeInput.vue"
 import { isSimpleCode } from "@/components/ActionCodeEditor.vue"
 import { confirm } from "@/libs/popups"
-
 
 const NEW_SCENE_DEFAULTS = {
   videoId: -1,
@@ -134,9 +137,9 @@ const readableLongAction = actionCode => {
   } else {
     ret = actionCode
   }
-  ret = ret.replaceAll('<', '&lt;')
-  ret = ret.replaceAll('>', '&gt;')
-  return ret.replaceAll(/\n/g, '<br/>')
+  ret = ret.replaceAll("<", "&lt;")
+  ret = ret.replaceAll(">", "&gt;")
+  return ret.replaceAll(/\n/g, "<br/>")
 }
 
 const props = defineProps({
@@ -150,9 +153,8 @@ const props = defineProps({
 
 const story = computed(() => props.store.currentStory)
 
-
-const deleteScene = async (id, skipConfirm=false) => {
-  if (!skipConfirm && !(await confirm('### Delete Scene\n<br>Are you sure?'))) return
+const deleteScene = async (id, skipConfirm = false) => {
+  if (!skipConfirm && !(await confirm("### Delete Scene\n<br>Are you sure?"))) return
   props.store.deleteScene(id)
 }
 
@@ -191,6 +193,19 @@ const addEventToScene = async scene => {
 }
 
 /**
+ * Adds an event from an existing one to scene - with popupeditor.
+ *
+ * @param      {object}  scene          The scene
+ * @param      {object}  existingEvent  The existing event to use as a basis
+ */
+const addEventFromExistingToScene = async (scene, existingEvent) => {
+  const initialEventData = structuredClone(toRaw(existingEvent))
+  delete initialEventData.id
+  const newEvent = await eventEditor.value.createNew(initialEventData)
+  if (newEvent) props.store.addEvent(scene.id, newEvent)
+}
+
+/**
  * Edit an existing event in scene with popup editor.
  *
  * @param      {object}  scene   The scene
@@ -209,7 +224,7 @@ const editEventForScene = async (scene, event) => {
  * @param      {object}  event   The event
  */
 const deleteEventFromScene = async (scene, event, skipConfirm) => {
-  if (!skipConfirm && !(await confirm('### Delete Event\n<br>Are you sure?'))) return
+  if (!skipConfirm && !(await confirm("### Delete Event\n<br>Are you sure?"))) return
   props.store.deleteEvent(scene.id, event.id)
 }
 
