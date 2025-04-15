@@ -40,7 +40,7 @@ const show = (state = true) => {
     dialog.value.showModal()
     setScrollAvailable(false)
   } else {
-    dialog.value.close('fromShow')
+    dialog.value.close("fromShow")
   }
 }
 
@@ -67,7 +67,7 @@ const setScrollAvailable = (state = true) => {
  */
 const handleModalClick = event => {
   // the selection stuff is to mitigate a bug in chrome where click erroneously fires when mouseup occurs on a text selection
-  if (event.target === dialog.value && document.getSelection().type !== 'Range') show(false)
+  if (event.target === dialog.value && document.getSelection().type !== "Range") show(false)
 }
 
 /**
@@ -84,6 +84,7 @@ const exit = () => {
  */
 const returnResult = result => {
   show(false)
+  setScrollAvailable(true)
   activePromiseControl?.resolve(result)
   activePromiseControl = null
 }
@@ -115,7 +116,7 @@ const api = {
 
 onMounted(() => {
   dialog.value.addEventListener("close", () => {
-    if (dialog.value.returnValue !== 'fromShow') exit()
+    if (dialog.value.returnValue !== "fromShow") exit()
   })
 })
 
