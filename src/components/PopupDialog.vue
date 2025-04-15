@@ -40,6 +40,8 @@ const show = (state = true) => {
     dialog.value.showModal()
     setScrollAvailable(false)
   } else {
+    setScrollAvailable()
+
     dialog.value.close("fromShow")
   }
 }
