@@ -97,10 +97,10 @@ function getArgValue(expression, state) {
  * @return     {String[]}  array of arguments (strings ready to be evaluated)
  */
 function splitArgs(allArgsStr) {
-  return allArgsStr
-    .split(/,([^,]*)/g)
-    .map(x => x.trim())
-    .filter(x => x)
+  if (!allArgsStr) return []
+  const regex = /"(?:[^"\\]+|\\.)*"|[^,]+/g
+  const matches = allArgsStr.match(regex) || []
+  return matches.map(arg => arg.trim()).filter(arg => arg)
 }
 
 /**
