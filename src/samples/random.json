@@ -1,0 +1,61 @@
+{
+	"version": "0.0.1",
+	"title": "Randomness",
+	"author": "VideoPath",
+	"info": "A project demonstrating how to introduce randomness",
+	"initialSceneId": 1,
+	"locales": ["en"],
+	"defaultChoiceLayout": "basic",
+	"defaultChoiceLayoutSettings": {},
+	"videos": [
+		{ "title": "Clock", "sourceType": "mp4", "url": "./videos/time.mp4", "thumbnail": "", "info": "", "audiotracks": [], "id": 1 },
+		{ "title": "Fireworks countdown", "sourceType": "mp4", "url": "./videos/01.mp4", "thumbnail": "", "info": "", "audiotracks": [], "id": 2 },
+		{ "title": "Vintage cinema countdown", "sourceType": "mp4", "url": "./videos/02.mp4", "thumbnail": "", "info": "", "audiotracks": [], "id": 3 },
+		{ "title": "Racing countdwon", "sourceType": "mp4", "url": "./videos/07.mp4", "thumbnail": "", "info": "", "audiotracks": [], "id": 4 }
+	],
+	"scenes": [
+		{
+			"videoId": 1,
+			"title": "Intro",
+			"startTime": 0,
+			"endTime": 10,
+			"nextSceneId": 2,
+			"events": [
+				{
+					"type": "action",
+					"launchTime": 1,
+					"data": "showMessage:\"## Randomness\\n<p>This project demonstrates how randomness can be added to projects using probabilistic action execution.</p>\"",
+					"id": 2
+				},
+				{
+					"type": "choice",
+					"launchTime": 4,
+					"data": {
+						"text": "Three possible scenes are next (fireworks, racing, and a film countdown)",
+						"type": "block",
+						"options": { "pauseDelay": 0 },
+						"layout": "",
+						"layoutSettings": {},
+						"buttons": [
+							{
+								"text": "Go to a random scene now",
+								"action": "// initially set the scene to go to to 2\nsetStateValue:\"myScene\",2\n\n// a 1 in 3 chance it will change to scene 3\nsetStateValue[0.333]:\"myScene\",3\n\n// a 1 in 3 chance it will change to scene 4\nsetStateValue[0.333]:\"myScene\",4\n\n// go to the scene we picked\ngotoScene:@myScene"
+							},
+							{
+								"text": "Go to a random scene after this one",
+								"action": "// initially set the scene to go to to 2\nsetStateValue:\"myScene\",2\n\n// a 1 in 3 chance it will change to scene 3\nsetStateValue[0.333]:\"myScene\",3\n\n// a 1 in 3 chance it will change to scene 4\nsetStateValue[0.333]:\"myScene\",4\n\n// set the next scene to our value\nsetNextScene:@myScene"
+							}
+						]
+					},
+					"id": 1
+				}
+			],
+			"id": 1
+		},
+		{ "videoId": 2, "title": "Fireworks countdown", "startTime": 0, "endTime": -1, "nextSceneId": -1, "events": [], "id": 2 },
+		{ "videoId": 3, "title": "Vintage film countdown", "startTime": 0, "endTime": -1, "nextSceneId": -1, "events": [], "id": 3 },
+		{ "videoId": 4, "title": "Racing countdown", "startTime": 0, "endTime": -1, "nextSceneId": -1, "events": [], "id": 4 }
+	],
+	"initialState": {},
+	"translations": {}
+}

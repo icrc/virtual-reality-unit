@@ -1,1 +1,107 @@
-{"version":"0.0.1","title":"Branching","author":"VideoPath","info":"A simple project demonstrating instant and end-of-scene branching","initialSceneId":1,"locales":["en"],"defaultChoiceLayout":"basic","defaultChoiceLayoutSettings":{},"videos":[{"title":"Clock","sourceType":"mp4","url":"./videos/time.mp4","thumbnail":"","info":"","audiotracks":[],"id":1},{"title":"Fireworks countdown","sourceType":"mp4","url":"./videos/01.mp4","thumbnail":"","info":"","audiotracks":[],"id":2},{"title":"Vintage cinema countdown","sourceType":"mp4","url":"./videos/02.mp4","thumbnail":"","info":"","audiotracks":[],"id":3},{"title":"Racing countdown","sourceType":"mp4","url":"./videos/07.mp4","thumbnail":"","info":"","audiotracks":[],"id":4},{"title":"Hacker countdown","sourceType":"mp4","url":"./videos/04.mp4","thumbnail":"","info":"","audiotracks":[],"id":5}],"scenes":[{"videoId":1,"title":"Intro","startTime":0,"endTime":-1,"nextSceneId":-1,"events":[{"type":"action","launchTime":1,"data":"showMessage:\"## Scene Branching\\nThis project demonstrates immediate branching with \\\"gotoScene\\\", and branching at the end of a scene with \\\"setNextScene\\\".\"","id":2},{"type":"choice","launchTime":4,"data":{"text":"Where would you like to go right now?","type":"block","options":{"pauseDelay":0},"layout":"","layoutSettings":{},"buttons":[{"text":"Fireworks countdown","action":"gotoScene:2"},{"text":"Vintage cinema countdown","action":"gotoScene:3"}]},"id":1}],"id":1},{"videoId":2,"title":"Fireworks countdown","startTime":0,"endTime":-1,"nextSceneId":4,"events":[{"type":"choice","launchTime":3,"data":{"text":"Where would you like to go at the end of this scene?","type":"block","options":{"pauseDelay":0},"layout":"","layoutSettings":{},"buttons":[{"text":"Racing countdown","action":"setNextScene:4"},{"text":"Hacker countdown","action":"setNextScene:5"}]},"id":1}],"id":2},{"videoId":3,"title":"Vintage cinema countdown","startTime":0,"endTime":-1,"nextSceneId":5,"events":[{"type":"choice","launchTime":3,"data":{"text":"Where would you like to go at the end of this scene?","type":"block","options":{"pauseDelay":0},"layout":"","layoutSettings":{},"buttons":[{"text":"Hacker countdown","action":"setNextScene:5"},{"text":"Racing countdown","action":"setNextScene:4"}]},"id":1}],"id":3},{"videoId":4,"title":"Racing countdown","startTime":0,"endTime":-1,"nextSceneId":-1,"events":[],"id":4},{"videoId":5,"title":"Hacker countdown","startTime":0,"endTime":-1,"nextSceneId":-1,"events":[],"id":5}],"initialState":{},"translations":{}}
+{
+	"version": "0.0.1",
+	"title": "Branching",
+	"author": "VideoPath",
+	"info": "A simple project demonstrating instant and end-of-scene branching",
+	"initialSceneId": 1,
+	"locales": ["en"],
+	"defaultChoiceLayout": "basic",
+	"defaultChoiceLayoutSettings": {},
+	"videos": [
+		{ "title": "Clock", "sourceType": "mp4", "url": "./videos/time.mp4", "thumbnail": "", "info": "", "audiotracks": [], "id": 1 },
+		{ "title": "Fireworks countdown", "sourceType": "mp4", "url": "./videos/01.mp4", "thumbnail": "", "info": "", "audiotracks": [], "id": 2 },
+		{ "title": "Vintage cinema countdown", "sourceType": "mp4", "url": "./videos/02.mp4", "thumbnail": "", "info": "", "audiotracks": [], "id": 3 },
+		{ "title": "Racing countdown", "sourceType": "mp4", "url": "./videos/07.mp4", "thumbnail": "", "info": "", "audiotracks": [], "id": 4 },
+		{ "title": "Hacker countdown", "sourceType": "mp4", "url": "./videos/04.mp4", "thumbnail": "", "info": "", "audiotracks": [], "id": 5 }
+	],
+	"scenes": [
+		{
+			"videoId": 1,
+			"title": "Intro",
+			"startTime": 0,
+			"endTime": -1,
+			"nextSceneId": -1,
+			"events": [
+				{
+					"type": "action",
+					"launchTime": 1,
+					"data": "showMessage:\"## Scene Branching\\n<p>This project demonstrates immediate branching with `gotoScene`, and branching at the end of a scene with `setNextScene`.</p>\"",
+					"id": 2
+				},
+				{
+					"type": "choice",
+					"launchTime": 4,
+					"data": {
+						"text": "Where would you like to go right now?",
+						"type": "block",
+						"options": { "pauseDelay": 0 },
+						"layout": "",
+						"layoutSettings": {},
+						"buttons": [
+							{ "text": "Fireworks countdown", "action": "gotoScene:2" },
+							{ "text": "Vintage cinema countdown", "action": "gotoScene:3" }
+						]
+					},
+					"id": 1
+				}
+			],
+			"id": 1
+		},
+		{
+			"videoId": 2,
+			"title": "Fireworks countdown",
+			"startTime": 0,
+			"endTime": -1,
+			"nextSceneId": 4,
+			"events": [
+				{
+					"type": "choice",
+					"launchTime": 3,
+					"data": {
+						"text": "Where would you like to go at the end of this scene?",
+						"type": "block",
+						"options": { "pauseDelay": 0 },
+						"layout": "",
+						"layoutSettings": {},
+						"buttons": [
+							{ "text": "Racing countdown", "action": "setNextScene:4" },
+							{ "text": "Hacker countdown", "action": "setNextScene:5" }
+						]
+					},
+					"id": 1
+				}
+			],
+			"id": 2
+		},
+		{
+			"videoId": 3,
+			"title": "Vintage cinema countdown",
+			"startTime": 0,
+			"endTime": -1,
+			"nextSceneId": 5,
+			"events": [
+				{
+					"type": "choice",
+					"launchTime": 3,
+					"data": {
+						"text": "Where would you like to go at the end of this scene?",
+						"type": "block",
+						"options": { "pauseDelay": 0 },
+						"layout": "",
+						"layoutSettings": {},
+						"buttons": [
+							{ "text": "Hacker countdown", "action": "setNextScene:5" },
+							{ "text": "Racing countdown", "action": "setNextScene:4" }
+						]
+					},
+					"id": 1
+				}
+			],
+			"id": 3
+		},
+		{ "videoId": 4, "title": "Racing countdown", "startTime": 0, "endTime": -1, "nextSceneId": -1, "events": [], "id": 4 },
+		{ "videoId": 5, "title": "Hacker countdown", "startTime": 0, "endTime": -1, "nextSceneId": -1, "events": [], "id": 5 }
+	],
+	"initialState": {},
+	"translations": {}
+}
