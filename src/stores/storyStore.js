@@ -146,7 +146,8 @@ export const useStoryStore = defineStore("story", () => {
   function newStory(data = EMPTY_STORY) {
     currentStory.value = structuredClone(data)
     persistMostRecentJSON(JSON.stringify(currentStory.value))
-    if (data === EMPTY_STORY) persistCurrentFilename("")
+    // remove saved filename, sinca a new story will not have been saved
+    persistCurrentFilename("")
     currentHighestVideoId = getHighestVideoId(data)
     currentHighestSceneId = getHighestSceneId(data)
   }
