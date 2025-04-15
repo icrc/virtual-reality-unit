@@ -148,6 +148,10 @@ const addVideo = () => {
   header.value.open = true
   nextTick(() => document.querySelector(`#video_${id} .video_name`).focus())
 }
+
+defineExpose({
+  addVideo
+})
 </script>
 
 <style scoped>

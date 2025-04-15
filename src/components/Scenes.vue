@@ -242,6 +242,11 @@ const eventTypeLabel = event => {
   }
   return label
 }
+
+
+defineExpose({
+  addScene
+})
 </script>
 
 <style scoped>
