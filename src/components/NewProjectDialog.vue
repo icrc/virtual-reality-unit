@@ -5,7 +5,7 @@
       <label style="--span: 4">
         Please select the project template or sample you wish to start from:
         <select autofocus v-model="templateId" @change="popupControl.fixScroll">
-          <option :value="id" v-for="(template, id) in TEMPLATES">{{ template.name }}</option>
+          <option :value="id" v-for="(template, id) in TEMPLATES" :title="template.description">{{ template.name }}</option>
         </select>
       </label>
       <label style="--span: 4">Template/sample description<textarea readonly>{{ templateDescription }}</textarea></label>
