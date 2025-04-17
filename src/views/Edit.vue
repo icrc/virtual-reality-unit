@@ -6,24 +6,24 @@
         <aside style="--span: 12; --span-11: 2">
           <nav class="side_nav">
             <menu id="side-navigation" class="svelte-1jn03lf">
-                <li>
-                  <a href="#" @click.prevent="newProject">Create new</a>
-                </li>
-                <li>
-                  <a href="#" @click.prevent="loadStory">Load existing</a>
-                </li>
-                <li>
-                  <a href="#" @click.prevent="saveStory">Save current {{ unsavedMarker }}</a>
-                </li>
-                <li>
-                  <RouterLink to="/view">View project</RouterLink>
-                </li>
-                <li>
-                  <a href="#" @click.prevent="shareLink" title="Share a link for viewing this project">Share view link</a>
-                </li>
-                <li class="menu_div"></li>
-                <li><a href="#" @click.prevent="addVideo">Add new video</a></li>
-                <li><a href="#" @click.prevent="addScene">Add new scene</a></li>
+              <li>
+                <a href="#" @click.prevent="newProject">Create new</a>
+              </li>
+              <li>
+                <a href="#" @click.prevent="loadStory">Load existing</a>
+              </li>
+              <li>
+                <a href="#" @click.prevent="saveStory">Save current {{ unsavedMarker }}</a>
+              </li>
+              <li>
+                <RouterLink to="/view">View project</RouterLink>
+              </li>
+              <li>
+                <a href="#" @click.prevent="shareLink" title="Share a link for viewing this project">Share view link</a>
+              </li>
+              <li class="menu_div"></li>
+              <li><a href="#" @click.prevent="addVideo">Add new video</a></li>
+              <li><a href="#" @click.prevent="addScene">Add new scene</a></li>
             </menu>
           </nav>
         </aside>
@@ -115,9 +115,13 @@ const unsavedMarker = computed(() => (store.isSaved ? "" : "*"))
 
 const router = useRouter()
 
+const props = defineProps({
+  action: String,
+})
+
 const storyTitle = useTemplateRef("storyTitle")
-const videosComponent = useTemplateRef('videos')
-const scenesComponent = useTemplateRef('scenes')
+const videosComponent = useTemplateRef("videos")
+const scenesComponent = useTemplateRef("scenes")
 
 const addVideo = () => videosComponent.value && videosComponent.value.addVideo()
 const addScene = () => scenesComponent.value && scenesComponent.value.addScene()
@@ -132,7 +136,25 @@ const newProjectDialog = useTemplateRef("newProjectDialog")
 
 onMounted(() => {
   inject("setWindowTitle")("Edit")
+  // handle any initial action we've been asked to do
+  if (props.action) {
+    handleInitialAction(props.action)
+    router.replace("/edit") // clear the action from URL
+  }
 })
+
+/**
+ * Perform an intial action on the page
+ *
+ * @param      {string}  action  The action
+ */
+const handleInitialAction = action =>
+  (
+    ({
+      new: newProject,
+      load: loadStory,
+    })[action] || (() => {})
+  )()
 
 /**
  * Attempt to start a new project

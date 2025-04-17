@@ -9,9 +9,10 @@ const routes = [
     component: views.Home,
   },
   {
-    path: "/edit",
+    path: "/edit/:action?",
     name: "edit",
     component: views.Edit,
+    props: true
   },
   {
     path: "/view",
