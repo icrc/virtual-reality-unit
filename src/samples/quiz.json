@@ -101,7 +101,7 @@
 				{
 					"type": "action",
 					"launchTime": -1,
-					"data": "showMessage: \"## Results\\n* Correct answers:\" + @correctAnswers + \"\\n* Skipped answers: \" + @skippedAnswers + \"\\n\\nClick 'OK' to download data\"\n\ndownloadData: \"Q1|Q2|Q3|Q4|Correct|Skipped\", @Q1Answer + '|' + @Q2Answer + '|' + @Q3Answer + '|' + @Q4Answer + '|' + @correctAnswers + '|' + @skippedAnswers  ",
+					"data": "showMessage: '## Results\\n* Correct answers:' + @correctAnswers + '\\n* Skipped answers: ' + @skippedAnswers + '\\n\\nClick \\'OK\\' to download data'\n\ndownloadData: 'Q1|Q2|Q3|Q4|Correct|Skipped', @Q1Answer + '|' + @Q2Answer + '|' + @Q3Answer + '|' + @Q4Answer + '|' + @correctAnswers + '|' + @skippedAnswers  ",
 					"id": 14
 				}
 			],
