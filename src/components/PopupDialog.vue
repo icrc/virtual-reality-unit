@@ -87,7 +87,8 @@ const exit = () => {
 const returnResult = result => {
   show(false)
   setScrollAvailable(true)
-  activePromiseControl?.resolve(result)
+  const prm = activePromiseControl
+  setTimeout(() => prm?.resolve(result), 10)
   activePromiseControl = null
 }
 
@@ -117,8 +118,13 @@ const api = {
 }
 
 onMounted(() => {
-  dialog.value.addEventListener("close", () => {
-    if (dialog.value.returnValue !== "fromShow") exit()
+  dialog.value.addEventListener("close", e => {
+    if (dialog.value.returnValue !== "fromShow") {
+      exit()
+    } else {
+      activePromiseControl?.resolve(null)
+      activePromiseControl = null
+    }
   })
 })
 
