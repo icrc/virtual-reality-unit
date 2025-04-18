@@ -98,9 +98,8 @@ function getArgValue(expression, state) {
  */
 function splitArgs(allArgsStr) {
   if (!allArgsStr) return []
-  const regex = /"(?:[^"\\]+|\\.)*"|[^,]+/g
-  const matches = allArgsStr.match(regex) || []
-  return matches.map(arg => arg.trim()).filter(arg => arg)
+  const regex = /(?<!\\),/;
+  return allArgsStr.split(regex).map(part => part.replace(/\\,/g, ',')).filter(x => x)
 }
 
 /**
