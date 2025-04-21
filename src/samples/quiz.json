@@ -6,7 +6,7 @@
 	"initialSceneId": 1,
 	"locales": ["en"],
 	"defaultChoiceLayout": "column_r",
-	"defaultChoiceLayoutSettings": { "jon": 1 },
+	"defaultChoiceLayoutSettings": {},
 	"videos": [{ "title": "Background Video", "sourceType": "mp4", "url": "./videos/time.mp4", "thumbnail": "", "info": "", "audiotracks": [], "id": 1 }],
 	"scenes": [
 		{
