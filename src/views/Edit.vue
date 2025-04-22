@@ -9,7 +9,7 @@
               <li>
                 <a href="#" @click.prevent="newProject">Create new</a>
               </li>
-              <li>
+              <li :class="{ highlight: loadStoryHighlighted }">
                 <a href="#" @click.prevent="loadStory">Load existing</a>
               </li>
               <li>
@@ -92,7 +92,7 @@ import { LAYOUT_NAMES } from "@/layouts"
 </script>
 
 <script setup>
-import { computed, useTemplateRef, nextTick, onMounted, provide, inject } from "vue"
+import { computed, useTemplateRef, nextTick, onMounted, provide, inject, ref } from "vue"
 import { storeToRefs } from "pinia"
 import { useRouter } from "vue-router"
 import { useStoryStore } from "@/stores/storyStore"
@@ -152,9 +152,20 @@ const handleInitialAction = action =>
   (
     ({
       new: newProject,
-      load: loadStory,
+      load: highlightLoadStory,
     })[action] || (() => {})
   )()
+
+const loadStoryHighlighted = ref(false)
+
+/**
+ * (un)/Highlight the load story li
+ *
+ * @param      {boolean}  [state=true]  The state of the highlight
+ */
+const highlightLoadStory = (state = true) => {
+  loadStoryHighlighted.value = state
+}
 
 /**
  * Attempt to start a new project
@@ -196,6 +207,7 @@ const handleLayoutChange = () => {
  * @return     {Promise}  n/a
  */
 const loadStory = async () => {
+  highlightLoadStory(false)
   if (!(await confirmUnsaved())) return
   const filename = await store.pickStory()
   if (filename) {
@@ -264,6 +276,15 @@ h2 > .missing {
   }
   :deep(& svg):hover {
     stroke: var(--s-color-primary);
+  }
+}
+
+li.highlight {
+  &::before {
+    content: "▶ ​";
+  }
+  &::after {
+    content: "​ ◀";
   }
 }
 </style>
