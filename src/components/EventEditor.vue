@@ -125,7 +125,7 @@ export const EVENT_TYPES = {
   choice: "choice",
 }
 export const EVENT_TYPE_NAMES = {
-  [EVENT_TYPES.action]: "Action",
+  [EVENT_TYPES.action]: "Action Event",
   [EVENT_TYPES.choice]: "Choice",
 }
 export const CHOICE_TYPES = {
