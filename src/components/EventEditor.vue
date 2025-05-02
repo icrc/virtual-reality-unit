@@ -74,7 +74,7 @@
       <div class="choices_container">
         <table style="margin-bottom: 0.5em">
           <caption style="text-align: left">
-            <span>Choices</span>
+            <span>Choice options</span>
           </caption>
           <thead>
             <tr>
