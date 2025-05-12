@@ -25,7 +25,7 @@
 				{
 					"type": "action",
 					"launchTime": 1,
-					"data": "showMessage:\"## Scene Branching\\n<p>This project demonstrates immediate branching with `gotoScene`, and branching at the end of a scene with `setNextScene`.</p>\"",
+					"data": "showMessage:\"## Scene Branching\\n<p>This project demonstrates immediate branching with `gotoScene`\\, and branching at the end of a scene with `setNextScene`.</p>\"",
 					"id": 2
 				},
 				{
